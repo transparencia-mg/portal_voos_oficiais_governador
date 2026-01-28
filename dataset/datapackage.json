@@ -1,0 +1,70 @@
+{
+  "name": "voos_oficiais_governador",
+  "owner_org": "",
+  "profile": "data-package",
+  "resources": [
+    {
+      "description": "Insira a descrição/explicação detalhada deste recurso.",
+      "dialect": {
+        "delimiter": ";"
+      },
+      "encoding": "utf-8-sig",
+      "format": "csv",
+      "hashing": "md5",
+      "name": "voos_2025",
+      "path": "data/voos_2025.csv",
+      "profile": "tabular-data-resource",
+      "schema": {
+        "fields": [
+          {
+            "name": "historico",
+            "type": "string"
+          },
+          {
+            "name": "horas_voadas",
+            "type": "time"
+          },
+          {
+            "name": "aernova",
+            "type": "string"
+          },
+          {
+            "name": "numero_db",
+            "type": "string"
+          },
+          {
+            "name": "base",
+            "type": "string"
+          },
+          {
+            "name": "data_voo",
+            "type": "date"
+          },
+          {
+            "name": "origem",
+            "type": "string"
+          },
+          {
+            "name": "destino",
+            "type": "string"
+          },
+          {
+            "name": "passageiro",
+            "type": "string"
+          },
+          {
+            "name": "cargo_passageiro",
+            "type": "string"
+          },
+          {
+            "name": "orgao_passageiro",
+            "type": "string"
+          }
+        ]
+      },
+      "scheme": "file",
+      "title": "Insira um título humanamente legível para este recurso."
+    }
+  ],
+  "title": "Voos_oficiais_governador"
+}
