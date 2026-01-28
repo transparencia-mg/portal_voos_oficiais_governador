@@ -1,916 +1,3262 @@
-<!doctype html>
-<html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Voos Oficiais — Governo de Minas Gerais</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voos Oficiais do Governador - Governo de Minas Gerais</title>
+    
+    <!-- ==================== ESTILOS E BIBLIOTECAS ==================== -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-  <!-- Bootstrap 5 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-  <!-- Plotly (versão explícita para evitar warning) -->
-  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
-  <!-- Tippy.js para tooltips -->
-  <script src="https://unpkg.com/@popperjs/core@2"></script>
-  <script src="https://unpkg.com/tippy.js@6"></script>
-  <!-- PapaParse para CSV -->
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <style>
-    :root{
-      --primary-dark:#29435A;
-      --primary-darker:#132837;
-      --accent-red:#B93C42;
-      --accent-bright:#DB233F;
-      --background-light:#EEEFF5;
-      --success-green:#2E8B57;
-      --muted:#6c757d;
-    }
-    body{font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:var(--background-light); padding-bottom:40px;}
-    .main-header{background:linear-gradient(135deg,var(--primary-darker),var(--primary-dark)); color:#fff; padding:22px 0; margin-bottom:22px; border-bottom:4px solid var(--accent-red); box-shadow:0 6px 18px rgba(0,0,0,0.12);}
-    .logo{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--accent-red),var(--accent-bright));color:white;font-weight:800;font-size:22px;box-shadow:0 4px 12px rgba(0,0,0,0.15);}
-    .header-title{font-size:22px;margin:0;font-weight:800;}
-    .header-subtitle{margin:4px 0 0 0;opacity:0.9;font-size:13px;}
-    .update-status{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:18px;background:rgba(255,255,255,0.9);color:var(--primary-dark);}
-    .update-status.online{color:var(--success-green);background:rgba(46,139,87,0.08);}
-    .filter-card{background:white;border-radius:12px;padding:16px;box-shadow:0 4px 18px rgba(0,0,0,0.06);margin-bottom:12px;}
-    .chart-card{background:white;border-radius:12px;padding:14px;box-shadow:0 4px 18px rgba(0,0,0,0.06);margin-bottom:12px;min-height:220px;}
-    .table-card{background:white;border-radius:12px;padding:0;box-shadow:0 4px 18px rgba(0,0,0,0.06);margin-bottom:18px;}
-    .card-stats{background:white;border-radius:12px;padding:14px;box-shadow:0 4px 12px rgba(0,0,0,0.06);text-align:center;}
-    .card-stats .value{font-size:24px;font-weight:800;color:var(--accent-red);margin-top:6px;}
-    .btn-primary-custom{background:linear-gradient(90deg,var(--accent-red),var(--accent-bright));color:white;border:none;padding:8px 14px;border-radius:10px;font-weight:700;}
-    .btn-secondary-custom{background:white;border:2px solid var(--primary-dark);color:var(--primary-dark);padding:8px 14px;border-radius:10px;font-weight:700;}
-    .table thead th{background:#f8f9fa;font-weight:700;color:var(--primary-dark);}
-    .badge-count{background:var(--accent-red);color:white;padding:6px 12px;border-radius:16px;font-weight:700;}
-    @media (max-width:992px){ .desktop-hide{display:none!important;} }
-  </style>
+    <style>
+        /* ==================== VARIÁVEIS DE CORES ==================== */
+        :root {
+            --primary-dark: #1A5276;
+            --primary-darker: #0E2F44;
+            --accent-blue: #3498DB;
+            --accent-bright: #2980B9;
+            --accent-red: #E74C3C;
+            --button-red: #E74C3C;
+            --button-red-hover: #3498DB;
+            --background-light: #F2F4F7;
+            --success-green: #27AE60;
+            --warning-yellow: #F39C12;
+            --info-blue: #17A589;
+            --secondary-purple: #8E44AD;
+            --secondary-orange: #E67E22;
+            --secondary-teal: #16A085;
+            --danger-red: #E74C3C;
+        }
+        
+        /* ==================== ESTILOS GERAIS ==================== */
+        body {
+            font-family: 'Montserrat', Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-light);
+            padding-bottom: 15px;
+            overflow-y: visible !important;
+            overflow-x: hidden !important;
+            min-height: auto !important;
+            height: auto !important;
+            position: relative;
+        }
+
+        html {
+            overflow-y: visible !important;
+            height: auto !important;
+        }
+
+        .main-container {
+            height: auto !important;
+            min-height: auto !important;
+            overflow: visible !important;
+            position: relative;
+        }
+
+        .container.dashboard-spacing {
+            overflow: visible !important;
+            height: auto !important;
+            min-height: auto !important;
+            position: relative;
+        }
+
+        .tab-content {
+            overflow: visible !important;
+            height: auto !important;
+            min-height: auto !important;
+            position: relative;
+        }
+
+        .table-container {
+            height: auto !important;
+            min-height: auto !important;
+            overflow: visible !important;
+            position: relative;
+        }
+
+        .table-fixed-header-container {
+            max-height: 500px;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* ==================== HEADER PRINCIPAL ==================== */
+        .main-header {
+            background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-bottom: 4px solid var(--accent-blue);
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-bright) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 0 3px 8px rgba(52, 152, 219, 0.25);
+        }
+        
+        .header-title {
+            font-weight: 700;
+            font-size: 22px;
+            margin: 0;
+            line-height: 1.2;
+        }
+        
+        .header-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+            margin: 5px 0 0 0;
+        }
+
+        .header-info {
+            margin-top: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .link-legislacao {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.3s;
+        }
+        
+        .link-legislacao:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .badge-atualizacao-header {
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 11px;
+        }
+        
+        /* ==================== FILTROS ==================== */
+        .filter-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--accent-blue);
+        }
+        
+        .filter-label {
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        
+        .form-control, .form-select {
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            height: 42px;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
+        }
+        
+        /* ==================== CARDS DE MÉTRICAS ==================== */
+        .metric-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px 15px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
+            border-top: 4px solid var(--accent-blue);
+            transition: all 0.3s ease;
+            height: 100%;
+            position: relative;
+            cursor: default;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .metric-card.primary {
+            border-top-color: var(--primary-dark);
+        }
+        
+        .metric-card.success {
+            border-top-color: var(--success-green);
+        }
+        
+        .metric-card.warning {
+            border-top-color: var(--warning-yellow);
+        }
+        
+        .metric-card.info {
+            border-top-color: var(--info-blue);
+        }
+        
+        .metric-card.purple {
+            border-top-color: var(--secondary-purple);
+        }
+        
+        .metric-card.orange {
+            border-top-color: var(--secondary-orange);
+        }
+        
+        .metric-card.teal {
+            border-top-color: var(--secondary-teal);
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin: 8px 0;
+            line-height: 1;
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            color: var(--primary-darker);
+            font-weight: 600;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        
+        .metric-change {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+        
+        .metric-change.positive {
+            background-color: rgba(39, 174, 96, 0.1);
+            color: var(--success-green);
+        }
+        
+        .metric-change.warning {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--warning-yellow);
+        }
+        
+        /* ==================== CONTAINER DE GRÁFICOS ==================== */
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
+            height: 100%;
+            min-height: 280px;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--background-light);
+        }
+        
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin: 0;
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            height: 220px;
+            width: 100%;
+        }
+        
+        /* ==================== TABELAS ==================== */
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .table-header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-darker) 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .table-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .table-badge {
+            background: var(--accent-red);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .table-fixed-header-container table thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: var(--primary-dark) !important;
+        }
+        
+        .table-fixed-header-container table thead th {
+            background-color: var(--primary-dark) !important;
+            color: white !important;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+        
+        .table-responsive {
+            padding: 0;
+            overflow-x: auto;
+            overflow-y: visible !important;
+        }
+        
+        .table {
+            margin: 0;
+            width: 100%;
+            font-size: 13px;
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 1px solid #dee2e6;
+        }
+        
+        .table thead th {
+            background-color: var(--primary-dark) !important;
+            color: white !important;
+            font-weight: 600;
+            border: none;
+            padding: 12px 10px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.2s ease;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            white-space: nowrap;
+            border-left: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+        }
+        
+        .table thead th:first-child {
+            border-left: none !important;
+        }
+        
+        .table thead th:last-child {
+            border-right: none !important;
+        }
+        
+        .sort-icon {
+            opacity: 0.8;
+            margin-left: 4px;
+            font-size: 9px;
+            transition: opacity 0.2s ease;
+            color: white;
+        }
+        
+        .table thead th:hover {
+            background-color: var(--primary-darker) !important;
+        }
+        
+        .table thead th:hover .sort-icon {
+            opacity: 1;
+        }
+        
+        .table thead th.sorted-asc .sort-icon,
+        .table thead th.sorted-desc .sort-icon {
+            opacity: 1;
+        }
+        
+        .table thead th.sorted-asc .sort-icon::after {
+            content: "↑";
+        }
+        
+        .table thead th.sorted-desc .sort-icon::after {
+            content: "↓";
+        }
+        
+        .table-container table th, 
+        .table-container table td {
+            border-left: 1px solid #dee2e6;
+            border-right: 1px solid #dee2e6;
+            vertical-align: middle;
+        }
+        
+        .table-container table th:first-child,
+        .table-container table td:first-child {
+            border-left: none;
+        }
+        
+        .table-container table th:last-child,
+        .table-container table td:last-child {
+            border-right: none;
+        }
+        
+        .table-container table tbody tr {
+            border-bottom: 1px solid #f1f1f1;
+        }
+        
+        .table-container table tbody tr:last-child {
+            border-bottom: none;
+        }
+        
+        .table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+        
+        .table tbody tr:hover {
+            background-color: rgba(41, 67, 90, 0.04);
+        }
+        
+        .table tbody td {
+            padding: 12px 10px;
+            vertical-align: middle;
+            font-size: 13px;
+        }
+        
+        /* ==================== MENU DE NAVEGAÇÃO ==================== */
+        .nav-tabs-container {
+            background: white;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+            margin-top: 10px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .nav-tabs {
+            border: none !important;
+            gap: 4px;
+            flex-wrap: nowrap;
+            min-width: max-content;
+            padding-bottom: 5px;
+            margin-bottom: 0 !important;
+        }
+
+        .nav-tabs .nav-item {
+            flex-shrink: 0;
+        }
+
+        .nav-tabs .nav-link {
+            border: none !important;
+            border-radius: 6px !important;
+            padding: 10px 15px !important;
+            font-weight: 600;
+            color: #1a5276 !important;
+            transition: all 0.3s ease;
+            font-size: 13px;
+            white-space: nowrap;
+            display: inline-flex !important;
+            align-items: center;
+            background: none !important;
+        }
+
+        .nav-tabs .nav-link:hover {
+            background-color: rgba(26, 82, 118, 0.05) !important;
+            color: #3498db !important;
+        }
+
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(135deg, #1a5276 0%, #154360 100%) !important;
+            color: white !important;
+            border: none !important;
+        }
+
+        .nav-tabs .nav-link .material-icons {
+            font-size: 16px !important;
+            margin-right: 8px !important;
+            vertical-align: middle;
+            line-height: 1;
+        }
+
+        .nav-tabs .nav-link.active .material-icons {
+            color: white !important;
+        }
+        
+        /* ==================== LOADING OVERLAY ==================== */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            display: none;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(26, 82, 118, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--accent-blue);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* ==================== RESPONSIVIDADE ==================== */
+        @media (max-width: 768px) {
+            .main-header {
+                padding: 15px 0;
+                margin-bottom: 20px;
+            }
+            
+            .logo-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .header-title {
+                font-size: 18px;
+            }
+            
+            .header-subtitle {
+                font-size: 12px;
+            }
+            
+            .metric-value {
+                font-size: 20px;
+            }
+            
+            .chart-wrapper {
+                height: 200px;
+            }
+            
+            .table-responsive {
+                font-size: 12px;
+            }
+            
+            .table thead th,
+            .table tbody td {
+                padding: 8px 6px;
+                font-size: 11px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- Loading overlay -->
-  <div id="loadingOverlay" style="position:fixed;inset:0;background:rgba(255,255,255,0.92);z-index:9999;display:none;align-items:center;justify-content:center;">
-    <div style="display:flex;align-items:center;gap:12px;">
-      <div style="width:48px;height:48px;border:5px solid rgba(0,0,0,0.08);border-top-color:var(--accent-red);border-radius:50%;animation:spin 1s linear infinite;"></div>
-      <div><strong id="loadingText">Carregando dados do GitHub...</strong></div>
-    </div>
-  </div>
-  <style>@keyframes spin{100%{transform:rotate(360deg);}}</style>
 
-  <!-- Header -->
-  <header class="main-header">
-    <div class="container d-flex align-items-center justify-content-between">
-      <div class="d-flex align-items-center gap-3">
-        <div class="logo"><i class="fas fa-plane"></i></div>
-        <div>
-          <div class="header-title">Painel de Voos Oficiais</div>
-          <div class="header-subtitle">Governo do Estado de Minas Gerais — Transparência de Voos Oficiais</div>
-        </div>
-      </div>
-      <div class="text-end">
-        <div id="updateStatus" class="update-status"><i class="fas fa-circle"></i> <span id="updateStatusText">Preparando</span></div>
-      </div>
-    </div>
-  </header>
+    <!-- ==================== CONTEÚDO PRINCIPAL ==================== -->
+    <div class="main-container">
+        <div class="container dashboard-spacing">
+            
+            <!-- ==================== HEADER PRINCIPAL ==================== -->
+            <header class="main-header">
+                <div class="container">
+                    <div class="logo-container">
+                        <div class="logo">
+                            <i class="material-icons">flight</i>
+                        </div>
+                        <div>
+                            <h1 class="header-title">Voos Oficiais do Governador</h1>
+                            <p class="header-subtitle">Governo de Minas Gerais | Transparência de Dados</p>
+                            <div class="header-info">
+                                <a href="https://www.mg.gov.br/" target="_blank" class="link-legislacao">
+                                    <i class="material-icons" style="font-size: 14px;">public</i>
+                                    Portal do Governo de Minas Gerais
+                                </a>
+                                <span class="badge-atualizacao-header">
+                                    <i class="material-icons" style="font-size: 12px;">update</i>
+                                    Atualizado em: <span id="data-atualizacao-header">Carregando...</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
 
-  <main class="container">
-    <!-- Top tabs -->
-    <div class="mb-3">
-      <ul class="nav nav-tabs">
-        <li class="nav-item"><a class="nav-link active" href="#" data-target="#tab-overview"><i class="fas fa-chart-pie me-1"></i> Visão Geral</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" data-target="#tab-destinos"><i class="fas fa-map-marker-alt me-1"></i> Análise por Destino</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" data-target="#tab-download"><i class="fas fa-download me-1"></i> Download de Dados</a></li>
-      </ul>
-    </div>
-
-    <!-- VISÃO GERAL -->
-    <section id="tab-overview" class="tab-pane active">
-      <div class="filter-card mb-3">
-        <div class="row g-3 align-items-end">
-          <!-- Filtros -->
-          <div class="col-md-2">
-            <label class="form-label small">Ano</label>
-            <select id="filter-ano" class="form-select"><option value="2025">2025</option><option value="2021">2021</option><option value="all">Todos os anos</option></select>
-          </div>
-          <div class="col-md-2">
-            <label class="form-label small">Origem</label>
-            <select id="filter-origem" class="form-select"><option value="all">Todas as origens</option></select>
-          </div>
-          <div class="col-md-2">
-            <label class="form-label small">Destino</label>
-            <select id="filter-destino" class="form-select"><option value="all">Todos os destinos</option></select>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label small">Passageiro</label>
-            <select id="filter-passageiro" class="form-select"><option value="all">Todos os passageiros</option></select>
-          </div>
-          
-          <!-- Botões de ação - Aplicar e Limpar -->
-          <div class="col-md-3">
-            <div class="d-grid gap-2">
-              <button id="btn-apply" class="btn-primary-custom"><i class="fas fa-filter me-1"></i> Aplicar</button>
-              <button id="btn-clear" class="btn-secondary-custom"><i class="fas fa-undo me-1"></i> Limpar</button>
+            <!-- ==================== MENU DE NAVEGAÇÃO ==================== -->
+            <div class="nav-tabs-container">
+                <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="dashboard1-tab" data-bs-toggle="tab" data-bs-target="#dashboard1" type="button" role="tab">
+                            <i class="material-icons">airplane_ticket</i>Visão Geral
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="dashboard2-tab" data-bs-toggle="tab" data-bs-target="#dashboard2" type="button" role="tab">
+                            <i class="material-icons">flight</i>Detalhamento de Voos
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="dashboard3-tab" data-bs-toggle="tab" data-bs-target="#dashboard3" type="button" role="tab">
+                            <i class="material-icons">groups</i>Passageiros e Comitiva
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="dashboard4-tab" data-bs-toggle="tab" data-bs-target="#dashboard4" type="button" role="tab">
+                            <i class="material-icons">map</i>Mapa de Rotas
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="dashboard5-tab" data-bs-toggle="tab" data-bs-target="#dashboard5" type="button" role="tab">
+                            <i class="material-icons">downloading</i>Downloads
+                        </button>
+                    </li>
+                </ul>
             </div>
-          </div>
+
+            <!-- ==================== CONTEÚDO DAS ABAS ==================== -->
+            <div class="tab-content" id="dashboardTabsContent">
+                
+                <!-- ==================== DASHBOARD 1: VISÃO GERAL ==================== -->
+                <div class="tab-pane fade show active" id="dashboard1" role="tabpanel">
+                    
+                    <!-- Filtros Dashboard 1 -->
+                    <div class="filter-container">
+                        <div class="row">
+                            <div class="col-md-3 col-6">
+                                <div class="mb-3">
+                                    <label for="anoDashboard1" class="form-label filter-label">Ano</label>
+                                    <select class="form-select" id="anoDashboard1">
+                                        <!-- Opções serão carregadas dinamicamente -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="mb-3">
+                                    <label for="mesDashboard1" class="form-label filter-label">Mês</label>
+                                    <select class="form-select" id="mesDashboard1">
+                                        <option value="all">Todos os Meses</option>
+                                        <option value="01">Janeiro</option>
+                                        <option value="02">Fevereiro</option>
+                                        <option value="03">Março</option>
+                                        <option value="04">Abril</option>
+                                        <option value="05">Maio</option>
+                                        <option value="06">Junho</option>
+                                        <option value="07">Julho</option>
+                                        <option value="08">Agosto</option>
+                                        <option value="09">Setembro</option>
+                                        <option value="10">Outubro</option>
+                                        <option value="11">Novembro</option>
+                                        <option value="12">Dezembro</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="mb-3">
+                                    <label for="aeronaveDashboard1" class="form-label filter-label">Aeronave</label>
+                                    <input type="text" class="form-control" list="aeronavesListDashboard1" id="aeronaveDashboard1" placeholder="Digite ou selecione...">
+                                    <datalist id="aeronavesListDashboard1">
+                                        <option value="all">Todas as Aeronaves</option>
+                                    </datalist>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="mb-3">
+                                    <label for="origemDashboard1" class="form-label filter-label">Origem</label>
+                                    <input type="text" class="form-control" list="origensListDashboard1" id="origemDashboard1" placeholder="Digite ou selecione...">
+                                    <datalist id="origensListDashboard1">
+                                        <option value="all">Todas as Origens</option>
+                                    </datalist>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex gap-3 flex-wrap">
+                                    <button class="btn-pesquisa" id="aplicarFiltros">
+                                        <i class="material-icons me-2">search</i>Pesquisar
+                                    </button>
+                                    <button class="btn-secondary-custom" id="limparFiltros">
+                                        <i class="material-icons me-2">clear</i>Limpar Filtros
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cards de Estatísticas Dashboard 1 -->
+                    <div class="row mb-4" id="summaryCards">
+                        <!-- Cards serão carregados aqui -->
+                    </div>
+
+                    <!-- Gráficos Dashboard 1 -->
+                    <div class="row mb-4">
+                        <div class="col-md-4 col-12">
+                            <div class="chart-container">
+                                <div class="chart-header">
+                                    <h4 class="chart-title">Voos por Mês</h4>
+                                </div>
+                                <div class="chart-wrapper">
+                                    <canvas id="chartMes"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <div class="chart-container">
+                                <div class="chart-header">
+                                    <h4 class="chart-title">Top 5 Destinos</h4>
+                                </div>
+                                <div class="chart-wrapper">
+                                    <canvas id="chartDestino"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <div class="chart-container">
+                                <div class="chart-header">
+                                    <h4 class="chart-title">Distribuição por Aeronave</h4>
+                                </div>
+                                <div class="chart-wrapper">
+                                    <canvas id="chartAeronave"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabela Resumo Dashboard 1 -->
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">Resumo de Voos por Mês</h3>
+                            <span class="table-badge" id="resumoCountDashboard1">0 registros</span>
+                        </div>
+                        <div class="table-fixed-header-container">
+                            <table class="table table-hover" id="visaoGeralTable">
+                                <thead>
+                                    <tr>
+                                        <th data-sort="mes" data-order="asc" onclick="sortTable('visaoGeral', 'mes')">
+                                            Mês <span class="sort-icon">▼</span>
+                                        </th>
+                                        <th data-sort="total_voos" data-order="desc" onclick="sortTable('visaoGeral', 'total_voos')">
+                                            Total de Voos <span class="sort-icon">▼</span>
+                                        </th>
+                                        <th data-sort="total_passageiros" data-order="desc" onclick="sortTable('visaoGeral', 'total_passageiros')">
+                                            Total de Passageiros <span class="sort-icon">▼</span>
+                                        </th>
+                                        <th data-sort="total_horas" data-order="desc" onclick="sortTable('visaoGeral', 'total_horas')">
+                                            Total de Horas <span class="sort-icon">▼</span>
+                                        </th>
+                                        <th data-sort="media_horas" data-order="desc" onclick="sortTable('visaoGeral', 'media_horas')">
+                                            Média de Horas por Voo <span class="sort-icon">▼</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="resumoTableBody">
+                                    <!-- Dados serão carregados aqui -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                </div> <!-- Fim Dashboard 1 -->
+
+                <!-- ==================== DASHBOARD 2: DETALHAMENTO DE VOOS ==================== -->
+                <div class="tab-pane fade" id="dashboard2" role="tabpanel">
+                    
+                    <!-- Filtros Dashboard 2 -->
+                    <div class="filter-container">
+                        <div class="row">
+                            <div class="col-md-3 col-6">
+                                <div class="mb-3">
+                                    <label for="anoDashboard2" class="form-label filter-label">Ano</label>
+                                    <select class="form-select" id="anoDashboard2">
+                                        <!-- Opções serão carregadas dinamicamente -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="mb-3">
+                                    <label for="mesDashboard2" class="form-label filter-label">Mês</label>
+                                    <select class="form-select" id="mesDashboard2">
+                                        <option value="all">Todos os Meses</option>
+                                        <option value="01">Janeiro</option>
+                                        <option value="02">Fevereiro</option>
+                                        <option value="03">Março</option>
+                                        <option value="04">Abril</option>
+                                        <option value="05">Maio</option>
+                                        <option value="06">Junho</option>
+                                        <option value="07">Julho</option>
+                                        <option value="08">Agosto</option>
+                                        <option value="09">Setembro</option>
+                                        <option value="10">Outubro</option>
+                                        <option value="11">Novembro</option>
+                                        <option value="12">Dezembro</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="mb-3">
+                                    <label for="origemDashboard2" class="form-label filter-label">Origem</label>
+                                    <input type="text" class="form-control" list="origensListDashboard2" id="origemDashboard2" placeholder="Digite ou selecione...">
+                                    <datalist id="origensListDashboard2">
+                                        <option value="all">Todas as Origens</option>
+                                    </datalist>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="mb-3">
+                                    <label for="destinoDashboard2" class="form-label filter-label">Destino</label>
+                                    <input type="text" class="form-control" list="destinosListDashboard2" id="destinoDashboard2" placeholder="Digite ou selecione...">
+                                    <datalist id="destinosListDashboard2">
+                                        <option value="all">Todos os Destinos</option>
+                                    </datalist>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 col-12">
+                                <div class="mb-3">
+                                    <label for="dataInicio" class="form-label filter-label">Data Início</label>
+                                    <input type="date" class="form-control" id="dataInicio">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-12">
+                                <div class="mb-3">
+                                    <label for="dataFim" class="form-label filter-label">Data Fim</label>
+                                    <input type="date" class="form-control" id="dataFim">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-12">
+                                <div class="mb-3">
+                                    <label for="aeronaveDashboard2" class="form-label filter-label">Aeronave</label>
+                                    <input type="text" class="form-control" list="aeronavesListDashboard2" id="aeronaveDashboard2" placeholder="Digite ou selecione...">
+                                    <datalist id="aeronavesListDashboard2">
+                                        <option value="all">Todas as Aeronaves</option>
+                                    </datalist>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex gap-3 flex-wrap">
+                                    <button class="btn-pesquisa" id="pesquisarVoos">
+                                        <i class="material-icons me-2">search</i>Pesquisar
+                                    </button>
+                                    <button class="btn-secondary-custom" id="limparFiltrosDashboard2">
+                                        <i class="material-icons me-2">clear</i>Limpar Filtros
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Campo de Busca de Registros Dashboard 2 -->
+                    <div class="actions-container mb-4">
+                        <div class="export-buttons">
+                            <button class="btn-export" id="exportCSVDashboard2">
+                                <i class="material-icons me-2">description</i>Exportar CSV
+                            </button>
+                            <button class="btn-export" id="printDashboard2">
+                                <i class="material-icons me-2">print</i>Imprimir
+                            </button>
+                        </div>
+
+                        <div class="right-aligned-container">
+                            <div class="items-per-page-container">
+                                <div class="search-box-container">
+                                    <label for="searchVoos">Buscar voos:</label>
+                                    <input type="text" id="searchVoos" placeholder="Buscar por histórico, passageiro, origem ou destino...">
+                                </div>
+                                
+                                <div class="items-per-page">
+                                    <span>Itens por página:</span>
+                                    <select id="itemsPerPageDashboard2">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50" selected>50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                </div>
+                                
+                                <span class="table-badge" id="resumoCountDashboard2">0 voos</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabela de Voos Dashboard 2 -->
+                    <div class="table-container">
+                        <div class="table-fixed-header-container">
+                            <table class="table table-hover" id="voosTable">
+                                <thead>
+                                    <tr>
+                                        <th data-sort="data_voo" data-order="desc" onclick="sortTable('voos', 'data_voo')">Data <span class="sort-icon">▼</span></th>
+                                        <th data-sort="origem" data-order="asc" onclick="sortTable('voos', 'origem')">Origem <span class="sort-icon">▼</span></th>
+                                        <th data-sort="destino" data-order="asc" onclick="sortTable('voos', 'destino')">Destino <span class="sort-icon">▼</span></th>
+                                        <th data-sort="historico" data-order="asc" onclick="sortTable('voos', 'historico')">Histórico <span class="sort-icon">▼</span></th>
+                                        <th data-sort="horas_voadas" data-order="desc" onclick="sortTable('voos', 'horas_voadas')">Horas <span class="sort-icon">▼</span></th>
+                                        <th data-sort="aernova" data-order="asc" onclick="sortTable('voos', 'aernova')">Aeronave <span class="sort-icon">▼</span></th>
+                                        <th data-sort="passageiro" data-order="asc" onclick="sortTable('voos', 'passageiro')">Passageiro <span class="sort-icon">▼</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="voosTableBody">
+                                    <!-- Dados serão carregados aqui -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Paginação Dashboard 2 -->
+                        <div class="pagination-container">
+                            <div class="pagination-info" id="paginationInfoDashboard2">
+                                Mostrando 0-0 de 0 registros
+                            </div>
+                            <nav aria-label="Paginação">
+                                <ul class="pagination mb-0" id="paginationDashboard2">
+                                    <!-- Paginação será gerada aqui -->
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    
+                </div> <!-- Fim Dashboard 2 -->
+
+                <!-- ==================== DASHBOARD 3: PASSAGEIROS E COMITIVA ==================== -->
+                <div class="tab-pane fade" id="dashboard3" role="tabpanel">
+                    
+                    <!-- Filtros Dashboard 3 -->
+                    <div class="filter-container">
+                        <div class="row">
+                            <div class="col-md-4 col-12">
+                                <div class="mb-3">
+                                    <label for="anoDashboard3" class="form-label filter-label">Ano</label>
+                                    <select class="form-select" id="anoDashboard3">
+                                        <!-- Opções serão carregadas dinamicamente -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-12">
+                                <div class="mb-3">
+                                    <label for="cargoDashboard3" class="form-label filter-label">Cargo/Função</label>
+                                    <input type="text" class="form-control" list="cargosListDashboard3" id="cargoDashboard3" placeholder="Digite ou selecione...">
+                                    <datalist id="cargosListDashboard3">
+                                        <option value="all">Todos os Cargos</option>
+                                    </datalist>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-12">
+                                <div class="mb-3">
+                                    <label for="orgaoDashboard3" class="form-label filter-label">Órgão</label>
+                                    <input type="text" class="form-control" list="orgaosListDashboard3" id="orgaoDashboard3" placeholder="Digite ou selecione...">
+                                    <datalist id="orgaosListDashboard3">
+                                        <option value="all">Todos os Órgãos</option>
+                                    </datalist>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex gap-3 flex-wrap">
+                                    <button class="btn-pesquisa" id="pesquisarPassageiros">
+                                        <i class="material-icons me-2">search</i>Pesquisar
+                                    </button>
+                                    <button class="btn-secondary-custom" id="limparFiltrosDashboard3">
+                                        <i class="material-icons me-2">clear</i>Limpar Filtros
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cards de Estatísticas Passageiros -->
+                    <div class="row mb-4">
+                        <div class="col-md-3 col-6">
+                            <div class="metric-card">
+                                <div class="metric-label">Total de Passageiros</div>
+                                <div class="metric-value" id="totalPassageiros">0</div>
+                                <div class="update-info">
+                                    <i class="material-icons" style="font-size: 14px;">person</i> Passageiros únicos
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="metric-card success">
+                                <div class="metric-label">Maior Comitiva</div>
+                                <div class="metric-value" id="maiorComitiva">0</div>
+                                <div class="metric-change">
+                                    <i class="material-icons" style="font-size: 14px;">groups</i> Em um único voo
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="metric-card info">
+                                <div class="metric-label">Órgãos Diferentes</div>
+                                <div class="metric-value" id="totalOrgaos">0</div>
+                                <div class="update-info">
+                                    <i class="material-icons" style="font-size: 14px;">apartment</i> Órgãos representados
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="metric-card purple">
+                                <div class="metric-label">Cargos Diferentes</div>
+                                <div class="metric-value" id="totalCargos">0</div>
+                                <div class="metric-change warning">
+                                    <i class="material-icons" style="font-size: 14px;">work</i> Funções diferentes
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gráficos Passageiros -->
+                    <div class="row mb-4">
+                        <div class="col-md-6 col-12">
+                            <div class="chart-container">
+                                <div class="chart-header">
+                                    <h4 class="chart-title">Top 10 Passageiros Mais Frequentes</h4>
+                                </div>
+                                <div class="chart-wrapper">
+                                    <canvas id="chartPassageiros"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="chart-container">
+                                <div class="chart-header">
+                                    <h4 class="chart-title">Distribuição por Órgão</h4>
+                                </div>
+                                <div class="chart-wrapper">
+                                    <canvas id="chartOrgaosPassageiros"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabela de Passageiros -->
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">Passageiros e Comitiva</h3>
+                            <span class="table-badge" id="resumoCountDashboard3">0 passageiros</span>
+                        </div>
+                        <div class="table-fixed-header-container">
+                            <table class="table table-hover" id="passageirosTable">
+                                <thead>
+                                    <tr>
+                                        <th data-sort="passageiro" data-order="asc" onclick="sortTable('passageiros', 'passageiro')">
+                                            Passageiro <span class="sort-icon">▼</span>
+                                        </th>
+                                        <th data-sort="cargo_passageiro" data-order="asc" onclick="sortTable('passageiros', 'cargo_passageiro')">
+                                            Cargo/Função <span class="sort-icon">▼</span>
+                                        </th>
+                                        <th data-sort="orgao_passageiro" data-order="asc" onclick="sortTable('passageiros', 'orgao_passageiro')">
+                                            Órgão <span class="sort-icon">▼</span>
+                                        </th>
+                                        <th data-sort="total_voos" data-order="desc" onclick="sortTable('passageiros', 'total_voos')">
+                                            Total de Voos <span class="sort-icon">▼</span>
+                                        </th>
+                                        <th data-sort="total_horas" data-order="desc" onclick="sortTable('passageiros', 'total_horas')">
+                                            Total de Horas <span class="sort-icon">▼</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="passageirosTableBody">
+                                    <!-- Dados serão carregados aqui -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                </div> <!-- Fim Dashboard 3 -->
+
+                <!-- ==================== DASHBOARD 4: MAPA DE ROTAS ==================== -->
+                <div class="tab-pane fade" id="dashboard4" role="tabpanel">
+                    
+                    <!-- Filtros Dashboard 4 -->
+                    <div class="filter-container">
+                        <div class="row">
+                            <div class="col-md-4 col-12">
+                                <div class="mb-3">
+                                    <label for="anoDashboard4" class="form-label filter-label">Ano</label>
+                                    <select class="form-select" id="anoDashboard4">
+                                        <!-- Opções serão carregadas dinamicamente -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-12">
+                                <div class="mb-3">
+                                    <label for="origemDashboard4" class="form-label filter-label">Origem</label>
+                                    <input type="text" class="form-control" list="origensListDashboard4" id="origemDashboard4" placeholder="Digite ou selecione...">
+                                    <datalist id="origensListDashboard4">
+                                        <option value="all">Todas as Origens</option>
+                                    </datalist>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-12">
+                                <div class="mb-3">
+                                    <label for="destinoDashboard4" class="form-label filter-label">Destino</label>
+                                    <input type="text" class="form-control" list="destinosListDashboard4" id="destinoDashboard4" placeholder="Digite ou selecione...">
+                                    <datalist id="destinosListDashboard4">
+                                        <option value="all">Todos os Destinos</option>
+                                    </datalist>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex gap-3 flex-wrap">
+                                    <button class="btn-pesquisa" id="aplicarFiltrosMapa">
+                                        <i class="material-icons me-2">search</i>Pesquisar
+                                    </button>
+                                    <button class="btn-secondary-custom" id="limparFiltrosDashboard4">
+                                        <i class="material-icons me-2">clear</i>Limpar Filtros
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Container do Mapa -->
+                    <div class="chart-container" style="min-height: 500px;">
+                        <div class="chart-header">
+                            <h4 class="chart-title">Mapa de Rotas dos Voos Oficiais</h4>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="mostrarRotas" checked>
+                                <label class="form-check-label" for="mostrarRotas" style="font-size: 12px;">
+                                    Mostrar rotas
+                                </label>
+                            </div>
+                        </div>
+                        <div id="mapaRotas" style="height: 400px; width: 100%; border-radius: 8px;">
+                            <div class="d-flex justify-content-center align-items-center h-100">
+                                <div class="text-center">
+                                    <i class="material-icons" style="font-size: 48px; color: #ccc;">map</i>
+                                    <p class="mt-3 text-muted">Mapa de rotas será carregado aqui</p>
+                                    <p class="text-muted" style="font-size: 12px;">Dados geoespaciais das rotas dos voos oficiais</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <div class="row">
+                                <div class="col-md-4 col-12">
+                                    <div class="d-flex align-items-center">
+                                        <div style="width: 20px; height: 2px; background-color: #3498DB; margin-right: 10px;"></div>
+                                        <span style="font-size: 12px;">Rota mais frequente</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="d-flex align-items-center">
+                                        <div style="width: 20px; height: 2px; background-color: #E74C3C; margin-right: 10px;"></div>
+                                        <span style="font-size: 12px;">Rota de maior distância</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="d-flex align-items-center">
+                                        <div style="width: 20px; height: 2px; background-color: #27AE60; margin-right: 10px;"></div>
+                                        <span style="font-size: 12px;">Rota recente</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Estatísticas de Rotas -->
+                    <div class="row mt-4">
+                        <div class="col-md-3 col-6">
+                            <div class="metric-card">
+                                <div class="metric-label">Total de Rotas</div>
+                                <div class="metric-value" id="totalRotas">0</div>
+                                <div class="update-info">
+                                    <i class="material-icons" style="font-size: 14px;">swap_horiz</i> Rotas diferentes
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="metric-card success">
+                                <div class="metric-label">Rota Mais Frequente</div>
+                                <div class="metric-value" id="rotaFrequente">-</div>
+                                <div class="metric-change">
+                                    <i class="material-icons" style="font-size: 14px;">repeat</i> Vezes realizada
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="metric-card info">
+                                <div class="metric-label">Cidades Visitadas</div>
+                                <div class="metric-value" id="totalCidades">0</div>
+                                <div class="update-info">
+                                    <i class="material-icons" style="font-size: 14px;">location_city</i> Cidades diferentes
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="metric-card purple">
+                                <div class="metric-label">Estados Visitados</div>
+                                <div class="metric-value" id="totalEstados">0</div>
+                                <div class="metric-change warning">
+                                    <i class="material-icons" style="font-size: 14px;">public</i> Estados diferentes
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabela de Rotas -->
+                    <div class="table-container mt-4">
+                        <div class="table-header">
+                            <h3 class="table-title">Principais Rotas</h3>
+                            <span class="table-badge" id="resumoCountDashboard4">0 rotas</span>
+                        </div>
+                        <div class="table-fixed-header-container">
+                            <table class="table table-hover" id="rotasTable">
+                                <thead>
+                                    <tr>
+                                        <th data-sort="rota" data-order="asc" onclick="sortTable('rotas', 'rota')">
+                                            Rota <span class="sort-icon">▼</span>
+                                        </th>
+                                        <th data-sort="frequencia" data-order="desc" onclick="sortTable('rotas', 'frequencia')">
+                                            Frequência <span class="sort-icon">▼</span>
+                                        </th>
+                                        <th data-sort="total_passageiros" data-order="desc" onclick="sortTable('rotas', 'total_passageiros')">
+                                            Total de Passageiros <span class="sort-icon">▼</span>
+                                        </th>
+                                        <th data-sort="total_horas" data-order="desc" onclick="sortTable('rotas', 'total_horas')">
+                                            Total de Horas <span class="sort-icon">▼</span>
+                                        </th>
+                                        <th data-sort="ultima_data" data-order="desc" onclick="sortTable('rotas', 'ultima_data')">
+                                            Último Voo <span class="sort-icon">▼</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="rotasTableBody">
+                                    <!-- Dados serão carregados aqui -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                </div> <!-- Fim Dashboard 4 -->
+
+                <!-- ==================== DASHBOARD 5: DOWNLOADS ==================== -->
+                <div class="tab-pane fade" id="dashboard5" role="tabpanel">
+                    
+                    <!-- Filtro de Download -->
+                    <div class="filter-container">
+                        <div class="row align-items-center">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="anoDownload" class="form-label filter-label">Selecione o Ano</label>
+                                    <select class="form-select" id="anoDownload">
+                                        <!-- Opções serão carregadas dinamicamente -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="d-flex gap-3 flex-wrap">
+                                    <button class="btn-primary-custom flex-grow-1" id="downloadCSV">
+                                        <i class="material-icons me-2">download</i>Baixar CSV Completo
+                                    </button>
+                                    <a href="https://github.com/transparencia-mg/voos_oficiais_governador" target="_blank" class="btn-legislacao flex-grow-1">
+                                        <i class="material-icons me-2">code</i>Repositório GitHub
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Informações sobre os dados -->
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">Informações sobre os Dados</h3>
+                        </div>
+                        <div class="p-4">
+                            <div class="row">
+                                <div class="col-md-6 col-12">
+                                    <div class="card-stats">
+                                        <i class="material-icons fa-3x mb-3" style="color: var(--primary-dark);">flight</i>
+                                        <h4>Dados de Voos Oficiais</h4>
+                                        <p class="text-muted" style="font-size: 13px;">Registro detalhado dos voos oficiais do Governador de Minas Gerais</p>
+                                        <div class="mt-3">
+                                            <button class="btn-export w-100" onclick="downloadAmostra()">
+                                                <i class="material-icons me-2">file_download</i>Baixar Amostra
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="card-stats">
+                                        <i class="material-icons fa-3x mb-3" style="color: var(--primary-dark);">public</i>
+                                        <h4>Portal de Dados Abertos</h4>
+                                        <p class="text-muted" style="font-size: 13px;">Acesse o portal oficial de dados abertos de Minas Gerais</p>
+                                        <div class="mt-3">
+                                            <a href="https://dados.mg.gov.br/" 
+                                               target="_blank" 
+                                               class="btn-export w-100 d-block text-decoration-none">
+                                                <i class="material-icons me-2">open_in_new</i>Acessar Portal
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <h5 class="mb-3">Metadados - Estrutura dos Dados</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Campo</th>
+                                                <th>Descrição</th>
+                                                <th>Tipo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>historico</td>
+                                                <td>Descrição/histórico do voo</td>
+                                                <td>Texto</td>
+                                            </tr>
+                                            <tr>
+                                                <td>horas_voadas</td>
+                                                <td>Duração do voo em horas</td>
+                                                <td>Tempo (HH:MM:SS)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>aernova</td>
+                                                <td>Identificação da aeronave</td>
+                                                <td>Texto</td>
+                                            </tr>
+                                            <tr>
+                                                <td>numero_db</td>
+                                                <td>Número do documento/base</td>
+                                                <td>Texto/Número</td>
+                                            </tr>
+                                            <tr>
+                                                <td>base</td>
+                                                <td>Base operacional do voo</td>
+                                                <td>Texto</td>
+                                            </tr>
+                                            <tr>
+                                                <td>data_voo</td>
+                                                <td>Data do voo</td>
+                                                <td>Data</td>
+                                            </tr>
+                                            <tr>
+                                                <td>origem</td>
+                                                <td>Aeroporto de origem</td>
+                                                <td>Texto</td>
+                                            </tr>
+                                            <tr>
+                                                <td>destino</td>
+                                                <td>Aeroporto de destino</td>
+                                                <td>Texto</td>
+                                            </tr>
+                                            <tr>
+                                                <td>passageiro</td>
+                                                <td>Nome do passageiro</td>
+                                                <td>Texto</td>
+                                            </tr>
+                                            <tr>
+                                                <td>cargo_passageiro</td>
+                                                <td>Cargo/função do passageiro</td>
+                                                <td>Texto</td>
+                                            </tr>
+                                            <tr>
+                                                <td>orgao_passageiro</td>
+                                                <td>Órgão do passageiro</td>
+                                                <td>Texto</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <div class="alert alert-info mt-3">
+                                    <i class="material-icons me-2">info</i>
+                                    <strong>Fonte dos Dados:</strong> Os dados são carregados automaticamente do repositório GitHub 
+                                    <a href="https://github.com/transparencia-mg/voos_oficiais_governador" target="_blank">transparencia-mg/voos_oficiais_governador</a>
+                                </div>
+                                
+                                <div class="alert alert-success mt-2">
+                                    <i class="material-icons me-2">sync</i>
+                                    <strong>Atualização Automática:</strong> Os dados são atualizados automaticamente quando novos arquivos são adicionados ao repositório GitHub.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div> <!-- Fim Dashboard 5 -->
+            </div>
         </div>
+    </div>
+
+    <!-- ==================== LOADING OVERLAY ==================== -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- ==================== SCRIPTS ==================== -->
+
+    <!-- PapaParse -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    
+    <!-- jQuery e Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // ============================================
+        // VARIÁVEIS GLOBAIS
+        // ============================================
+        let voosData = [];
+        let filteredData = [];
+        let currentYear = 'all';
+        let currentSortDashboard1 = { column: 'mes', order: 'asc' };
+        let currentSortDashboard2 = { column: 'data_voo', order: 'desc' };
+        let currentSortDashboard3 = { column: 'passageiro', order: 'asc' };
+        let currentSortDashboard4 = { column: 'rota', order: 'asc' };
+        let charts = {};
         
-        <!-- Linha separada para botões de exportação -->
-        <div class="row g-2 mt-3">
-          <div class="col-md-12">
-            <div class="d-flex flex-wrap gap-2 justify-content-end">
-              <button id="exportCSV" class="btn btn-outline-primary"><i class="fas fa-file-csv me-1"></i> Exportar CSV</button>
-              <button id="exportExcel" class="btn btn-outline-success"><i class="fas fa-file-excel me-1"></i> Exportar Excel</button>
-              <button id="btn-print" class="btn btn-outline-secondary"><i class="fas fa-print me-1"></i> Imprimir</button>
-              <button id="shareBtn" class="btn btn-outline-info"><i class="fas fa-share-alt me-1"></i> Compartilhar</button>
-            </div>
-          </div>
-        </div>
-      </div>
+        // URLs base do GitHub
+        const GITHUB_BASE_URL = 'https://github.com/transparencia-mg/voos_oficiais_governador/tree/main/dataset/data';
+        const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/transparencia-mg/voos_oficiais_governador/main/dataset/data';
 
-      <!-- stats -->
-      <div class="row g-3 mb-3">
-        <div class="col-md-3">
-          <div class="card-stats">
-            <i class="fas fa-plane fa-2x" style="color:var(--accent-red)"></i>
-            <div class="value" id="card-voos">—</div>
-            <div class="small text-muted">Total de Voos</div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card-stats">
-            <i class="fas fa-clock fa-2x" style="color:#2E5984"></i>
-            <div class="value" id="card-horas">—</div>
-            <div class="small text-muted">Horas Voadas</div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card-stats">
-            <i class="fas fa-users fa-2x" style="color:#2E8B57"></i>
-            <div class="value" id="card-passageiros">—</div>
-            <div class="small text-muted">Total de Passageiros</div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card-stats">
-            <i class="fas fa-map-marker-alt fa-2x" style="color:#6A5ACD"></i>
-            <div class="value" id="card-destinos">—</div>
-            <div class="small text-muted">Total de Destinos</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- charts -->
-      <div class="row g-3">
-        <div class="col-md-6">
-          <div class="chart-card">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <div><strong>Top 10 Destinos (pizza)</strong></div>
-              <div class="small text-muted">Fonte: GitHub</div>
-            </div>
-            <div id="chart-pie" style="height:260px;"></div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="chart-card">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <div><strong>Distribuição por Mês</strong></div>
-              <div class="small text-muted">Fonte: GitHub</div>
-            </div>
-            <div id="chart-month" style="height:260px;"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- table -->
-      <div class="table-card mt-3">
-        <div class="d-flex justify-content-between align-items-center p-3" style="border-bottom:1px solid #f1f1f1;">
-          <div><strong>Detalhamento de Voos</strong></div>
-          <div class="d-flex align-items-center gap-2">
-            <div class="small">Ano: <span id="table-year">2025</span></div>
-            <div class="badge-count" id="voos-count">0 voos</div>
-          </div>
-        </div>
-        <div class="table-responsive p-3">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>Data</th>
-                <th>Nº Voo</th>
-                <th>Origem</th>
-                <th>Destino</th>
-                <th>Qtd Passageiros</th>
-                <th>Situação do Voo</th>
-                <th>Horas Voadas</th>
-              </tr>
-            </thead>
-            <tbody id="voos-table-body">
-              <tr><td colspan="7" class="text-center">Carregando dados...</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="p-3 d-flex justify-content-between align-items-center" style="border-top:1px solid #f1f1f1;">
-          <div id="pagination-info" class="text-muted">Mostrando 0 de 0 voos</div>
-          <div class="d-flex gap-2">
-            <button id="btn-prev" class="btn btn-sm btn-outline-primary" disabled>Anterior</button>
-            <button id="btn-next" class="btn btn-sm btn-outline-primary" disabled>Próximo</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ANÁLISE POR DESTINO -->
-    <section id="tab-destinos" class="tab-pane" style="display:none;">
-      <div class="filter-card mb-3">
-        <div class="row g-3 align-items-end">
-          <div class="col-md-3">
-            <label class="form-label small">Ano</label>
-            <select id="analise-ano" class="form-select"><option value="2025">2025</option><option value="2021">2021</option><option value="all">Todos</option></select>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label small">Destino</label>
-            <select id="analise-destino" class="form-select"><option value="all">Todos os destinos</option></select>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label small">Passageiro</label>
-            <select id="analise-passageiro" class="form-select"><option value="all">Todos</option></select>
-          </div>
-          <div class="col-md-2">
-            <div class="d-grid">
-              <button id="btn-analisar" class="btn-primary-custom"><i class="fas fa-chart-bar me-1"></i> Gerar Análise</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row g-3 mb-3">
-        <div class="col-md-3"><div class="card-stats"><i class="fas fa-plane fa-2x" style="color:var(--accent-red)"></i><div class="value" id="analise-total">—</div><div class="small text-muted">Voos para o Destino</div></div></div>
-        <div class="col-md-3"><div class="card-stats"><i class="fas fa-percentage fa-2x" style="color:var(--success-green)"></i><div class="value" id="analise-sucesso">—</div><div class="small text-muted">Taxa de Realização</div></div></div>
-        <div class="col-md-3"><div class="card-stats"><i class="fas fa-clock fa-2x" style="color:#2E5984"></i><div class="value" id="analise-horas">—</div><div class="small text-muted">Horas Totais</div></div></div>
-        <div class="col-md-3"><div class="card-stats"><i class="fas fa-user-friends fa-2x" style="color:#6A5ACD"></i><div class="value" id="analise-passageiros">—</div><div class="small text-muted">Passageiros Únicos</div></div></div>
-      </div>
-
-      <div class="table-card">
-        <div class="d-flex justify-content-between align-items-center p-3" style="border-bottom:1px solid #f1f1f1;">
-          <div><strong>Destinos</strong></div>
-          <div class="small text-muted">Resultados por destino</div>
-        </div>
-        <div class="table-responsive p-3">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>Destino</th>
-                <th>Total de Voos</th>
-                <th>Horas Totais</th>
-                <th>Qtd Passageiros</th>
-                <th>Percentual de Voos</th>
-              </tr>
-            </thead>
-            <tbody id="analise-table-body">
-              <tr><td colspan="5" class="text-center">Selecione filtros e clique em "Gerar Análise"</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- DOWNLOAD -->
-    <section id="tab-download" class="tab-pane" style="display:none;">
-      <div class="table-card p-3 mb-3">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <div><strong>Download de Dados</strong></div>
-          <div><span class="badge-count">Dados Abertos</span></div>
-        </div>
-
-        <div class="row g-3">
-          <div class="col-md-6">
-            <h6>Arquivos no repositório</h6>
-            <div id="arquivos-lista" class="list-group"></div>
-            <div class="mt-3">
-              <a class="btn btn-outline-dark" href="https://dados.mg.gov.br" target="_blank"><i class="fas fa-external-link-alt me-1"></i> Portal de Dados Abertos</a>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <h6>Exportar dados filtrados</h6>
-            <p class="text-muted">Baixe os dados atuais filtrados pelo painel (CSV).</p>
-            <div class="d-grid gap-2">
-              <button id="downloadFiltered" class="btn btn-primary"><i class="fas fa-download me-1"></i> Baixar dados filtrados (CSV)</button>
-              <div class="mt-3">
-                <h6>Metadados (estrutura dos campos)</h6>
-                <table class="table table-sm table-bordered">
-                  <thead><tr><th>Campo</th><th>Descrição</th></tr></thead>
-                  <tbody>
-                    <tr><td>historico</td><td>Histórico / observações</td></tr>
-                    <tr><td>solicitante</td><td>Pessoa que solicitou</td></tr>
-                    <tr><td>orgao_solicitante</td><td>Órgão solicitante</td></tr>
-                    <tr><td>situacao_voo</td><td>Situação informada pelo sistema</td></tr>
-                    <tr><td>horas_voadas</td><td>Horas voadas (decimal)</td></tr>
-                    <tr><td>aeronave</td><td>Identificação da aeronave</td></tr>
-                    <tr><td>n_db</td><td>Número do voo / DB</td></tr>
-                    <tr><td>base</td><td>Base</td></tr>
-                    <tr><td>data</td><td>Data do voo (YYYY-MM-DD)</td></tr>
-                    <tr><td>orgao_responsavel</td><td>Órgão responsável</td></tr>
-                    <tr><td>origem</td><td>Aeroporto de origem (código)</td></tr>
-                    <tr><td>destino</td><td>Aeroporto de destino (código)</td></tr>
-                    <tr><td>passageiro</td><td>Nome do passageiro</td></tr>
-                    <tr><td>cargo_funcao</td><td>Cargo / função</td></tr>
-                    <tr><td>orgao_passageiro</td><td>Órgão do passageiro</td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-  </main>
-
-  <footer class="container text-center mt-4 mb-4">
-    <small>© 2025 Governo de Minas Gerais — Dados: <a href="https://github.com/transparencia-mg/voos_oficiais_governador" target="_blank">GitHub / transparencia-mg</a></small>
-  </footer>
-
-  <!-- SCRIPTS -->
-  <script>
-  // -----------------------------
-  // CONFIGURAÇÃO
-  // -----------------------------
-  const GITHUB_API_CONTENTS = 'https://api.github.com/repos/transparencia-mg/voos_oficiais_governador/contents/docs/data/normalized';
-  const GITHUB_RAW = 'https://raw.githubusercontent.com/transparencia-mg/voos_oficiais_governador/main/docs/data/normalized';
-  // procurar arquivos no formato voos_YYYY.csv (OPÇÃO A)
-  const FILE_PATTERN = /^voos_(\d{4})\.csv$/i;
-
-  // colunas que iremos manter (nomes normalizados)
-  const VALID_COLUMNS = [
-    'historico','solicitante','orgao_solicitante','situacao_voo','horas_voadas',
-    'aeronave','n_db','base','data','orgao_responsavel','origem','destino',
-    'passageiro','cargo_funcao','orgao_passageiro'
-  ];
-
-  // estado
-  let allRows = [];      // todas as linhas processadas (raw)
-  let groupedFlights = {}; // agrupamento por voo (key)
-  let filteredFlights = []; // voos (agrupados) após filtro
-  let currentPage = 1;
-  const pageSize = 50;
-
-  // -----------------------------
-  // UTIL: mostrar/ocultar loading e status
-  // -----------------------------
-  function showLoading(msg='Carregando...'){
-    document.getElementById('loadingText').textContent = msg;
-    document.getElementById('loadingOverlay').style.display = 'flex';
-    updateStatus('updating', msg);
-  }
-  function hideLoading(){ document.getElementById('loadingOverlay').style.display = 'none'; }
-  function updateStatus(cls, text){
-    const el = document.getElementById('updateStatus'); const txt = document.getElementById('updateStatusText');
-    el.className = 'update-status ' + (cls || '');
-    txt.textContent = text || '';
-  }
-  function notify(msg, type='info'){
-    const n = document.createElement('div'); n.className = 'alert alert-' + (type==='info'?'primary':type) + ' alert-dismissible';
-    n.style.position='fixed'; n.style.right='20px'; n.style.top='20px'; n.style.zIndex=20000;
-    n.innerHTML = msg + ' <button class="btn-close" onclick="this.parentElement.remove()"></button>';
-    document.body.appendChild(n);
-    setTimeout(()=>{ if(n.parentNode) n.remove(); },6000);
-  }
-
-  // -----------------------------
-  // Normalização de headers e limpeza BOM
-  // -----------------------------
-  function limparBOM(s){ return s ? s.replace(/^\uFEFF/, '') : s; }
-  function normalizeKey(k){
-    if(!k) return '';
-    k = limparBOM(k).trim();
-    k = k.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-    k = k.replace(/[^\w]+/g,'_').replace(/^_|_$/g,'').toLowerCase();
-    return k;
-  }
-
-  // -----------------------------
-  // Ler lista de arquivos do repo (API GitHub) e carregar aqueles que casam com voos_YYYY.csv
-  // -----------------------------
-  async function fetchFilesList(){
-    try{
-      const res = await fetch(GITHUB_API_CONTENTS);
-      if(!res.ok) throw new Error('Erro ao listar arquivos: ' + res.status);
-      const data = await res.json();
-      const files = data.filter(f => FILE_PATTERN.test(f.name)).map(f => f.name).sort().reverse();
-      return files;
-    }catch(err){
-      console.error('Erro fetchFilesList', err);
-      // fallback: tentar lista manual comum
-      return ['voos_2025.csv','voos_2021.csv'];
-    }
-  }
-
-  // -----------------------------
-  // Carregar e parsear CSV via PapaParse (transformHeader para normalizar)
-  // -----------------------------
-  function parseCSV(csvText){
-    return new Promise((resolve, reject) => {
-      Papa.parse(csvText, {
-        header: true,
-        skipEmptyLines: true,
-        transformHeader: h => normalizeKey(h),
-        complete: r => resolve(r.data),
-        error: e => reject(e)
-      });
-    });
-  }
-
-  // -----------------------------
-  // Processar linhas: manter só colunas válidas e mapear
-  // -----------------------------
-  function mapRowKeepColumns(row){
-    // row já tem headers normalizados
-    const r = {};
-    for(const key of VALID_COLUMNS){
-      r[key] = row[key] !== undefined ? (row[key] === null ? '' : String(row[key]).trim()) : '';
-    }
-    // padronizar horas_voadas -> número decimal (ponto)
-    r.horas_voadas = parseFloat((r.horas_voadas || '').toString().replace(',','.')) || 0;
-
-    // garantir data como string
-    r.data = r.data || '';
-
-    // situacao_voo: se vazio, inferir a partir de horas_voadas
-    if(!r.situacao_voo || r.situacao_voo.trim()===''){
-      r.situacao_voo = (r.horas_voadas && r.horas_voadas > 0) ? 'REALIZADO' : 'CANCELADO';
-    } else {
-      r.situacao_voo = r.situacao_voo.toString().trim();
-    }
-
-    return r;
-  }
-
-  // -----------------------------
-  // Identificador único de voo (para contar voos únicos)
-  //    usa n_db quando disponível, senão data|origem|destino|aeronave
-  // -----------------------------
-  function flightKey(row){
-    if(row.n_db && row.n_db.trim() !== '') return `${row.n_db.trim()}|${row.data}|${row.aeronave || ''}`.toUpperCase();
-    return `${row.data}|${row.origem}|${row.destino}|${row.aeronave || ''}`.toUpperCase();
-  }
-
-  // -----------------------------
-  // Carregar todos os arquivos detectados
-  // -----------------------------
-  async function loadAllData(){
-    showLoading('Detectando arquivos no GitHub...');
-    updateStatus('updating','Detectando arquivos...');
-    const files = await fetchFilesList();
-    const loaded = [];
-    document.getElementById('arquivos-lista').innerHTML = '<div class="text-muted small">Verificando arquivos...</div>';
-
-    for(const fname of files){
-      const url = `${GITHUB_RAW}/${fname}`;
-      try{
-        showLoading('Carregando ' + fname + ' ...');
-        const r = await fetch(url);
-        if(!r.ok){ console.warn('Arquivo nao carregado', fname, r.status); continue; }
-        const txt = await r.text();
-        const parsed = await parseCSV(txt);
-        // mapear e filtrar apenas colunas válidas
-        parsed.forEach(p => {
-          const keep = mapRowKeepColumns(p);
-          // incluir origem/destino/passageiro/data obrigatórios
-          if(keep.data && keep.origem && keep.destino){
-            // extrair ano
-            const m = keep.data.match(/(\d{4})/);
-            keep.ano = m ? m[1] : (fname.match(/(\d{4})/) ? fname.match(/(\d{4})/)[1] : '');
-            // guardar raw original? (já perdemos cabeçalhos originais mas ok)
-            loaded.push(keep);
-          }
-        });
-      }catch(err){
-        console.error('Erro carregando', fname, err);
-      }
-    }
-
-    allRows = loaded;
-    hideLoading();
-    if(allRows.length === 0){
-      updateStatus('offline','Nenhum registro carregado');
-      notify('Nenhum registro carregado — verifique os CSVs no repositório.', 'warning');
-    } else {
-      updateStatus('online','Dados carregados');
-    }
-
-    // popular selects e processar agrupamento
-    populateSelects();
-    buildFlightGroups();
-    applyFilters(); // load initial view
-    renderFilesList(files);
-  }
-
-  // -----------------------------
-  // Exibir lista de arquivos (Download tab)
-  // -----------------------------
-  function renderFilesList(files){
-    const container = document.getElementById('arquivos-lista');
-    container.innerHTML = '';
-    if(!files || files.length===0){
-      container.innerHTML = '<div class="text-muted small">Nenhum arquivo encontrado.</div>';
-      return;
-    }
-    files.forEach(f=>{
-      const item = document.createElement('div'); item.className='list-group-item d-flex justify-content-between align-items-center';
-      item.innerHTML = `<div><strong>${f}</strong><div class="small text-muted">Arquivo CSV</div></div>
-        <div><a class="btn btn-sm btn-outline-primary" href="${GITHUB_RAW}/${f}" target="_blank"><i class="fas fa-download me-1"></i> Baixar</a></div>`;
-      container.appendChild(item);
-    });
-  }
-
-  // -----------------------------
-  // Popular selects filtro (anos, origens, destinos, passageiros)
-  // -----------------------------
-  function populateSelects(){
-    const anos = Array.from(new Set(allRows.map(r=>r.ano).filter(Boolean))).sort().reverse();
-    const origens = Array.from(new Set(allRows.map(r=>r.origem).filter(Boolean))).sort();
-    const destinos = Array.from(new Set(allRows.map(r=>r.destino).filter(Boolean))).sort();
-    const passageiros = Array.from(new Set(allRows.map(r=>r.passageiro).filter(Boolean))).sort();
-
-    // anos
-    const sAno = document.getElementById('filter-ano');
-    const analiseAno = document.getElementById('analise-ano');
-    sAno.innerHTML = '';
-    analiseAno.innerHTML = '';
-    (anos.length?anos:['2025','2021']).forEach(a=>{
-      const o = document.createElement('option'); o.value=a; o.textContent=a; sAno.appendChild(o);
-      const o2 = document.createElement('option'); o2.value=a; o2.textContent=a; analiseAno.appendChild(o2);
-    });
-    // adicionar Todos
-    const optAll1 = document.createElement('option'); optAll1.value='all'; optAll1.textContent='Todos os anos'; sAno.appendChild(optAll1);
-    const optAll2 = document.createElement('option'); optAll2.value='all'; optAll2.textContent='Todos'; analiseAno.appendChild(optAll2);
-
-    // origens
-    const sOrig = document.getElementById('filter-origem'); sOrig.innerHTML='<option value="all">Todas as origens</option>';
-    origens.forEach(o=>{ const opt=document.createElement('option'); opt.value=o; opt.textContent=o; sOrig.appendChild(opt); });
-
-    // destinos
-    const sDest = document.getElementById('filter-destino'); sDest.innerHTML='<option value="all">Todos os destinos</option>';
-    destinos.forEach(d=>{ const opt=document.createElement('option'); opt.value=d; opt.textContent=d; sDest.appendChild(opt); });
-    // analise destino
-    const aDest = document.getElementById('analise-destino'); aDest.innerHTML='<option value="all">Todos os destinos</option>';
-    destinos.forEach(d=>{ const opt=document.createElement('option'); opt.value=d; opt.textContent=d; aDest.appendChild(opt); });
-
-    // passageiros
-    const sPass = document.getElementById('filter-passageiro'); sPass.innerHTML='<option value="all">Todos os passageiros</option>';
-    const aPass = document.getElementById('analise-passageiro'); aPass.innerHTML='<option value="all">Todos</option>';
-    passageiros.forEach(p=>{ const opt = document.createElement('option'); opt.value=p; opt.textContent=p; sPass.appendChild(opt); aPass.appendChild(opt.cloneNode(true)); });
-  }
-
-  // -----------------------------
-  // Agrupar linhas por voo (flightKey) e calcular quantidade de passageiros por voo
-  // groupedFlights: { flightKey: { key, n_db, data, origem, destino, aeronave, situacao_voo, horas_voadas_total, passageiros:Set(), rows:[] } }
-  // -----------------------------
-  function buildFlightGroups(){
-    groupedFlights = {};
-    for(const row of allRows){
-      const key = flightKey(row);
-      if(!groupedFlights[key]){
-        groupedFlights[key] = {
-          key,
-          n_db: row.n_db || '',
-          data: row.data || '',
-          origem: row.origem || '',
-          destino: row.destino || '',
-          aeronave: row.aeronave || '',
-          situacao_voo: row.situacao_voo || '',
-          horas_voadas_total: 0,
-          passageiros: new Set(),
-          rows: []
+        // Mapeamento de meses
+        const mesesMap = {
+            '01': 'Janeiro', '02': 'Fevereiro', '03': 'Março', '04': 'Abril',
+            '05': 'Maio', '06': 'Junho', '07': 'Julho', '08': 'Agosto',
+            '09': 'Setembro', '10': 'Outubro', '11': 'Novembro', '12': 'Dezembro'
         };
-      }
-      groupedFlights[key].rows.push(row);
-      groupedFlights[key].horas_voadas_total += (parseFloat(row.horas_voadas) || 0);
-      if(row.passageiro) groupedFlights[key].passageiros.add(row.passageiro);
-    }
-  }
 
-  // -----------------------------
-  // Aplicar filtros (visão geral)
-  // -----------------------------
-  function applyFilters(){
-    const ano = document.getElementById('filter-ano').value;
-    const origem = document.getElementById('filter-origem').value;
-    const destino = document.getElementById('filter-destino').value;
-    const passageiro = document.getElementById('filter-passageiro').value;
+        // Cores para gráficos
+        const chartColors = {
+            primary: '#1A5276',
+            accent: '#3498DB',
+            bright: '#2980B9',
+            dark: '#0E2F44',
+            success: '#27AE60',
+            warning: '#F39C12',
+            info: '#17A589',
+            purple: '#8E44AD',
+            orange: '#E67E22',
+            teal: '#16A085',
+            danger: '#E74C3C'
+        };
 
-    // transformar groupedFlights em array de voos
-    const flights = Object.values(groupedFlights).map(f => ({
-      key: f.key,
-      n_db: f.n_db,
-      data: f.data,
-      origem: f.origem,
-      destino: f.destino,
-      situacao_voo: f.situacao_voo,
-      horas_voadas: f.horas_voadas_total,
-      passageiros_count: f.passageiros.size,
-      passageiros_list: Array.from(f.passageiros)
-    }));
+        // ==================== FUNÇÕES DE INICIALIZAÇÃO ====================
 
-    let list = flights;
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            loadInitialData();
+            updateDataAtualizacao();
+            console.log('Painel de Voos Oficiais do Governador carregado com sucesso!!!');
+        });
 
-    if(ano && ano !== 'all') list = list.filter(f => (f.data || '').indexOf(ano) !== -1);
-    if(origem && origem !== 'all') list = list.filter(f => f.origem === origem);
-    if(destino && destino !== 'all') list = list.filter(f => f.destino === destino);
-    if(passageiro && passageiro !== 'all') list = list.filter(f => f.passageiros_list.includes(passageiro));
+        function showLoading(show) {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.display = show ? 'flex' : 'none';
+        }
 
-    // ordenar por data desc
-    list.sort((a,b) => (b.data || '').localeCompare(a.data || ''));
+        function showError(message) {
+            const container = document.querySelector('.main-container');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'alert alert-danger alert-dismissible fade show';
+            errorDiv.innerHTML = `
+                <i class="material-icons me-2">warning</i>
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            container.prepend(errorDiv);
+        }
 
-    filteredFlights = list;
-    currentPage = 1;
-    renderOverview();
-    renderTablePage();
-  }
+        function updateDataAtualizacao() {
+            const now = new Date();
+            const dataFormatada = now.toLocaleDateString('pt-BR') + ' ' + now.toLocaleTimeString('pt-BR');
+            const elementoData = document.getElementById('data-atualizacao-header');
+            if (elementoData) {
+                elementoData.textContent = dataFormatada;
+            }
+        }
 
-  // -----------------------------
-  // Render overview (stats + charts)
-  // -----------------------------
-  function renderOverview(){
-    // stats
-    const totalVoos = filteredFlights.length;
-    const totalHoras = filteredFlights.reduce((s,f)=>s + (parseFloat(f.horas_voadas)||0),0);
-    const totalPass = new Set(filteredFlights.flatMap(f=>f.passageiros_list)).size;
-    const totalDest = new Set(filteredFlights.map(f=>f.destino)).size;
+        // Função para converter horas no formato HH:MM:SS para horas decimais
+        function horasParaDecimal(horasStr) {
+            if (!horasStr) return 0;
+            
+            const partes = horasStr.split(':');
+            if (partes.length !== 3) return 0;
+            
+            const horas = parseInt(partes[0]) || 0;
+            const minutos = parseInt(partes[1]) || 0;
+            const segundos = parseInt(partes[2]) || 0;
+            
+            return horas + (minutos / 60) + (segundos / 3600);
+        }
 
-    document.getElementById('card-voos').textContent = totalVoos.toLocaleString('pt-BR');
-    document.getElementById('card-horas').textContent = formatHoras(totalHoras);
-    document.getElementById('card-passageiros').textContent = totalPass.toLocaleString('pt-BR');
-    document.getElementById('card-destinos').textContent = totalDest.toLocaleString('pt-BR');
-    document.getElementById('voos-count').textContent = `${totalVoos} voos`;
+        // Função para formatar horas decimais para HH:MM
+        function formatarHoras(horasDecimal) {
+            const horas = Math.floor(horasDecimal);
+            const minutos = Math.round((horasDecimal - horas) * 60);
+            return `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+        }
 
-    // charts
-    // pie TOP 10 destinos (by number of flights unique)
-    const destCounts = {};
-    filteredFlights.forEach(f => { destCounts[f.destino] = (destCounts[f.destino]||0) + 1; });
-    const destEntries = Object.entries(destCounts).map(([k,v])=>({k,v})).sort((a,b)=>b.v-a.v).slice(0,10);
-    const pieLabels = destEntries.map(d=>d.k);
-    const pieValues = destEntries.map(d=>d.v);
+        // ==================== CONFIGURAR EVENT LISTENERS ====================
+        function setupEventListeners() {
+            // Filtros Dashboard 1
+            document.getElementById('aplicarFiltros').addEventListener('click', function() {
+                applyFilters('dashboard1');
+            });
+            document.getElementById('limparFiltros').addEventListener('click', function() {
+                clearAllFilters();
+            });
+            
+            // Dashboard 2
+            document.getElementById('pesquisarVoos').addEventListener('click', function() {
+                applyFilters('dashboard2');
+            });
+            document.getElementById('limparFiltrosDashboard2').addEventListener('click', function() {
+                clearDashboard2Filters();
+            });
+            
+            // Dashboard 3
+            document.getElementById('pesquisarPassageiros').addEventListener('click', function() {
+                applyFilters('dashboard3');
+            });
+            document.getElementById('limparFiltrosDashboard3').addEventListener('click', function() {
+                clearDashboard3Filters();
+            });
+            
+            // Dashboard 4
+            document.getElementById('aplicarFiltrosMapa').addEventListener('click', function() {
+                applyFilters('dashboard4');
+            });
+            document.getElementById('limparFiltrosDashboard4').addEventListener('click', function() {
+                clearDashboard4Filters();
+            });
+            
+            // Download
+            document.getElementById('downloadCSV').addEventListener('click', downloadFullCSV);
+            
+            // Campo de busca
+            document.getElementById('searchVoos').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                filterVoosTable(searchTerm);
+            });
+            
+            // Troca de abas
+            const tabs = document.querySelectorAll('[data-bs-toggle="tab"]');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-bs-target').replace('#', '');
+                    setTimeout(() => {
+                        if (tabId === 'dashboard1') updateDashboard1();
+                        else if (tabId === 'dashboard2') updateDashboard2();
+                        else if (tabId === 'dashboard3') updateDashboard3();
+                        else if (tabId === 'dashboard4') updateDashboard4();
+                    }, 100);
+                });
+            });
+            
+            // Itens por página Dashboard 2
+            document.getElementById('itemsPerPageDashboard2').addEventListener('change', function() {
+                updateDashboard2();
+            });
+            
+            // Mapa - mostrar/ocultar rotas
+            document.getElementById('mostrarRotas').addEventListener('change', function() {
+                updateMapaRotas();
+            });
+        }
 
-    // choose palette (consistent)
-    const palette = [
-      '#2E5984','#B93C42','#2E8B57','#6A5ACD','#E87A2C','#1F77B4','#9467BD','#8C564B','#7F7F7F','#17BECF'
-    ];
+        async function loadInitialData() {
+            showLoading(true);
+            try {
+                // Tentar carregar dados de 2025 primeiro (ano mais recente no exemplo)
+                await loadData('2025');
+                updateFilterOptions();
+                updateDashboard1();
+                updateDashboard2();
+                updateDashboard3();
+                updateDashboard4();
+                console.log('Dashboard inicializado com sucesso!');
+                console.log(`Dados carregados: ${voosData.length} registros de voos`);
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                showError('Erro ao carregar dados do CSV. Tentando carregar dados de exemplo...');
+                // Em caso de erro, carregar dados do exemplo fornecido
+                await loadDadosExemplo();
+            } finally {
+                showLoading(false);
+            }
+        }
 
-    Plotly.newPlot('chart-pie',[{
-      labels: pieLabels,
-      values: pieValues,
-      type: 'pie',
-      marker:{colors: palette.slice(0,pieLabels.length)},
-      textinfo:'label+percent',
-      insidetextorientation:'radial'
-    }],{margin:{t:10,b:10}}, {responsive:true});
+        // Função para carregar dados do GitHub
+        async function loadData(year) {
+            return new Promise((resolve, reject) => {
+                const csvUrl = `${GITHUB_RAW_BASE}/voos_${year}.csv`;
+                
+                Papa.parse(csvUrl, {
+                    download: true,
+                    header: true,
+                    delimiter: ";",
+                    encoding: "utf-8",
+                    skipEmptyLines: "greedy",
+                    transformHeader: function (header) {
+                        return header
+                            .replace(/^\uFEFF/, "")
+                            .trim()
+                            .toLowerCase()
+                            .normalize("NFD")
+                            .replace(/[\u0300-\u036f]/g, "");
+                    },
+                    complete: function (results) {
+                        console.log(`Linhas brutas ${year}:`, results.data.length);
+                        
+                        const dadosValidos = results.data.filter(row =>
+                            Object.values(row).some(v => v && v.toString().trim() !== "")
+                        );
+                        
+                        // Processar dados
+                        const novosDados = dadosValidos.map((row, index) => {
+                            // Extrair ano da data
+                            let ano = year;
+                            if (row.data_voo) {
+                                const partesData = row.data_voo.split('/');
+                                if (partesData.length === 3) {
+                                    ano = partesData[2];
+                                }
+                            }
+                            
+                            // Extrair mês da data
+                            let mes = '';
+                            if (row.data_voo) {
+                                const partesData = row.data_voo.split('/');
+                                if (partesData.length === 3) {
+                                    mes = partesData[1];
+                                }
+                            }
+                            
+                            return {
+                                __id: `${ano}_${index}`,
+                                ano: ano,
+                                mes: mes,
+                                historico: row.historico || '',
+                                horas_voadas: row.horas_voadas || '00:00:00',
+                                horas_decimais: horasParaDecimal(row.horas_voadas || '00:00:00'),
+                                aernova: row.aernova || '',
+                                numero_db: row.numero_db || '',
+                                base: row.base || '',
+                                data_voo: row.data_voo || '',
+                                origem: row.origem || '',
+                                destino: row.destino || '',
+                                passageiro: row.passageiro || '',
+                                cargo_passageiro: row.cargo_passageiro || '',
+                                orgao_passageiro: row.orgao_passageiro || ''
+                            };
+                        });
+                        
+                        // Adicionar aos dados existentes
+                        voosData = [...voosData, ...novosDados];
+                        filteredData = [...voosData];
+                        
+                        console.log(`Dados ${year} processados:`, novosDados.length);
+                        console.log("Total de registros:", voosData.length);
+                        
+                        resolve();
+                    },
+                    error: function (err) {
+                        console.error(`Erro ao carregar CSV de ${year}:`, err);
+                        reject(err);
+                    }
+                });
+            });
+        }
 
-    // month bar chart (by month from data field)
-    const monthCounts = {}; // 'YYYY-MM' -> count
-    filteredFlights.forEach(f=>{
-      const m = (f.data || '').match(/^(\d{4})-(\d{2})/);
-      const key = m ? `${m[1]}-${m[2]}` : 'unknown';
-      monthCounts[key] = (monthCounts[key]||0) + 1;
-    });
-    const months = Object.keys(monthCounts).sort();
-    const monthValues = months.map(m=>monthCounts[m]);
-    Plotly.newPlot('chart-month',[{
-      x: months,
-      y: monthValues,
-      type: 'bar',
-      marker:{color: palette}
-    }],{margin:{t:10,b:80}}, {responsive:true});
-  }
+        // Função para carregar dados do exemplo fornecido
+        async function loadDadosExemplo() {
+            return new Promise((resolve) => {
+                // Usar os dados do exemplo fornecido
+                const dadosExemplo = `historico;horas_voadas;aernova;numero_db;base;data_voo;origem;destino;passageiro;cargo_passageiro;orgao_passageiro
+Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO e Araçuaí/MG;01:30:00;PP-LCE - PÉGASUS 24;0117-2025;DTA;05/09/2025;GOIANIA;ARACUAI;Andre Valadares da Cruz;Videomaker;Secretaria de Estado de Comunicaçăo Social
+Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO e Araçuaí/MG;01:30:00;PP-LCE - PÉGASUS 24;0117-2025;DTA;05/09/2025;GOIANIA;ARACUAI;Andreza Gischewski Costa;Assessor Especial;Secretaria-Geral do Estado de Minas Gerais
+Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO e Araçuaí/MG;01:30:00;PP-LCE - PÉGASUS 24;0117-2025;DTA;05/09/2025;GOIANIA;ARACUAI;Igor Augusto Tinoco da Silva;Imprensa;Secretaria de Estado de Comunicaçăo Social`;
+                
+                Papa.parse(dadosExemplo, {
+                    header: true,
+                    delimiter: ";",
+                    skipEmptyLines: "greedy",
+                    transformHeader: function (header) {
+                        return header
+                            .replace(/^\uFEFF/, "")
+                            .trim()
+                            .toLowerCase()
+                            .normalize("NFD")
+                            .replace(/[\u0300-\u036f]/g, "");
+                    },
+                    complete: function (results) {
+                        const dadosValidos = results.data.filter(row =>
+                            Object.values(row).some(v => v && v.toString().trim() !== "")
+                        );
+                        
+                        voosData = dadosValidos.map((row, index) => {
+                            // Extrair ano e mês da data
+                            let ano = '2025';
+                            let mes = '09';
+                            if (row.data_voo) {
+                                const partesData = row.data_voo.split('/');
+                                if (partesData.length === 3) {
+                                    ano = partesData[2];
+                                    mes = partesData[1];
+                                }
+                            }
+                            
+                            return {
+                                __id: `${ano}_${index}`,
+                                ano: ano,
+                                mes: mes,
+                                historico: row.historico || '',
+                                horas_voadas: row.horas_voadas || '00:00:00',
+                                horas_decimais: horasParaDecimal(row.horas_voadas || '00:00:00'),
+                                aernova: row.aernova || '',
+                                numero_db: row.numero_db || '',
+                                base: row.base || '',
+                                data_voo: row.data_voo || '',
+                                origem: row.origem || '',
+                                destino: row.destino || '',
+                                passageiro: row.passageiro || '',
+                                cargo_passageiro: row.cargo_passageiro || '',
+                                orgao_passageiro: row.orgao_passageiro || ''
+                            };
+                        });
+                        
+                        filteredData = [...voosData];
+                        
+                        console.log("Dados de exemplo carregados:", voosData.length);
+                        updateFilterOptions();
+                        updateDashboard1();
+                        updateDashboard2();
+                        updateDashboard3();
+                        updateDashboard4();
+                        
+                        resolve();
+                    }
+                });
+            });
+        }
 
-  // -----------------------------
-  // Render tabela (pagina atual)
-  // -----------------------------
-  function renderTablePage(){
-    const start = (currentPage-1)*pageSize;
-    const page = filteredFlights.slice(start, start+pageSize);
-    const tbody = document.getElementById('voos-table-body');
-    if(!page || page.length===0){
-      tbody.innerHTML = '<tr><td colspan="7" class="text-center">Nenhum voo encontrado com os filtros aplicados</td></tr>';
-      document.getElementById('pagination-info').textContent = `Mostrando 0 de 0 voos`;
-      document.getElementById('btn-prev').disabled = true;
-      document.getElementById('btn-next').disabled = true;
-      return;
-    }
-    let html = '';
-    page.forEach(f=>{
-      html += `<tr>
-        <td>${escapeHtml(formatDate(f.data))}</td>
-        <td>${escapeHtml(f.n_db || '')}</td>
-        <td>${escapeHtml(f.origem)}</td>
-        <td>${escapeHtml(f.destino)}</td>
-        <td>${escapeHtml(String(f.passageiros_count || f.passageiros_list.length || 0))}</td>
-        <td>${escapeHtml(f.situacao_voo || '')}</td>
-        <td>${escapeHtml(formatHoras(f.horas_voadas))}</td>
-      </tr>`;
-    });
-    tbody.innerHTML = html;
+        // ==================== FUNÇÕES DE FILTRO ====================
+        function updateFilterOptions() {
+            // Obter anos únicos
+            const anosUnicos = [...new Set(voosData.map(v => v.ano))].sort((a, b) => b - a);
+            
+            // Atualizar todos os selects de ano
+            ['Dashboard1', 'Dashboard2', 'Dashboard3', 'Dashboard4', 'Download'].forEach(suffix => {
+                const selectId = `ano${suffix}`;
+                const select = document.getElementById(selectId);
+                if (select) {
+                    select.innerHTML = '<option value="all">Todos os Anos</option>';
+                    anosUnicos.forEach(ano => {
+                        const option = document.createElement('option');
+                        option.value = ano;
+                        option.textContent = ano;
+                        if (ano === '2025') option.selected = true;
+                        select.appendChild(option);
+                    });
+                }
+            });
+            
+            // Obter aeronaves únicas
+            const aeronavesUnicas = [...new Set(voosData.map(v => v.aernova))].sort();
+            ['Dashboard1', 'Dashboard2'].forEach(suffix => {
+                const datalistId = `aeronavesList${suffix}`;
+                const datalist = document.getElementById(datalistId);
+                if (datalist) {
+                    datalist.innerHTML = '<option value="all">Todas as Aeronaves</option>';
+                    aeronavesUnicas.forEach(aeronave => {
+                        if (aeronave) {
+                            const option = document.createElement('option');
+                            option.value = aeronave;
+                            datalist.appendChild(option);
+                        }
+                    });
+                }
+            });
+            
+            // Obter origens únicas
+            const origensUnicas = [...new Set(voosData.map(v => v.origem))].sort();
+            ['Dashboard1', 'Dashboard2', 'Dashboard4'].forEach(suffix => {
+                const datalistId = `origensList${suffix}`;
+                const datalist = document.getElementById(datalistId);
+                if (datalist) {
+                    datalist.innerHTML = '<option value="all">Todas as Origens</option>';
+                    origensUnicas.forEach(origem => {
+                        if (origem) {
+                            const option = document.createElement('option');
+                            option.value = origem;
+                            datalist.appendChild(option);
+                        }
+                    });
+                }
+            });
+            
+            // Obter destinos únicos
+            const destinosUnicos = [...new Set(voosData.map(v => v.destino))].sort();
+            ['Dashboard2', 'Dashboard4'].forEach(suffix => {
+                const datalistId = `destinosList${suffix}`;
+                const datalist = document.getElementById(datalistId);
+                if (datalist) {
+                    datalist.innerHTML = '<option value="all">Todos os Destinos</option>';
+                    destinosUnicos.forEach(destino => {
+                        if (destino) {
+                            const option = document.createElement('option');
+                            option.value = destino;
+                            datalist.appendChild(option);
+                        }
+                    });
+                }
+            });
+            
+            // Obter cargos únicos
+            const cargosUnicos = [...new Set(voosData.map(v => v.cargo_passageiro))].sort();
+            const cargosDatalist = document.getElementById('cargosListDashboard3');
+            if (cargosDatalist) {
+                cargosDatalist.innerHTML = '<option value="all">Todos os Cargos</option>';
+                cargosUnicos.forEach(cargo => {
+                    if (cargo) {
+                        const option = document.createElement('option');
+                        option.value = cargo;
+                        cargosDatalist.appendChild(option);
+                    }
+                });
+            }
+            
+            // Obter órgãos únicos
+            const orgaosUnicos = [...new Set(voosData.map(v => v.orgao_passageiro))].sort();
+            const orgaosDatalist = document.getElementById('orgaosListDashboard3');
+            if (orgaosDatalist) {
+                orgaosDatalist.innerHTML = '<option value="all">Todos os Órgãos</option>';
+                orgaosUnicos.forEach(orgao => {
+                    if (orgao) {
+                        const option = document.createElement('option');
+                        option.value = orgao;
+                        orgaosDatalist.appendChild(option);
+                    }
+                });
+            }
+        }
 
-    // pagination info
-    const total = filteredFlights.length;
-    const startItem = total===0?0:(start+1);
-    const endItem = Math.min(start+pageSize, total);
-    document.getElementById('pagination-info').textContent = `Mostrando ${startItem}-${endItem} de ${total} voos`;
-    document.getElementById('btn-prev').disabled = currentPage <= 1;
-    document.getElementById('btn-next').disabled = endItem >= total;
-  }
+        function applyFilters(dashboard) {
+            showLoading(true);
+            
+            if (dashboard === 'dashboard1') {
+                const ano = document.getElementById('anoDashboard1').value;
+                const mes = document.getElementById('mesDashboard1').value;
+                const aeronaveInput = document.getElementById('aeronaveDashboard1').value;
+                const origemInput = document.getElementById('origemDashboard1').value;
+                
+                const aeronave = aeronaveInput === 'all' || aeronaveInput === '' ? 'all' : aeronaveInput;
+                const origem = origemInput === 'all' || origemInput === '' ? 'all' : origemInput;
+                
+                // Filtrar dados
+                filteredData = voosData.filter(voo => {
+                    // Filtro por ano
+                    if (ano !== 'all' && voo.ano !== ano) {
+                        return false;
+                    }
+                    
+                    // Filtro por mês
+                    if (mes !== 'all' && voo.mes !== mes) {
+                        return false;
+                    }
+                    
+                    // Filtro por aeronave
+                    if (aeronave !== 'all' && voo.aernova !== aeronave) {
+                        return false;
+                    }
+                    
+                    // Filtro por origem
+                    if (origem !== 'all' && voo.origem !== origem) {
+                        return false;
+                    }
+                    
+                    return true;
+                });
+                
+                currentYear = ano;
+                updateDashboard1();
+                
+            } else if (dashboard === 'dashboard2') {
+                const ano = document.getElementById('anoDashboard2').value;
+                const mes = document.getElementById('mesDashboard2').value;
+                const origemInput = document.getElementById('origemDashboard2').value;
+                const destinoInput = document.getElementById('destinoDashboard2').value;
+                const dataInicio = document.getElementById('dataInicio').value;
+                const dataFim = document.getElementById('dataFim').value;
+                const aeronaveInput = document.getElementById('aeronaveDashboard2').value;
+                
+                const origem = origemInput === 'all' || origemInput === '' ? 'all' : origemInput;
+                const destino = destinoInput === 'all' || destinoInput === '' ? 'all' : destinoInput;
+                const aeronave = aeronaveInput === 'all' || aeronaveInput === '' ? 'all' : aeronaveInput;
+                
+                // Filtrar dados
+                filteredData = voosData.filter(voo => {
+                    // Filtro por ano
+                    if (ano !== 'all' && voo.ano !== ano) {
+                        return false;
+                    }
+                    
+                    // Filtro por mês
+                    if (mes !== 'all' && voo.mes !== mes) {
+                        return false;
+                    }
+                    
+                    // Filtro por origem
+                    if (origem !== 'all' && voo.origem !== origem) {
+                        return false;
+                    }
+                    
+                    // Filtro por destino
+                    if (destino !== 'all' && voo.destino !== destino) {
+                        return false;
+                    }
+                    
+                    // Filtro por aeronave
+                    if (aeronave !== 'all' && voo.aernova !== aeronave) {
+                        return false;
+                    }
+                    
+                    // Filtro por data início
+                    if (dataInicio) {
+                        const dataVoo = converterDataParaComparacao(voo.data_voo);
+                        const dataInicioComp = new Date(dataInicio);
+                        if (dataVoo < dataInicioComp) {
+                            return false;
+                        }
+                    }
+                    
+                    // Filtro por data fim
+                    if (dataFim) {
+                        const dataVoo = converterDataParaComparacao(voo.data_voo);
+                        const dataFimComp = new Date(dataFim);
+                        if (dataVoo > dataFimComp) {
+                            return false;
+                        }
+                    }
+                    
+                    return true;
+                });
+                
+                currentYear = ano;
+                updateDashboard2();
+                
+            } else if (dashboard === 'dashboard3') {
+                const ano = document.getElementById('anoDashboard3').value;
+                const cargoInput = document.getElementById('cargoDashboard3').value;
+                const orgaoInput = document.getElementById('orgaoDashboard3').value;
+                
+                const cargo = cargoInput === 'all' || cargoInput === '' ? 'all' : cargoInput;
+                const orgao = orgaoInput === 'all' || orgaoInput === '' ? 'all' : orgaoInput;
+                
+                // Filtrar dados
+                filteredData = voosData.filter(voo => {
+                    // Filtro por ano
+                    if (ano !== 'all' && voo.ano !== ano) {
+                        return false;
+                    }
+                    
+                    // Filtro por cargo
+                    if (cargo !== 'all' && voo.cargo_passageiro !== cargo) {
+                        return false;
+                    }
+                    
+                    // Filtro por órgão
+                    if (orgao !== 'all' && voo.orgao_passageiro !== orgao) {
+                        return false;
+                    }
+                    
+                    return true;
+                });
+                
+                currentYear = ano;
+                updateDashboard3();
+                
+            } else if (dashboard === 'dashboard4') {
+                const ano = document.getElementById('anoDashboard4').value;
+                const origemInput = document.getElementById('origemDashboard4').value;
+                const destinoInput = document.getElementById('destinoDashboard4').value;
+                
+                const origem = origemInput === 'all' || origemInput === '' ? 'all' : origemInput;
+                const destino = destinoInput === 'all' || destinoInput === '' ? 'all' : destinoInput;
+                
+                // Filtrar dados
+                filteredData = voosData.filter(voo => {
+                    // Filtro por ano
+                    if (ano !== 'all' && voo.ano !== ano) {
+                        return false;
+                    }
+                    
+                    // Filtro por origem
+                    if (origem !== 'all' && voo.origem !== origem) {
+                        return false;
+                    }
+                    
+                    // Filtro por destino
+                    if (destino !== 'all' && voo.destino !== destino) {
+                        return false;
+                    }
+                    
+                    return true;
+                });
+                
+                currentYear = ano;
+                updateDashboard4();
+            }
+            
+            showLoading(false);
+        }
 
-  function prevPage(){ if(currentPage>1){ currentPage--; renderTablePage(); } }
-  function nextPage(){ const totalPages = Math.ceil(filteredFlights.length / pageSize); if(currentPage < totalPages){ currentPage++; renderTablePage(); } }
+        function converterDataParaComparacao(dataStr) {
+            if (!dataStr) return new Date(0);
+            
+            const partes = dataStr.split('/');
+            if (partes.length === 3) {
+                return new Date(`${partes[2]}-${partes[1]}-${partes[0]}`);
+            }
+            
+            return new Date(dataStr);
+        }
 
-  // -----------------------------
-  // ANÁLISE POR DESTINO (gera a tabela agregada por destino)
-  // Regras: contar voos únicos (já agrupados), somar horas, contar passageiros únicos
-  // Percentual de voos: (voos deste destino / total voos selecionados) * 100
-  // -----------------------------
-  function gerarAnalise(){
-    const ano = document.getElementById('analise-ano').value;
-    const destinoFilter = document.getElementById('analise-destino').value;
-    const passageiro = document.getElementById('analise-passageiro').value;
+        function filterVoosTable(searchTerm) {
+            if (!searchTerm.trim()) {
+                updateDashboard2();
+                return;
+            }
+            
+            const tempFiltered = [...filteredData];
+            const filtered = filteredData.filter(voo => {
+                return (
+                    voo.historico.toLowerCase().includes(searchTerm) ||
+                    voo.origem.toLowerCase().includes(searchTerm) ||
+                    voo.destino.toLowerCase().includes(searchTerm) ||
+                    voo.passageiro.toLowerCase().includes(searchTerm) ||
+                    voo.aernova.toLowerCase().includes(searchTerm)
+                );
+            });
+            
+            filteredData = filtered;
+            updateDashboard2();
+            filteredData = tempFiltered;
+        }
 
-    // considerar somente voos que atendem filtros (reaproveitar groupedFlights -> flights)
-    const flights = Object.values(groupedFlights).map(f => ({
-      key: f.key,
-      data: f.data,
-      ano: (f.data||'').match(/(\d{4})/) ? (f.data||'').match(/(\d{4})/)[1] : '',
-      origem: f.origem,
-      destino: f.destino,
-      horas: f.horas_voadas_total,
-      passageiros: Array.from(f.passageiros),
-      passageiros_count: f.passageiros.size
-    }));
+        function clearAllFilters() {
+            document.getElementById('anoDashboard1').value = 'all';
+            document.getElementById('mesDashboard1').value = 'all';
+            document.getElementById('aeronaveDashboard1').value = '';
+            document.getElementById('origemDashboard1').value = '';
+            
+            currentYear = 'all';
+            filteredData = [...voosData];
+            
+            updateDashboard1();
+        }
 
-    let list = flights;
-    if(ano && ano !== 'all') list = list.filter(f => f.ano === ano);
-    if(destinoFilter && destinoFilter !== 'all') list = list.filter(f => f.destino === destinoFilter);
-    if(passageiro && passageiro !== 'all') list = list.filter(f => f.passageiros.includes(passageiro));
+        function clearDashboard2Filters() {
+            document.getElementById('anoDashboard2').value = 'all';
+            document.getElementById('mesDashboard2').value = 'all';
+            document.getElementById('origemDashboard2').value = '';
+            document.getElementById('destinoDashboard2').value = '';
+            document.getElementById('dataInicio').value = '';
+            document.getElementById('dataFim').value = '';
+            document.getElementById('aeronaveDashboard2').value = '';
+            document.getElementById('searchVoos').value = '';
+            
+            currentYear = 'all';
+            filteredData = [...voosData];
+            
+            updateDashboard2();
+        }
 
-    // agrupar por destino
-    const map = {};
-    list.forEach(f=>{
-      if(!map[f.destino]) map[f.destino] = { destino: f.destino, total:0, horas:0, passageirosSet: new Set() };
-      map[f.destino].total += 1;
-      map[f.destino].horas += parseFloat(f.horas) || 0;
-      f.passageiros.forEach(p => { if(p) map[f.destino].passageirosSet.add(p); });
-    });
+        function clearDashboard3Filters() {
+            document.getElementById('anoDashboard3').value = 'all';
+            document.getElementById('cargoDashboard3').value = '';
+            document.getElementById('orgaoDashboard3').value = '';
+            
+            currentYear = 'all';
+            filteredData = [...voosData];
+            
+            updateDashboard3();
+        }
 
-    const arr = Object.values(map).map(v=>({
-      destino: v.destino,
-      total: v.total,
-      horas: v.horas,
-      passageiros: v.passageirosSet.size
-    })).sort((a,b)=>b.total - a.total);
+        function clearDashboard4Filters() {
+            document.getElementById('anoDashboard4').value = 'all';
+            document.getElementById('origemDashboard4').value = '';
+            document.getElementById('destinoDashboard4').value = '';
+            
+            currentYear = 'all';
+            filteredData = [...voosData];
+            
+            updateDashboard4();
+        }
 
-    // total voos para calculo de percentual
-    const totalVoos = arr.reduce((s,i)=>s+i.total,0) || 0;
+        // ==================== DASHBOARD 1: VISÃO GERAL ====================
+        function updateDashboard1() {
+            updateSummaryCards();
+            updateResumoTable();
+            updateCharts1();
+        }
 
-    // render tabela
-    const tbody = document.getElementById('analise-table-body');
-    if(arr.length === 0){
-      tbody.innerHTML = '<tr><td colspan="5" class="text-center">Nenhum dado</td></tr>';
-    } else {
-      let html = '';
-      // limitar a 10 se quiser, mas você pediu todos; vamos exibir todos (se quiser limite, slice(0,10))
-      arr.forEach(a=>{
-        const perc = totalVoos > 0 ? ((a.total / totalVoos) * 100).toFixed(1) : '0.0';
-        html += `<tr>
-          <td>${escapeHtml(a.destino)}</td>
-          <td>${a.total}</td>
-          <td>${escapeHtml(formatHoras(a.horas))}</td>
-          <td>${a.passageiros}</td>
-          <td>${perc}%</td>
-        </tr>`;
-      });
-      tbody.innerHTML = html;
-    }
+        function updateSummaryCards() {
+            const container = document.getElementById('summaryCards');
+            
+            if (filteredData.length === 0) {
+                container.innerHTML = '<div class="col-12 text-center"><p class="text-muted">Nenhum voo encontrado para os filtros aplicados.</p></div>';
+                return;
+            }
+            
+            // Calcular métricas
+            const totalVoos = [...new Set(filteredData.map(v => `${v.data_voo}_${v.origem}_${v.destino}`))].length;
+            const totalPassageiros = filteredData.length;
+            const totalHoras = filteredData.reduce((sum, voo) => sum + voo.horas_decimais, 0);
+            
+            // Contar aeronaves diferentes
+            const aeronavesDiferentes = [...new Set(filteredData.map(v => v.aernova))].length;
+            
+            // Calcular média de passageiros por voo
+            const voosAgrupados = {};
+            filteredData.forEach(voo => {
+                const key = `${voo.data_voo}_${voo.origem}_${voo.destino}`;
+                if (!voosAgrupados[key]) {
+                    voosAgrupados[key] = {
+                        passageiros: 0,
+                        horas: voo.horas_decimais
+                    };
+                }
+                voosAgrupados[key].passageiros++;
+            });
+            
+            const mediaPassageirosPorVoo = totalVoos > 0 ? 
+                Object.values(voosAgrupados).reduce((sum, voo) => sum + voo.passageiros, 0) / totalVoos : 0;
+            
+            const cardsHTML = `
+                <div class="col-md-3 col-6">
+                    <div class="metric-card">
+                        <div class="metric-label">Total de Voos</div>
+                        <div class="metric-value">${totalVoos.toLocaleString('pt-BR')}</div>
+                        <div class="update-info">
+                            <i class="material-icons" style="font-size: 14px;">flight</i> Voos realizados
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="metric-card success">
+                        <div class="metric-label">Total de Passageiros</div>
+                        <div class="metric-value">${totalPassageiros.toLocaleString('pt-BR')}</div>
+                        <div class="metric-change positive">
+                            ${mediaPassageirosPorVoo.toFixed(1)} média por voo
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="metric-card info">
+                        <div class="metric-label">Total de Horas Voadas</div>
+                        <div class="metric-value">${formatarHoras(totalHoras)}</div>
+                        <div class="update-info">
+                            <i class="material-icons" style="font-size: 14px;">schedule</i> Horas no ar
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="metric-card purple">
+                        <div class="metric-label">Aeronaves Diferentes</div>
+                        <div class="metric-value">${aeronavesDiferentes}</div>
+                        <div class="metric-change warning">
+                            <i class="material-icons" style="font-size: 14px;">airplanemode_active</i> Aeronaves utilizadas
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = cardsHTML;
+        }
 
-    // estatisticas gerais (agregadas)
-    const horasTotais = arr.reduce((s,i)=>s + (i.horas||0),0);
-    const passageirosUnicos = new Set(list.flatMap(f => f.passageiros)).size;
-    document.getElementById('analise-total').textContent = totalVoos.toLocaleString('pt-BR');
-    document.getElementById('analise-horas').textContent = formatHoras(horasTotais);
-    document.getElementById('analise-passageiros').textContent = passageirosUnicos.toLocaleString('pt-BR');
-    document.getElementById('analise-sucesso').textContent = '—';
-  }
+        function updateResumoTable() {
+            const tbody = document.getElementById('resumoTableBody');
+            const countElement = document.getElementById('resumoCountDashboard1');
+            
+            if (filteredData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">Nenhum voo encontrado para os filtros aplicados.</td></tr>';
+                if (countElement) countElement.textContent = '0 registros';
+                return;
+            }
+            
+            // Agrupar por mês
+            const mesesData = {};
+            filteredData.forEach(voo => {
+                const mes = voo.mes;
+                const mesNome = mesesMap[mes] || `Mês ${mes}`;
+                
+                if (!mesesData[mes]) {
+                    mesesData[mes] = {
+                        mes: mesNome,
+                        mesNumero: parseInt(mes),
+                        total_voos: new Set(),
+                        total_passageiros: 0,
+                        total_horas: 0,
+                        registros: []
+                    };
+                }
+                
+                // Adicionar voo único (por data+origem+destino)
+                const vooKey = `${voo.data_voo}_${voo.origem}_${voo.destino}`;
+                mesesData[mes].total_voos.add(vooKey);
+                
+                // Contar passageiros
+                mesesData[mes].total_passageiros++;
+                
+                // Somar horas
+                mesesData[mes].total_horas += voo.horas_decimais;
+                
+                // Armazenar registro
+                mesesData[mes].registros.push(voo);
+            });
+            
+            // Converter para array e ordenar
+            let resumoArray = Object.values(mesesData);
+            resumoArray.sort((a, b) => {
+                const order = currentSortDashboard1.order === 'asc' ? 1 : -1;
+                
+                if (currentSortDashboard1.column === 'mes') {
+                    return order * (a.mesNumero - b.mesNumero);
+                } else if (currentSortDashboard1.column === 'total_voos') {
+                    return order * (a.total_voos.size - b.total_voos.size);
+                } else if (currentSortDashboard1.column === 'total_passageiros') {
+                    return order * (a.total_passageiros - b.total_passageiros);
+                } else if (currentSortDashboard1.column === 'total_horas') {
+                    return order * (a.total_horas - b.total_horas);
+                } else if (currentSortDashboard1.column === 'media_horas') {
+                    const mediaA = a.total_voos.size > 0 ? a.total_horas / a.total_voos.size : 0;
+                    const mediaB = b.total_voos.size > 0 ? b.total_horas / b.total_voos.size : 0;
+                    return order * (mediaA - mediaB);
+                }
+                return 0;
+            });
+            
+            // Gerar HTML da tabela
+            const rowsHTML = resumoArray.map(item => {
+                const mediaHoras = item.total_voos.size > 0 ? item.total_horas / item.total_voos.size : 0;
+                
+                return `
+                    <tr>
+                        <td><strong>${item.mes}</strong></td>
+                        <td class="text-center">${item.total_voos.size.toLocaleString('pt-BR')}</td>
+                        <td class="text-center">${item.total_passageiros.toLocaleString('pt-BR')}</td>
+                        <td class="text-center">${formatarHoras(item.total_horas)}</td>
+                        <td class="text-center">${formatarHoras(mediaHoras)}</td>
+                    </tr>
+                `;
+            }).join('');
+            
+            tbody.innerHTML = rowsHTML;
+            if (countElement) countElement.textContent = `${resumoArray.length} meses`;
+            
+            updateSortIconsDashboard1();
+        }
 
-  // -----------------------------
-  // Export filtered flights (csv) — gera CSV com as colunas principais
-  // -----------------------------
-  function exportFilteredCSV(){
-    if(!filteredFlights || filteredFlights.length === 0){ notify('Nenhum registro para exportar','warning'); return; }
-    const headers = ['data','n_db','origem','destino','qtd_passageiros','situacao_voo','horas_voadas'];
-    const rows = [headers.join(',')];
-    filteredFlights.forEach(f=>{
-      const line = [
-        f.data,
-        f.n_db || '',
-        f.origem,
-        f.destino,
-        f.passageiros_list.length || 0,
-        f.situacao_voo || '',
-        (f.horas_voadas || 0)
-      ];
-      rows.push(line.map(cell => { const s = (cell===null||cell===undefined)?'':String(cell); return (s.includes(',')||s.includes('"'))?`"${s.replace(/"/g,'""')}"`:s; }).join(','));
-    });
-    const blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a'); const url = URL.createObjectURL(blob);
-    link.href = url; link.download = `voos_filtrados_${new Date().toISOString().slice(0,10)}.csv`; document.body.appendChild(link); link.click(); link.remove(); URL.revokeObjectURL(url);
-    notify(`Exportado ${filteredFlights.length} voos (CSV)`, 'success');
-  }
+        function updateSortIconsDashboard1() {
+            const headers = document.querySelectorAll('#visaoGeralTable thead th');
+            headers.forEach(header => {
+                const sortIcon = header.querySelector('.sort-icon');
+                const column = header.getAttribute('data-sort');
+                
+                if (column === currentSortDashboard1.column) {
+                    header.classList.add('sorted-' + currentSortDashboard1.order);
+                    if (sortIcon) {
+                        sortIcon.innerHTML = currentSortDashboard1.order === 'asc' ? '↑' : '↓';
+                    }
+                } else {
+                    header.classList.remove('sorted-asc', 'sorted-desc');
+                    if (sortIcon) {
+                        sortIcon.innerHTML = '▼';
+                    }
+                }
+            });
+        }
 
-  // -----------------------------
-  // Export Excel (simples: baixar CSV com extensão .xlsx para abrir no Excel) — nota: opção simples
-  // -----------------------------
-  function exportFilteredExcel(){
-    if(!filteredFlights || filteredFlights.length === 0){ notify('Nenhum registro para exportar','warning'); return; }
-    // reutiliza CSV mas altera nome ext
-    const headers = ['data','n_db','origem','destino','qtd_passageiros','situacao_voo','horas_voadas'];
-    const rows = [headers.join(',')];
-    filteredFlights.forEach(f=>{
-      const line = [
-        f.data,
-        f.n_db || '',
-        f.origem,
-        f.destino,
-        f.passageiros_list.length || 0,
-        f.situacao_voo || '',
-        (f.horas_voadas || 0)
-      ];
-      rows.push(line.map(cell => { const s = (cell===null||cell===undefined)?'':String(cell); return (s.includes(',')||s.includes('"'))?`"${s.replace(/"/g,'""')}"`:s; }).join(','));
-    });
-    const blob = new Blob([rows.join('\n')], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8;' });
-    const link = document.createElement('a'); const url = URL.createObjectURL(blob);
-    link.href = url; link.download = `voos_filtrados_${new Date().toISOString().slice(0,10)}.xlsx`; document.body.appendChild(link); link.click(); link.remove(); URL.revokeObjectURL(url);
-    notify(`Exportado ${filteredFlights.length} voos (Excel)`, 'success');
-  }
+        function updateCharts1() {
+            if (filteredData.length === 0) return;
+            
+            updateMesChart();
+            updateDestinoChart();
+            updateAeronaveChart();
+        }
 
-  // -----------------------------
-  // Helpers: formatDate, formatHoras, escapeHtml
-  // -----------------------------
-  function formatDate(d){
-    if(!d) return '';
-    const iso = new Date(d);
-    if(!isNaN(iso.getTime())) return iso.toLocaleDateString('pt-BR');
-    const m = d.match(/^(\d{4})-(\d{2})-(\d{2})/);
-    if(m) return `${m[3]}/${m[2]}/${m[1]}`;
-    return d;
-  }
-  function formatHoras(h){
-    if(h === null || h === undefined || isNaN(h)) return '0h 0m';
-    const hi = Math.floor(h);
-    const min = Math.round((h - hi) * 60);
-    return `${hi}h ${min}m`;
-  }
-  function escapeHtml(s){ if(s===null||s===undefined) return ''; return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+        function updateMesChart() {
+            const ctx = document.getElementById('chartMes')?.getContext('2d');
+            if (!ctx) return;
+            
+            // Agrupar por mês
+            const mesesCount = {};
+            filteredData.forEach(v => {
+                const mes = v.mes;
+                const mesNome = mesesMap[mes] || `Mês ${mes}`;
+                mesesCount[mesNome] = (mesesCount[mesNome] || 0) + 1;
+            });
+            
+            // Ordenar por mês numérico
+            const mesesOrdenados = Object.keys(mesesCount)
+                .sort((a, b) => {
+                    const mesA = Object.keys(mesesMap).find(key => mesesMap[key] === a) || '13';
+                    const mesB = Object.keys(mesesMap).find(key => mesesMap[key] === b) || '13';
+                    return parseInt(mesA) - parseInt(mesB);
+                });
+            
+            const counts = mesesOrdenados.map(mes => mesesCount[mes]);
+            
+            if (charts.mes) {
+                charts.mes.destroy();
+            }
+            
+            charts.mes = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: mesesOrdenados,
+                    datasets: [{
+                        label: 'Número de Passageiros',
+                        data: counts,
+                        backgroundColor: chartColors.accent,
+                        borderColor: chartColors.primary,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
 
-  // -----------------------------
-  // Event bindings and init
-  // -----------------------------
-  document.addEventListener('DOMContentLoaded', () => {
-    // tabs
-    document.querySelectorAll('.nav-link').forEach(btn=>{
-      btn.addEventListener('click', (e)=>{
-        e.preventDefault();
-        document.querySelectorAll('.nav-link').forEach(n=>n.classList.remove('active'));
-        btn.classList.add('active');
-        document.querySelectorAll('.tab-pane').forEach(t=>t.style.display='none');
-        const target = btn.getAttribute('data-target');
-        document.querySelector(target).style.display = 'block';
-      });
-    });
+        function updateDestinoChart() {
+            const ctx = document.getElementById('chartDestino')?.getContext('2d');
+            if (!ctx) return;
+            
+            // Contar por destino
+            const destinosCount = {};
+            filteredData.forEach(v => {
+                const destino = v.destino;
+                destinosCount[destino] = (destinosCount[destino] || 0) + 1;
+            });
+            
+            // Pegar top 5 destinos
+            const topDestinos = Object.entries(destinosCount)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+            
+            const labels = topDestinos.map(([destino]) => destino);
+            const data = topDestinos.map(([, count]) => count);
+            
+            if (charts.destino) {
+                charts.destino.destroy();
+            }
+            
+            charts.destino = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: [
+                            chartColors.primary,
+                            chartColors.accent,
+                            chartColors.success,
+                            chartColors.warning,
+                            chartColors.info
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                usePointStyle: true,
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
 
-    // bind buttons
-    document.getElementById('btn-apply').addEventListener('click', applyFilters);
-    document.getElementById('btn-clear').addEventListener('click', ()=>{
-      document.getElementById('filter-ano').value = '2025';
-      document.getElementById('filter-origem').value = 'all';
-      document.getElementById('filter-destino').value = 'all';
-      document.getElementById('filter-passageiro').value = 'all';
-      applyFilters();
-    });
-    document.getElementById('btn-prev').addEventListener('click', prevPage);
-    document.getElementById('btn-next').addEventListener('click', nextPage);
-    document.getElementById('exportCSV').addEventListener('click', exportFilteredCSV);
-    document.getElementById('exportExcel').addEventListener('click', exportFilteredExcel);
-    document.getElementById('btn-print').addEventListener('click', ()=>window.print());
-    document.getElementById('downloadFiltered').addEventListener('click', exportFilteredCSV);
-    document.getElementById('btn-analisar').addEventListener('click', gerarAnalise);
+        function updateAeronaveChart() {
+            const ctx = document.getElementById('chartAeronave')?.getContext('2d');
+            if (!ctx) return;
+            
+            // Contar por aeronave
+            const aeronavesCount = {};
+            filteredData.forEach(v => {
+                const aeronave = v.aernova;
+                aeronavesCount[aeronave] = (aeronavesCount[aeronave] || 0) + 1;
+            });
+            
+            const labels = Object.keys(aeronavesCount);
+            const data = Object.values(aeronavesCount);
+            
+            if (charts.aeronave) {
+                charts.aeronave.destroy();
+            }
+            
+            charts.aeronave = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: [
+                            chartColors.primary,
+                            chartColors.accent,
+                            chartColors.success,
+                            chartColors.warning,
+                            chartColors.info,
+                            chartColors.purple
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                usePointStyle: true,
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
 
-    // share
-    document.getElementById('shareBtn').addEventListener('click', ()=>{
-      const url = encodeURIComponent(window.location.href);
-      const text = encodeURIComponent('Painel de Voos Oficiais - Governo de Minas Gerais');
-      window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank', 'width=600,height=400');
-    });
+        // ==================== DASHBOARD 2: DETALHAMENTO DE VOOS ====================
+        function updateDashboard2() {
+            const tbody = document.getElementById('voosTableBody');
+            const countElement = document.getElementById('resumoCountDashboard2');
+            const paginationInfo = document.getElementById('paginationInfoDashboard2');
+            
+            if (filteredData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">Nenhum voo encontrado para os filtros aplicados.</td></tr>';
+                if (countElement) countElement.textContent = '0 voos';
+                if (paginationInfo) paginationInfo.textContent = 'Mostrando 0-0 de 0 registros';
+                return;
+            }
+            
+            // Ordenar dados
+            let voosArray = [...filteredData];
+            voosArray.sort((a, b) => {
+                const order = currentSortDashboard2.order === 'asc' ? 1 : -1;
+                
+                if (currentSortDashboard2.column === 'data_voo') {
+                    const dataA = converterDataParaComparacao(a.data_voo);
+                    const dataB = converterDataParaComparacao(b.data_voo);
+                    return order * (dataA - dataB);
+                } else if (currentSortDashboard2.column === 'origem') {
+                    return order * a.origem.localeCompare(b.origem);
+                } else if (currentSortDashboard2.column === 'destino') {
+                    return order * a.destino.localeCompare(b.destino);
+                } else if (currentSortDashboard2.column === 'historico') {
+                    return order * a.historico.localeCompare(b.historico);
+                } else if (currentSortDashboard2.column === 'horas_voadas') {
+                    return order * (a.horas_decimais - b.horas_decimais);
+                } else if (currentSortDashboard2.column === 'aernova') {
+                    return order * a.aernova.localeCompare(b.aernova);
+                } else if (currentSortDashboard2.column === 'passageiro') {
+                    return order * a.passageiro.localeCompare(b.passageiro);
+                }
+                return 0;
+            });
+            
+            // Paginação
+            const itemsPerPage = parseInt(document.getElementById('itemsPerPageDashboard2').value) || 50;
+            const totalPages = Math.ceil(voosArray.length / itemsPerPage);
+            const currentPage = 1; // Sempre começa na página 1 para esta implementação simples
+            
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, voosArray.length);
+            const currentData = voosArray.slice(startIndex, endIndex);
+            
+            // Gerar HTML da tabela
+            const rowsHTML = currentData.map(voo => {
+                // Limitar histórico se for muito longo
+                const historicoCurto = voo.historico.length > 50 ? 
+                    voo.historico.substring(0, 50) + '...' : voo.historico;
+                
+                return `
+                <tr>
+                    <td>${voo.data_voo || '-'}</td>
+                    <td>${voo.origem || '-'}</td>
+                    <td>${voo.destino || '-'}</td>
+                    <td title="${voo.historico || ''}">${historicoCurto}</td>
+                    <td>${voo.horas_voadas || '00:00:00'}</td>
+                    <td>${voo.aernova || '-'}</td>
+                    <td>${voo.passageiro || '-'}</td>
+                </tr>
+            `}).join('');
+            
+            tbody.innerHTML = rowsHTML;
+            if (countElement) countElement.textContent = `${voosArray.length.toLocaleString('pt-BR')} voos`;
+            if (paginationInfo) paginationInfo.textContent = `Mostrando ${startIndex + 1}-${endIndex} de ${voosArray.length.toLocaleString('pt-BR')} registros`;
+            
+            updateSortIconsDashboard2();
+        }
 
-    // carregar dados
-    loadAllData();
-  });
+        function updateSortIconsDashboard2() {
+            const headers = document.querySelectorAll('#voosTable thead th');
+            headers.forEach(header => {
+                const sortIcon = header.querySelector('.sort-icon');
+                const column = header.getAttribute('data-sort');
+                
+                if (column === currentSortDashboard2.column) {
+                    header.classList.add('sorted-' + currentSortDashboard2.order);
+                    if (sortIcon) {
+                        sortIcon.innerHTML = currentSortDashboard2.order === 'asc' ? '↑' : '↓';
+                    }
+                } else {
+                    header.classList.remove('sorted-asc', 'sorted-desc');
+                    if (sortIcon) {
+                        sortIcon.innerHTML = '▼';
+                    }
+                }
+            });
+        }
 
-  </script>
+        // ==================== DASHBOARD 3: PASSAGEIROS E COMITIVA ====================
+        function updateDashboard3() {
+            if (filteredData.length === 0) {
+                document.getElementById('totalPassageiros').textContent = '0';
+                document.getElementById('maiorComitiva').textContent = '0';
+                document.getElementById('totalOrgaos').textContent = '0';
+                document.getElementById('totalCargos').textContent = '0';
+                document.getElementById('passageirosTableBody').innerHTML = '<tr><td colspan="5" class="text-center text-muted">Nenhum passageiro encontrado.</td></tr>';
+                document.getElementById('resumoCountDashboard3').textContent = '0 passageiros';
+                return;
+            }
+            
+            // Agrupar por passageiro
+            const passageirosMap = {};
+            filteredData.forEach(voo => {
+                const passageiro = voo.passageiro;
+                const cargo = voo.cargo_passageiro;
+                const orgao = voo.orgao_passageiro;
+                
+                if (!passageiro) return;
+                
+                if (!passageirosMap[passageiro]) {
+                    passageirosMap[passageiro] = {
+                        passageiro: passageiro,
+                        cargo_passageiro: cargo,
+                        orgao_passageiro: orgao,
+                        total_voos: 0,
+                        total_horas: 0
+                    };
+                }
+                
+                passageirosMap[passageiro].total_voos++;
+                passageirosMap[passageiro].total_horas += voo.horas_decimais;
+            });
+            
+            // Converter para array
+            const passageirosArray = Object.values(passageirosMap);
+            
+            // Ordenar
+            passageirosArray.sort((a, b) => {
+                const order = currentSortDashboard3.order === 'asc' ? 1 : -1;
+                
+                if (currentSortDashboard3.column === 'passageiro') {
+                    return order * a.passageiro.localeCompare(b.passageiro);
+                } else if (currentSortDashboard3.column === 'cargo_passageiro') {
+                    return order * a.cargo_passageiro.localeCompare(b.cargo_passageiro);
+                } else if (currentSortDashboard3.column === 'orgao_passageiro') {
+                    return order * a.orgao_passageiro.localeCompare(b.orgao_passageiro);
+                } else if (currentSortDashboard3.column === 'total_voos') {
+                    return order * (a.total_voos - b.total_voos);
+                } else if (currentSortDashboard3.column === 'total_horas') {
+                    return order * (a.total_horas - b.total_horas);
+                }
+                return 0;
+            });
+            
+            // Atualizar estatísticas
+            document.getElementById('totalPassageiros').textContent = passageirosArray.length.toLocaleString('pt-BR');
+            document.getElementById('totalOrgaos').textContent = [...new Set(passageirosArray.map(p => p.orgao_passageiro))].length.toLocaleString('pt-BR');
+            document.getElementById('totalCargos').textContent = [...new Set(passageirosArray.map(p => p.cargo_passageiro))].length.toLocaleString('pt-BR');
+            
+            // Encontrar maior comitiva (maior número de passageiros em um único voo por data+origem+destino)
+            const voosAgrupados = {};
+            filteredData.forEach(voo => {
+                const key = `${voo.data_voo}_${voo.origem}_${voo.destino}`;
+                if (!voosAgrupados[key]) {
+                    voosAgrupados[key] = 0;
+                }
+                voosAgrupados[key]++;
+            });
+            
+            const maiorComitiva = Math.max(...Object.values(voosAgrupados), 0);
+            document.getElementById('maiorComitiva').textContent = maiorComitiva.toLocaleString('pt-BR');
+            
+            // Gerar HTML da tabela
+            const rowsHTML = passageirosArray.map(passageiro => {
+                return `
+                    <tr>
+                        <td><strong>${passageiro.passageiro}</strong></td>
+                        <td>${passageiro.cargo_passageiro || '-'}</td>
+                        <td>${passageiro.orgao_passageiro || '-'}</td>
+                        <td class="text-center">${passageiro.total_voos.toLocaleString('pt-BR')}</td>
+                        <td class="text-center">${formatarHoras(passageiro.total_horas)}</td>
+                    </tr>
+                `;
+            }).join('');
+            
+            document.getElementById('passageirosTableBody').innerHTML = rowsHTML;
+            document.getElementById('resumoCountDashboard3').textContent = `${passageirosArray.length.toLocaleString('pt-BR')} passageiros`;
+            
+            updateSortIconsDashboard3();
+            updatePassageirosChart(passageirosArray);
+            updateOrgaosChart(passageirosArray);
+        }
+
+        function updatePassageirosChart(passageirosArray) {
+            const ctx = document.getElementById('chartPassageiros')?.getContext('2d');
+            if (!ctx || passageirosArray.length === 0) return;
+            
+            // Pegar top 10 passageiros por número de voos
+            const topPassageiros = [...passageirosArray]
+                .sort((a, b) => b.total_voos - a.total_voos)
+                .slice(0, 10);
+            
+            const labels = topPassageiros.map(p => {
+                const nome = p.passageiro;
+                return nome.length > 15 ? nome.substring(0, 15) + '...' : nome;
+            });
+            const data = topPassageiros.map(p => p.total_voos);
+            
+            if (charts.passageiros) {
+                charts.passageiros.destroy();
+            }
+            
+            charts.passageiros = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Número de Voos',
+                        data: data,
+                        backgroundColor: chartColors.accent,
+                        borderColor: chartColors.primary,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateOrgaosChart(passageirosArray) {
+            const ctx = document.getElementById('chartOrgaosPassageiros')?.getContext('2d');
+            if (!ctx || passageirosArray.length === 0) return;
+            
+            // Agrupar por órgão
+            const orgaosCount = {};
+            passageirosArray.forEach(p => {
+                const orgao = p.orgao_passageiro || 'Não informado';
+                orgaosCount[orgao] = (orgaosCount[orgao] || 0) + 1;
+            });
+            
+            const labels = Object.keys(orgaosCount);
+            const data = Object.values(orgaosCount);
+            
+            if (charts.orgaosPassageiros) {
+                charts.orgaosPassageiros.destroy();
+            }
+            
+            charts.orgaosPassageiros = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels.map(label => label.length > 20 ? label.substring(0, 20) + '...' : label),
+                    datasets: [{
+                        data: data,
+                        backgroundColor: [
+                            chartColors.primary,
+                            chartColors.accent,
+                            chartColors.success,
+                            chartColors.warning,
+                            chartColors.info,
+                            chartColors.purple,
+                            chartColors.orange,
+                            chartColors.teal
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                padding: 10,
+                                usePointStyle: true,
+                                font: {
+                                    size: 9
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateSortIconsDashboard3() {
+            const headers = document.querySelectorAll('#passageirosTable thead th');
+            headers.forEach(header => {
+                const sortIcon = header.querySelector('.sort-icon');
+                const column = header.getAttribute('data-sort');
+                
+                if (column === currentSortDashboard3.column) {
+                    header.classList.add('sorted-' + currentSortDashboard3.order);
+                    if (sortIcon) {
+                        sortIcon.innerHTML = currentSortDashboard3.order === 'asc' ? '↑' : '↓';
+                    }
+                } else {
+                    header.classList.remove('sorted-asc', 'sorted-desc');
+                    if (sortIcon) {
+                        sortIcon.innerHTML = '▼';
+                    }
+                }
+            });
+        }
+
+        // ==================== DASHBOARD 4: MAPA DE ROTAS ====================
+        function updateDashboard4() {
+            if (filteredData.length === 0) {
+                document.getElementById('totalRotas').textContent = '0';
+                document.getElementById('rotaFrequente').textContent = '-';
+                document.getElementById('totalCidades').textContent = '0';
+                document.getElementById('totalEstados').textContent = '0';
+                document.getElementById('rotasTableBody').innerHTML = '<tr><td colspan="5" class="text-center text-muted">Nenhuma rota encontrada.</td></tr>';
+                document.getElementById('resumoCountDashboard4').textContent = '0 rotas';
+                return;
+            }
+            
+            // Agrupar por rota (origem -> destino)
+            const rotasMap = {};
+            filteredData.forEach(voo => {
+                const origem = voo.origem;
+                const destino = voo.destino;
+                
+                if (!origem || !destino) return;
+                
+                const rotaKey = `${origem} → ${destino}`;
+                
+                if (!rotasMap[rotaKey]) {
+                    rotasMap[rotaKey] = {
+                        rota: rotaKey,
+                        origem: origem,
+                        destino: destino,
+                        frequencia: 0,
+                        total_passageiros: 0,
+                        total_horas: 0,
+                        ultima_data: ''
+                    };
+                }
+                
+                rotasMap[rotaKey].frequencia++;
+                rotasMap[rotaKey].total_passageiros++;
+                rotasMap[rotaKey].total_horas += voo.horas_decimais;
+                
+                // Atualizar última data
+                if (!rotasMap[rotaKey].ultima_data || 
+                    converterDataParaComparacao(voo.data_voo) > converterDataParaComparacao(rotasMap[rotaKey].ultima_data)) {
+                    rotasMap[rotaKey].ultima_data = voo.data_voo;
+                }
+            });
+            
+            // Converter para array
+            const rotasArray = Object.values(rotasMap);
+            
+            // Ordenar
+            rotasArray.sort((a, b) => {
+                const order = currentSortDashboard4.order === 'asc' ? 1 : -1;
+                
+                if (currentSortDashboard4.column === 'rota') {
+                    return order * a.rota.localeCompare(b.rota);
+                } else if (currentSortDashboard4.column === 'frequencia') {
+                    return order * (a.frequencia - b.frequencia);
+                } else if (currentSortDashboard4.column === 'total_passageiros') {
+                    return order * (a.total_passageiros - b.total_passageiros);
+                } else if (currentSortDashboard4.column === 'total_horas') {
+                    return order * (a.total_horas - b.total_horas);
+                } else if (currentSortDashboard4.column === 'ultima_data') {
+                    const dataA = converterDataParaComparacao(a.ultima_data);
+                    const dataB = converterDataParaComparacao(b.ultima_data);
+                    return order * (dataA - dataB);
+                }
+                return 0;
+            });
+            
+            // Atualizar estatísticas
+            document.getElementById('totalRotas').textContent = rotasArray.length.toLocaleString('pt-BR');
+            
+            // Encontrar rota mais frequente
+            if (rotasArray.length > 0) {
+                const rotaMaisFrequente = rotasArray.reduce((prev, current) => 
+                    (prev.frequencia > current.frequencia) ? prev : current
+                );
+                document.getElementById('rotaFrequente').textContent = rotaMaisFrequente.rota;
+            }
+            
+            // Contar cidades únicas (origens e destinos)
+            const todasCidades = [
+                ...new Set([
+                    ...rotasArray.map(r => r.origem),
+                    ...rotasArray.map(r => r.destino)
+                ])
+            ];
+            document.getElementById('totalCidades').textContent = todasCidades.length.toLocaleString('pt-BR');
+            
+            // Para estados, assumindo siglas de 2-3 letras no final após /
+            const estados = todasCidades
+                .map(cidade => {
+                    const partes = cidade.split('/');
+                    return partes.length > 1 ? partes[1].trim() : null;
+                })
+                .filter(estado => estado && estado.length <= 3);
+            
+            const estadosUnicos = [...new Set(estados)];
+            document.getElementById('totalEstados').textContent = estadosUnicos.length.toLocaleString('pt-BR');
+            
+            // Gerar HTML da tabela
+            const rowsHTML = rotasArray.map(rota => {
+                return `
+                    <tr>
+                        <td><strong>${rota.rota}</strong></td>
+                        <td class="text-center">${rota.frequencia.toLocaleString('pt-BR')}</td>
+                        <td class="text-center">${rota.total_passageiros.toLocaleString('pt-BR')}</td>
+                        <td class="text-center">${formatarHoras(rota.total_horas)}</td>
+                        <td class="text-center">${rota.ultima_data || '-'}</td>
+                    </tr>
+                `;
+            }).join('');
+            
+            document.getElementById('rotasTableBody').innerHTML = rowsHTML;
+            document.getElementById('resumoCountDashboard4').textContent = `${rotasArray.length.toLocaleString('pt-BR')} rotas`;
+            
+            updateSortIconsDashboard4();
+            updateMapaRotas(rotasArray);
+        }
+
+        function updateMapaRotas(rotasArray = null) {
+            // Esta é uma implementação simplificada do mapa
+            // Em uma implementação real, você usaria uma biblioteca como Leaflet ou Google Maps
+            
+            const mapaContainer = document.getElementById('mapaRotas');
+            if (!mapaContainer) return;
+            
+            if (!rotasArray) {
+                // Obter rotas dos dados filtrados
+                const rotasMap = {};
+                filteredData.forEach(voo => {
+                    const origem = voo.origem;
+                    const destino = voo.destino;
+                    
+                    if (!origem || !destino) return;
+                    
+                    const rotaKey = `${origem} → ${destino}`;
+                    
+                    if (!rotasMap[rotaKey]) {
+                        rotasMap[rotaKey] = {
+                            rota: rotaKey,
+                            origem: origem,
+                            destino: destino,
+                            frequencia: 0
+                        };
+                    }
+                    
+                    rotasMap[rotaKey].frequencia++;
+                });
+                
+                rotasArray = Object.values(rotasMap);
+            }
+            
+            if (rotasArray.length === 0) {
+                mapaContainer.innerHTML = `
+                    <div class="d-flex justify-content-center align-items-center h-100">
+                        <div class="text-center">
+                            <i class="material-icons" style="font-size: 48px; color: #ccc;">map</i>
+                            <p class="mt-3 text-muted">Nenhuma rota encontrada para os filtros aplicados</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Pegar as rotas mais frequentes (máximo 5 para visualização)
+            const rotasParaMapa = [...rotasArray]
+                .sort((a, b) => b.frequencia - a.frequencia)
+                .slice(0, 5);
+            
+            // Criar visualização simplificada do mapa
+            let htmlMapa = `
+                <div class="h-100 d-flex flex-column justify-content-center">
+                    <div class="text-center mb-4">
+                        <h5><i class="material-icons me-2">flight_takeoff</i> Principais Rotas</h5>
+                        <p class="text-muted" style="font-size: 12px;">${rotasParaMapa.length} rotas mais frequentes</p>
+                    </div>
+                    
+                    <div class="px-4">
+            `;
+            
+            rotasParaMapa.forEach((rota, index) => {
+                const largura = 20 + (rota.frequencia * 5); // Largura proporcional à frequência
+                const cores = ['#3498DB', '#E74C3C', '#27AE60', '#F39C12', '#8E44AD'];
+                
+                htmlMapa += `
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span style="font-size: 12px; font-weight: 600;">${rota.origem}</span>
+                            <span style="font-size: 10px; color: #666;">${rota.frequencia} voos</span>
+                            <span style="font-size: 12px; font-weight: 600;">${rota.destino}</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div style="width: 20px; text-align: center;">
+                                <i class="material-icons" style="font-size: 16px; color: ${cores[index % cores.length]};">flight_takeoff</i>
+                            </div>
+                            <div class="flex-grow-1 mx-2">
+                                <div style="height: 4px; background-color: ${cores[index % cores.length]}; width: ${largura}%; border-radius: 2px;"></div>
+                            </div>
+                            <div style="width: 20px; text-align: center;">
+                                <i class="material-icons" style="font-size: 16px; color: ${cores[index % cores.length]};">flight_land</i>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            htmlMapa += `
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <p class="text-muted" style="font-size: 11px;">
+                            <i class="material-icons" style="font-size: 14px; vertical-align: middle;">info</i>
+                            Representação visual das rotas mais frequentes
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            mapaContainer.innerHTML = htmlMapa;
+        }
+
+        function updateSortIconsDashboard4() {
+            const headers = document.querySelectorAll('#rotasTable thead th');
+            headers.forEach(header => {
+                const sortIcon = header.querySelector('.sort-icon');
+                const column = header.getAttribute('data-sort');
+                
+                if (column === currentSortDashboard4.column) {
+                    header.classList.add('sorted-' + currentSortDashboard4.order);
+                    if (sortIcon) {
+                        sortIcon.innerHTML = currentSortDashboard4.order === 'asc' ? '↑' : '↓';
+                    }
+                } else {
+                    header.classList.remove('sorted-asc', 'sorted-desc');
+                    if (sortIcon) {
+                        sortIcon.innerHTML = '▼';
+                    }
+                }
+            });
+        }
+
+        // ==================== FUNÇÕES DE ORDENAÇÃO ====================
+        window.sortTable = function(tableType, column) {
+            if (tableType === 'visaoGeral') {
+                if (currentSortDashboard1.column === column) {
+                    currentSortDashboard1.order = currentSortDashboard1.order === 'asc' ? 'desc' : 'asc';
+                } else {
+                    currentSortDashboard1.column = column;
+                    currentSortDashboard1.order = 'asc';
+                }
+                updateResumoTable();
+            } else if (tableType === 'voos') {
+                if (currentSortDashboard2.column === column) {
+                    currentSortDashboard2.order = currentSortDashboard2.order === 'asc' ? 'desc' : 'asc';
+                } else {
+                    currentSortDashboard2.column = column;
+                    currentSortDashboard2.order = 'asc';
+                }
+                updateDashboard2();
+            } else if (tableType === 'passageiros') {
+                if (currentSortDashboard3.column === column) {
+                    currentSortDashboard3.order = currentSortDashboard3.order === 'asc' ? 'desc' : 'asc';
+                } else {
+                    currentSortDashboard3.column = column;
+                    currentSortDashboard3.order = 'asc';
+                }
+                updateDashboard3();
+            } else if (tableType === 'rotas') {
+                if (currentSortDashboard4.column === column) {
+                    currentSortDashboard4.order = currentSortDashboard4.order === 'asc' ? 'desc' : 'asc';
+                } else {
+                    currentSortDashboard4.column = column;
+                    currentSortDashboard4.order = 'asc';
+                }
+                updateDashboard4();
+            }
+        };
+
+        // ==================== FUNÇÕES DE DOWNLOAD ====================
+        async function downloadFullCSV() {
+            const year = document.getElementById('anoDownload').value;
+            
+            showLoading(true);
+            
+            try {
+                let dataToDownload;
+                
+                if (year === 'all') {
+                    dataToDownload = voosData;
+                } else {
+                    dataToDownload = voosData.filter(v => v.ano === year);
+                }
+                
+                if (!dataToDownload || dataToDownload.length === 0) {
+                    alert(`Nenhum dado disponível para o ano ${year}.`);
+                    showLoading(false);
+                    return;
+                }
+                
+                // Preparar CSV
+                const headers = ['ano', 'mes', 'historico', 'horas_voadas', 'aernova', 'numero_db', 
+                               'base', 'data_voo', 'origem', 'destino', 'passageiro', 
+                               'cargo_passageiro', 'orgao_passageiro'];
+                const csvContent = [
+                    headers.join(';'),
+                    ...dataToDownload.map(voo => [
+                        voo.ano,
+                        voo.mes,
+                        `"${(voo.historico || '').replace(/"/g, '""')}"`,
+                        voo.horas_voadas,
+                        voo.aernova,
+                        voo.numero_db,
+                        voo.base,
+                        voo.data_voo,
+                        voo.origem,
+                        voo.destino,
+                        `"${(voo.passageiro || '').replace(/"/g, '""')}"`,
+                        `"${(voo.cargo_passageiro || '').replace(/"/g, '""')}"`,
+                        `"${(voo.orgao_passageiro || '').replace(/"/g, '""')}"`
+                    ].join(';'))
+                ].join('\n');
+                
+                // Criar e baixar arquivo
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                
+                const filename = year === 'all' ? 'voos_oficiais_governador_completo.csv' : `voos_oficiais_governador_${year}.csv`;
+                
+                link.setAttribute('href', url);
+                link.setAttribute('download', filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                console.log(`Download realizado: ${dataToDownload.length} registros`);
+                
+            } catch (error) {
+                console.error(`Erro ao baixar dados:`, error);
+                alert(`Erro ao baixar dados. Por favor, tente novamente.`);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function downloadAmostra() {
+            // Criar dados de amostra
+            const amostra = [
+                {
+                    ano: '2025',
+                    mes: '09',
+                    historico: 'Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO e Araçuaí/MG',
+                    horas_voadas: '01:30:00',
+                    aernova: 'PP-LCE - PÉGASUS 24',
+                    numero_db: '0117-2025',
+                    base: 'DTA',
+                    data_voo: '05/09/2025',
+                    origem: 'GOIANIA',
+                    destino: 'ARACUAI',
+                    passageiro: 'Andre Valadares da Cruz',
+                    cargo_passageiro: 'Videomaker',
+                    orgao_passageiro: 'Secretaria de Estado de Comunicação Social'
+                },
+                {
+                    ano: '2025',
+                    mes: '09',
+                    historico: 'Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO e Araçuaí/MG',
+                    horas_voadas: '01:30:00',
+                    aernova: 'PP-LCE - PÉGASUS 24',
+                    numero_db: '0117-2025',
+                    base: 'DTA',
+                    data_voo: '05/09/2025',
+                    origem: 'GOIANIA',
+                    destino: 'ARACUAI',
+                    passageiro: 'Andreza Gischewski Costa',
+                    cargo_passageiro: 'Assessor Especial',
+                    orgao_passageiro: 'Secretaria-Geral do Estado de Minas Gerais'
+                }
+            ];
+            
+            const headers = ['ano', 'mes', 'historico', 'horas_voadas', 'aernova', 'numero_db', 
+                           'base', 'data_voo', 'origem', 'destino', 'passageiro', 
+                           'cargo_passageiro', 'orgao_passageiro'];
+            const csvContent = [
+                headers.join(';'),
+                ...amostra.map(voo => [
+                    voo.ano,
+                    voo.mes,
+                    `"${voo.historico}"`,
+                    voo.horas_voadas,
+                    voo.aernova,
+                    voo.numero_db,
+                    voo.base,
+                    voo.data_voo,
+                    voo.origem,
+                    voo.destino,
+                    `"${voo.passageiro}"`,
+                    `"${voo.cargo_passageiro}"`,
+                    `"${voo.orgao_passageiro}"`
+                ].join(';'))
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'amostra_voos_oficiais.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
 </body>
 </html>
