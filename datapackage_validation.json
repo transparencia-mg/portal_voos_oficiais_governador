@@ -1,0 +1,109 @@
+{
+  "version": "4.16.6",
+  "time": 0.084,
+  "errors": [],
+  "tasks": [
+    {
+      "resource": {
+        "description": "Insira a descrição/explicação detalhada deste recurso.",
+        "dialect": {
+          "delimiter": ";"
+        },
+        "encoding": "utf-8-sig",
+        "format": "csv",
+        "hashing": "md5",
+        "name": "voos_2025",
+        "path": "data/voos_2025.csv",
+        "profile": "tabular-data-resource",
+        "schema": {
+          "fields": [
+            {
+              "name": "historico",
+              "type": "string"
+            },
+            {
+              "name": "horas_voadas",
+              "type": "time"
+            },
+            {
+              "name": "aernova",
+              "type": "string"
+            },
+            {
+              "name": "numero_db",
+              "type": "string"
+            },
+            {
+              "name": "base",
+              "type": "string"
+            },
+            {
+              "name": "data_voo",
+              "type": "date"
+            },
+            {
+              "name": "origem",
+              "type": "string"
+            },
+            {
+              "name": "destino",
+              "type": "string"
+            },
+            {
+              "name": "passageiro",
+              "type": "string"
+            },
+            {
+              "name": "cargo_passageiro",
+              "type": "string"
+            },
+            {
+              "name": "orgao_passageiro",
+              "type": "string"
+            }
+          ]
+        },
+        "scheme": "file",
+        "title": "Insira um título humanamente legível para este recurso.",
+        "stats": {
+          "hash": "6ffd7d8419a44a4cd09f1a05f755a8f1",
+          "bytes": 303388,
+          "fields": 11,
+          "rows": 1098
+        }
+      },
+      "time": 0.071,
+      "scope": [
+        "hash-count-error",
+        "byte-count-error",
+        "field-count-error",
+        "row-count-error",
+        "blank-header",
+        "extra-label",
+        "missing-label",
+        "blank-label",
+        "duplicate-label",
+        "incorrect-label",
+        "blank-row",
+        "primary-key-error",
+        "foreign-key-error",
+        "extra-cell",
+        "missing-cell",
+        "type-error",
+        "constraint-error",
+        "unique-error"
+      ],
+      "partial": false,
+      "errors": [],
+      "stats": {
+        "errors": 0
+      },
+      "valid": true
+    }
+  ],
+  "stats": {
+    "errors": 0,
+    "tasks": 1
+  },
+  "valid": true
+}
