@@ -87,28 +87,25 @@
             position: relative;
         }
         
-        /* ==================== HEADER PRINCIPAL ==================== */
+        /* ==================== HEADER SIMPLIFICADO ==================== */
         .main-header {
             background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 20px 0;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            border-bottom: 4px solid var(--accent-blue);
+            padding: 15px 0;
+            margin-bottom: 15px;
+            border-bottom: 3px solid var(--accent-blue);
             flex-shrink: 0;
-            position: relative;
-            z-index: 1;
         }
         
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
         }
         
         .logo {
-            width: 60px;
-            height: 60px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-bright) 100%);
             border-radius: 50%;
             display: flex;
@@ -116,51 +113,20 @@
             justify-content: center;
             color: white;
             font-weight: bold;
-            font-size: 20px;
-            box-shadow: 0 3px 8px rgba(52, 152, 219, 0.25);
+            font-size: 16px;
         }
         
         .header-title {
             font-weight: 700;
-            font-size: 22px;
+            font-size: 18px;
             margin: 0;
             line-height: 1.2;
         }
         
         .header-subtitle {
-            font-size: 14px;
-            opacity: 0.9;
-            margin: 5px 0 0 0;
-        }
-
-        .header-info {
-            margin-top: 8px;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .link-legislacao {
-            color: rgba(255, 255, 255, 0.9);
-            text-decoration: none;
             font-size: 12px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            transition: color 0.3s;
-        }
-        
-        .link-legislacao:hover {
-            color: white;
-            text-decoration: underline;
-        }
-        
-        .badge-atualizacao-header {
-            background-color: rgba(255, 255, 255, 0.15);
-            padding: 3px 8px;
-            border-radius: 15px;
-            font-size: 11px;
+            opacity: 0.9;
+            margin: 2px 0 0 0;
         }
         
         /* ==================== FILTROS ==================== */
@@ -534,6 +500,64 @@
             color: white !important;
         }
         
+        /* ==================== BOTÕES ==================== */
+        .btn-pesquisa {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-darker) 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .btn-pesquisa:hover {
+            background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary-custom {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .btn-secondary-custom:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        .btn-export {
+            background: var(--success-green);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .btn-export:hover {
+            background: #219653;
+            transform: translateY(-2px);
+        }
+        
         /* ==================== LOADING OVERLAY ==================== */
         .loading-overlay {
             position: fixed;
@@ -562,25 +586,39 @@
             100% { transform: rotate(360deg); }
         }
         
+        /* ==================== LINK PARA CONSULTA INDIVIDUAL ==================== */
+        .link-consulta {
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .link-consulta:hover {
+            color: var(--accent-blue);
+            text-decoration: underline;
+        }
+        
         /* ==================== RESPONSIVIDADE ==================== */
         @media (max-width: 768px) {
             .main-header {
-                padding: 15px 0;
-                margin-bottom: 20px;
+                padding: 10px 0;
+                margin-bottom: 15px;
             }
             
             .logo-container {
                 flex-direction: column;
                 text-align: center;
-                gap: 10px;
+                gap: 8px;
             }
             
             .header-title {
-                font-size: 18px;
+                font-size: 16px;
             }
             
             .header-subtitle {
-                font-size: 12px;
+                font-size: 11px;
             }
             
             .metric-value {
@@ -609,7 +647,7 @@
     <div class="main-container">
         <div class="container dashboard-spacing">
             
-            <!-- ==================== HEADER PRINCIPAL ==================== -->
+            <!-- ==================== HEADER SIMPLIFICADO ==================== -->
             <header class="main-header">
                 <div class="container">
                     <div class="logo-container">
@@ -619,47 +657,32 @@
                         <div>
                             <h1 class="header-title">Voos Oficiais do Governador</h1>
                             <p class="header-subtitle">Governo de Minas Gerais | Transparência de Dados</p>
-                            <div class="header-info">
-                                <a href="https://www.mg.gov.br/" target="_blank" class="link-legislacao">
-                                    <i class="material-icons" style="font-size: 14px;">public</i>
-                                    Portal do Governo de Minas Gerais
-                                </a>
-                                <span class="badge-atualizacao-header">
-                                    <i class="material-icons" style="font-size: 12px;">update</i>
-                                    Atualizado em: <span id="data-atualizacao-header">Carregando...</span>
-                                </span>
-                            </div>
                         </div>
                     </div>
                 </div>
             </header>
 
-            <!-- ==================== MENU DE NAVEGAÇÃO ==================== -->
+            <!-- ==================== MENU DE NAVEGAÇÃO (4 ABAS) ==================== -->
             <div class="nav-tabs-container">
                 <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="dashboard1-tab" data-bs-toggle="tab" data-bs-target="#dashboard1" type="button" role="tab">
-                            <i class="material-icons">airplane_ticket</i>Visão Geral
+                            <i class="material-icons">dashboard</i>Visão Geral
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="dashboard2-tab" data-bs-toggle="tab" data-bs-target="#dashboard2" type="button" role="tab">
-                            <i class="material-icons">flight</i>Detalhamento de Voos
+                            <i class="material-icons">location_on</i>Destino
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="dashboard3-tab" data-bs-toggle="tab" data-bs-target="#dashboard3" type="button" role="tab">
-                            <i class="material-icons">groups</i>Passageiros e Comitiva
+                            <i class="material-icons">person_search</i>Consulta Individual
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="dashboard4-tab" data-bs-toggle="tab" data-bs-target="#dashboard4" type="button" role="tab">
-                            <i class="material-icons">map</i>Mapa de Rotas
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="dashboard5-tab" data-bs-toggle="tab" data-bs-target="#dashboard5" type="button" role="tab">
-                            <i class="material-icons">downloading</i>Downloads
+                            <i class="material-icons">download</i>Downloads
                         </button>
                     </li>
                 </ul>
@@ -810,7 +833,7 @@
                     
                 </div> <!-- Fim Dashboard 1 -->
 
-                <!-- ==================== DASHBOARD 2: DETALHAMENTO DE VOOS ==================== -->
+                <!-- ==================== DASHBOARD 2: DESTINO ==================== -->
                 <div class="tab-pane fade" id="dashboard2" role="tabpanel">
                     
                     <!-- Filtros Dashboard 2 -->
@@ -969,35 +992,41 @@
                     
                 </div> <!-- Fim Dashboard 2 -->
 
-                <!-- ==================== DASHBOARD 3: PASSAGEIROS E COMITIVA ==================== -->
+                <!-- ==================== DASHBOARD 3: CONSULTA INDIVIDUAL ==================== -->
                 <div class="tab-pane fade" id="dashboard3" role="tabpanel">
                     
                     <!-- Filtros Dashboard 3 -->
                     <div class="filter-container">
                         <div class="row">
-                            <div class="col-md-4 col-12">
+                            <div class="col-md-6 col-12">
                                 <div class="mb-3">
-                                    <label for="anoDashboard3" class="form-label filter-label">Ano</label>
-                                    <select class="form-select" id="anoDashboard3">
+                                    <label for="nomePassageiro" class="form-label filter-label">Nome do Passageiro</label>
+                                    <input type="text" class="form-control" id="nomePassageiro" placeholder="Digite o nome completo...">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="mb-3">
+                                    <label for="cpfPassageiro" class="form-label filter-label">CPF (opcional)</label>
+                                    <input type="text" class="form-control" id="cpfPassageiro" placeholder="Digite o CPF...">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-12">
+                                <div class="mb-3">
+                                    <label for="anoConsulta" class="form-label filter-label">Ano</label>
+                                    <select class="form-select" id="anoConsulta">
+                                        <option value="all">Todos os Anos</option>
                                         <!-- Opções serão carregadas dinamicamente -->
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4 col-12">
+                            <div class="col-md-6 col-12">
                                 <div class="mb-3">
-                                    <label for="cargoDashboard3" class="form-label filter-label">Cargo/Função</label>
-                                    <input type="text" class="form-control" list="cargosListDashboard3" id="cargoDashboard3" placeholder="Digite ou selecione...">
-                                    <datalist id="cargosListDashboard3">
-                                        <option value="all">Todos os Cargos</option>
-                                    </datalist>
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-12">
-                                <div class="mb-3">
-                                    <label for="orgaoDashboard3" class="form-label filter-label">Órgão</label>
-                                    <input type="text" class="form-control" list="orgaosListDashboard3" id="orgaoDashboard3" placeholder="Digite ou selecione...">
-                                    <datalist id="orgaosListDashboard3">
-                                        <option value="all">Todos os Órgãos</option>
+                                    <label for="orgaoConsulta" class="form-label filter-label">Órgão</label>
+                                    <input type="text" class="form-control" list="orgaosListConsulta" id="orgaoConsulta" placeholder="Digite o órgão...">
+                                    <datalist id="orgaosListConsulta">
+                                        <!-- Opções serão carregadas dinamicamente -->
                                     </datalist>
                                 </div>
                             </div>
@@ -1005,286 +1034,84 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="d-flex gap-3 flex-wrap">
-                                    <button class="btn-pesquisa" id="pesquisarPassageiros">
-                                        <i class="material-icons me-2">search</i>Pesquisar
+                                    <button class="btn-pesquisa" id="pesquisarConsulta">
+                                        <i class="material-icons me-2">search</i>Consultar
                                     </button>
-                                    <button class="btn-secondary-custom" id="limparFiltrosDashboard3">
-                                        <i class="material-icons me-2">clear</i>Limpar Filtros
+                                    <button class="btn-secondary-custom" id="limparConsulta">
+                                        <i class="material-icons me-2">clear</i>Limpar
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Cards de Estatísticas Passageiros -->
-                    <div class="row mb-4">
-                        <div class="col-md-3 col-6">
-                            <div class="metric-card">
-                                <div class="metric-label">Total de Passageiros</div>
-                                <div class="metric-value" id="totalPassageiros">0</div>
-                                <div class="update-info">
-                                    <i class="material-icons" style="font-size: 14px;">person</i> Passageiros únicos
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-6">
-                            <div class="metric-card success">
-                                <div class="metric-label">Maior Comitiva</div>
-                                <div class="metric-value" id="maiorComitiva">0</div>
-                                <div class="metric-change">
-                                    <i class="material-icons" style="font-size: 14px;">groups</i> Em um único voo
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-6">
-                            <div class="metric-card info">
-                                <div class="metric-label">Órgãos Diferentes</div>
-                                <div class="metric-value" id="totalOrgaos">0</div>
-                                <div class="update-info">
-                                    <i class="material-icons" style="font-size: 14px;">apartment</i> Órgãos representados
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-6">
-                            <div class="metric-card purple">
-                                <div class="metric-label">Cargos Diferentes</div>
-                                <div class="metric-value" id="totalCargos">0</div>
-                                <div class="metric-change warning">
-                                    <i class="material-icons" style="font-size: 14px;">work</i> Funções diferentes
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Gráficos Passageiros -->
-                    <div class="row mb-4">
-                        <div class="col-md-6 col-12">
-                            <div class="chart-container">
-                                <div class="chart-header">
-                                    <h4 class="chart-title">Top 10 Passageiros Mais Frequentes</h4>
-                                </div>
-                                <div class="chart-wrapper">
-                                    <canvas id="chartPassageiros"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="chart-container">
-                                <div class="chart-header">
-                                    <h4 class="chart-title">Distribuição por Órgão</h4>
-                                </div>
-                                <div class="chart-wrapper">
-                                    <canvas id="chartOrgaosPassageiros"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tabela de Passageiros -->
-                    <div class="table-container">
+                    <!-- Resultado da Consulta -->
+                    <div class="table-container" id="resultadoConsulta" style="display: none;">
                         <div class="table-header">
-                            <h3 class="table-title">Passageiros e Comitiva</h3>
-                            <span class="table-badge" id="resumoCountDashboard3">0 passageiros</span>
+                            <h3 class="table-title">Resultado da Consulta Individual</h3>
+                            <span class="table-badge" id="consultaCount">0 registros</span>
                         </div>
-                        <div class="table-fixed-header-container">
-                            <table class="table table-hover" id="passageirosTable">
-                                <thead>
-                                    <tr>
-                                        <th data-sort="passageiro" data-order="asc" onclick="sortTable('passageiros', 'passageiro')">
-                                            Passageiro <span class="sort-icon">▼</span>
-                                        </th>
-                                        <th data-sort="cargo_passageiro" data-order="asc" onclick="sortTable('passageiros', 'cargo_passageiro')">
-                                            Cargo/Função <span class="sort-icon">▼</span>
-                                        </th>
-                                        <th data-sort="orgao_passageiro" data-order="asc" onclick="sortTable('passageiros', 'orgao_passageiro')">
-                                            Órgão <span class="sort-icon">▼</span>
-                                        </th>
-                                        <th data-sort="total_voos" data-order="desc" onclick="sortTable('passageiros', 'total_voos')">
-                                            Total de Voos <span class="sort-icon">▼</span>
-                                        </th>
-                                        <th data-sort="total_horas" data-order="desc" onclick="sortTable('passageiros', 'total_horas')">
-                                            Total de Horas <span class="sort-icon">▼</span>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody id="passageirosTableBody">
-                                    <!-- Dados serão carregados aqui -->
-                                </tbody>
-                            </table>
+                        <div class="p-3">
+                            <div class="row mb-4">
+                                <div class="col-md-3 col-6">
+                                    <div class="metric-card">
+                                        <div class="metric-label">Passageiro</div>
+                                        <div class="metric-value" id="consultaNome">-</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="metric-card success">
+                                        <div class="metric-label">Total de Voos</div>
+                                        <div class="metric-value" id="consultaTotalVoos">0</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="metric-card info">
+                                        <div class="metric-label">Total de Horas</div>
+                                        <div class="metric-value" id="consultaTotalHoras">00:00</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="metric-card purple">
+                                        <div class="metric-label">Período</div>
+                                        <div class="metric-value" id="consultaPeriodo">-</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="table-fixed-header-container">
+                                <table class="table table-hover" id="consultaTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Data</th>
+                                            <th>Origem</th>
+                                            <th>Destino</th>
+                                            <th>Histórico</th>
+                                            <th>Horas Voadas</th>
+                                            <th>Aeronave</th>
+                                            <th>Cargo/Função</th>
+                                            <th>Órgão</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="consultaTableBody">
+                                        <!-- Dados serão carregados aqui -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
+                    </div>
+
+                    <!-- Mensagem quando não houver consulta -->
+                    <div class="text-center mt-5" id="mensagemConsulta">
+                        <i class="material-icons" style="font-size: 60px; color: #ccc;">person_search</i>
+                        <h4 class="mt-3 text-muted">Consulta Individual</h4>
+                        <p class="text-muted">Preencha os campos acima para consultar os voos de um passageiro específico.</p>
                     </div>
                     
                 </div> <!-- Fim Dashboard 3 -->
 
-                <!-- ==================== DASHBOARD 4: MAPA DE ROTAS ==================== -->
+                <!-- ==================== DASHBOARD 4: DOWNLOADS ==================== -->
                 <div class="tab-pane fade" id="dashboard4" role="tabpanel">
-                    
-                    <!-- Filtros Dashboard 4 -->
-                    <div class="filter-container">
-                        <div class="row">
-                            <div class="col-md-4 col-12">
-                                <div class="mb-3">
-                                    <label for="anoDashboard4" class="form-label filter-label">Ano</label>
-                                    <select class="form-select" id="anoDashboard4">
-                                        <!-- Opções serão carregadas dinamicamente -->
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-12">
-                                <div class="mb-3">
-                                    <label for="origemDashboard4" class="form-label filter-label">Origem</label>
-                                    <input type="text" class="form-control" list="origensListDashboard4" id="origemDashboard4" placeholder="Digite ou selecione...">
-                                    <datalist id="origensListDashboard4">
-                                        <option value="all">Todas as Origens</option>
-                                    </datalist>
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-12">
-                                <div class="mb-3">
-                                    <label for="destinoDashboard4" class="form-label filter-label">Destino</label>
-                                    <input type="text" class="form-control" list="destinosListDashboard4" id="destinoDashboard4" placeholder="Digite ou selecione...">
-                                    <datalist id="destinosListDashboard4">
-                                        <option value="all">Todos os Destinos</option>
-                                    </datalist>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="d-flex gap-3 flex-wrap">
-                                    <button class="btn-pesquisa" id="aplicarFiltrosMapa">
-                                        <i class="material-icons me-2">search</i>Pesquisar
-                                    </button>
-                                    <button class="btn-secondary-custom" id="limparFiltrosDashboard4">
-                                        <i class="material-icons me-2">clear</i>Limpar Filtros
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Container do Mapa -->
-                    <div class="chart-container" style="min-height: 500px;">
-                        <div class="chart-header">
-                            <h4 class="chart-title">Mapa de Rotas dos Voos Oficiais</h4>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="mostrarRotas" checked>
-                                <label class="form-check-label" for="mostrarRotas" style="font-size: 12px;">
-                                    Mostrar rotas
-                                </label>
-                            </div>
-                        </div>
-                        <div id="mapaRotas" style="height: 400px; width: 100%; border-radius: 8px;">
-                            <div class="d-flex justify-content-center align-items-center h-100">
-                                <div class="text-center">
-                                    <i class="material-icons" style="font-size: 48px; color: #ccc;">map</i>
-                                    <p class="mt-3 text-muted">Mapa de rotas será carregado aqui</p>
-                                    <p class="text-muted" style="font-size: 12px;">Dados geoespaciais das rotas dos voos oficiais</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-3">
-                            <div class="row">
-                                <div class="col-md-4 col-12">
-                                    <div class="d-flex align-items-center">
-                                        <div style="width: 20px; height: 2px; background-color: #3498DB; margin-right: 10px;"></div>
-                                        <span style="font-size: 12px;">Rota mais frequente</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-12">
-                                    <div class="d-flex align-items-center">
-                                        <div style="width: 20px; height: 2px; background-color: #E74C3C; margin-right: 10px;"></div>
-                                        <span style="font-size: 12px;">Rota de maior distância</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-12">
-                                    <div class="d-flex align-items-center">
-                                        <div style="width: 20px; height: 2px; background-color: #27AE60; margin-right: 10px;"></div>
-                                        <span style="font-size: 12px;">Rota recente</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Estatísticas de Rotas -->
-                    <div class="row mt-4">
-                        <div class="col-md-3 col-6">
-                            <div class="metric-card">
-                                <div class="metric-label">Total de Rotas</div>
-                                <div class="metric-value" id="totalRotas">0</div>
-                                <div class="update-info">
-                                    <i class="material-icons" style="font-size: 14px;">swap_horiz</i> Rotas diferentes
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-6">
-                            <div class="metric-card success">
-                                <div class="metric-label">Rota Mais Frequente</div>
-                                <div class="metric-value" id="rotaFrequente">-</div>
-                                <div class="metric-change">
-                                    <i class="material-icons" style="font-size: 14px;">repeat</i> Vezes realizada
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-6">
-                            <div class="metric-card info">
-                                <div class="metric-label">Cidades Visitadas</div>
-                                <div class="metric-value" id="totalCidades">0</div>
-                                <div class="update-info">
-                                    <i class="material-icons" style="font-size: 14px;">location_city</i> Cidades diferentes
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-6">
-                            <div class="metric-card purple">
-                                <div class="metric-label">Estados Visitados</div>
-                                <div class="metric-value" id="totalEstados">0</div>
-                                <div class="metric-change warning">
-                                    <i class="material-icons" style="font-size: 14px;">public</i> Estados diferentes
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tabela de Rotas -->
-                    <div class="table-container mt-4">
-                        <div class="table-header">
-                            <h3 class="table-title">Principais Rotas</h3>
-                            <span class="table-badge" id="resumoCountDashboard4">0 rotas</span>
-                        </div>
-                        <div class="table-fixed-header-container">
-                            <table class="table table-hover" id="rotasTable">
-                                <thead>
-                                    <tr>
-                                        <th data-sort="rota" data-order="asc" onclick="sortTable('rotas', 'rota')">
-                                            Rota <span class="sort-icon">▼</span>
-                                        </th>
-                                        <th data-sort="frequencia" data-order="desc" onclick="sortTable('rotas', 'frequencia')">
-                                            Frequência <span class="sort-icon">▼</span>
-                                        </th>
-                                        <th data-sort="total_passageiros" data-order="desc" onclick="sortTable('rotas', 'total_passageiros')">
-                                            Total de Passageiros <span class="sort-icon">▼</span>
-                                        </th>
-                                        <th data-sort="total_horas" data-order="desc" onclick="sortTable('rotas', 'total_horas')">
-                                            Total de Horas <span class="sort-icon">▼</span>
-                                        </th>
-                                        <th data-sort="ultima_data" data-order="desc" onclick="sortTable('rotas', 'ultima_data')">
-                                            Último Voo <span class="sort-icon">▼</span>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody id="rotasTableBody">
-                                    <!-- Dados serão carregados aqui -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    
-                </div> <!-- Fim Dashboard 4 -->
-
-                <!-- ==================== DASHBOARD 5: DOWNLOADS ==================== -->
-                <div class="tab-pane fade" id="dashboard5" role="tabpanel">
                     
                     <!-- Filtro de Download -->
                     <div class="filter-container">
@@ -1299,10 +1126,10 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="d-flex gap-3 flex-wrap">
-                                    <button class="btn-primary-custom flex-grow-1" id="downloadCSV">
+                                    <button class="btn-pesquisa flex-grow-1" id="downloadCSV">
                                         <i class="material-icons me-2">download</i>Baixar CSV Completo
                                     </button>
-                                    <a href="https://github.com/transparencia-mg/voos_oficiais_governador" target="_blank" class="btn-legislacao flex-grow-1">
+                                    <a href="https://github.com/transparencia-mg/voos_oficiais_governador" target="_blank" class="btn-secondary-custom flex-grow-1 text-decoration-none">
                                         <i class="material-icons me-2">code</i>Repositório GitHub
                                     </a>
                                 </div>
@@ -1430,7 +1257,7 @@
                         </div>
                     </div>
                     
-                </div> <!-- Fim Dashboard 5 -->
+                </div> <!-- Fim Dashboard 4 -->
             </div>
         </div>
     </div>
@@ -1461,9 +1288,8 @@
         let currentYear = 'all';
         let currentSortDashboard1 = { column: 'mes', order: 'asc' };
         let currentSortDashboard2 = { column: 'data_voo', order: 'desc' };
-        let currentSortDashboard3 = { column: 'passageiro', order: 'asc' };
-        let currentSortDashboard4 = { column: 'rota', order: 'asc' };
         let charts = {};
+        let dashboardAnterior = '';
         
         // URLs base do GitHub
         const GITHUB_BASE_URL = 'https://github.com/transparencia-mg/voos_oficiais_governador/tree/main/dataset/data';
@@ -1496,9 +1322,65 @@
         document.addEventListener('DOMContentLoaded', function() {
             setupEventListeners();
             loadInitialData();
-            updateDataAtualizacao();
-            console.log('Painel de Voos Oficiais do Governador carregado com sucesso!!!');
+            setupTooltips();
+            setupDescriptiveTooltips();
+            setupAtualizacaoData();
+            console.log('Painel de Diárias e Viagens carregado com sucesso!!!');
+            iframeUpdateHeight();
         });
+
+        // código incluir
+        function iframeUpdateHeight() { 
+            window.parent.postMessage({ iframeHeight: document.body.scrollHeight+10 }, '*'); 
+        }
+
+        // Event listeners para mudança de aba
+        const tabs = document.querySelectorAll('[data-bs-toggle="tab"]');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                const tabId = this.getAttribute('data-bs-target').replace('#', '');
+                if (tabId === 'dashboard3') {
+                    // Se vem de outro dashboard, mostra botão voltar
+                    if (dashboardAnterior && dashboardAnterior !== 'dashboard3') {
+                        document.getElementById('botaoVoltarContainer').style.display = 'block';
+                    } else {
+                        document.getElementById('botaoVoltarContainer').style.display = 'none';
+                    }
+                } else {
+                    dashboardAnterior = tabId;
+                }
+                iframeUpdateHeight();
+            });
+        });
+
+        function setupTooltips() {
+            // Inicializar tooltips do Bootstrap
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        }
+
+        function setupDescriptiveTooltips() {
+            // Adicionar tooltips descritivos para os filtros
+            const tooltipElements = document.querySelectorAll('[data-tooltip]');
+            tooltipElements.forEach(el => {
+                const tooltipText = el.getAttribute('data-tooltip');
+                el.setAttribute('title', tooltipText);
+                el.setAttribute('data-bs-toggle', 'tooltip');
+                el.setAttribute('data-bs-placement', 'top');
+            });
+            setupTooltips();
+        }
+
+        function setupAtualizacaoData() {
+            const now = new Date();
+            const dataFormatada = now.toLocaleDateString('pt-BR') + ' ' + now.toLocaleTimeString('pt-BR');
+            const elementosData = document.querySelectorAll('.data-atualizacao');
+            elementosData.forEach(el => {
+                el.textContent = dataFormatada;
+            });
+        }
 
         function showLoading(show) {
             const overlay = document.getElementById('loadingOverlay');
@@ -1515,15 +1397,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             `;
             container.prepend(errorDiv);
-        }
-
-        function updateDataAtualizacao() {
-            const now = new Date();
-            const dataFormatada = now.toLocaleDateString('pt-BR') + ' ' + now.toLocaleTimeString('pt-BR');
-            const elementoData = document.getElementById('data-atualizacao-header');
-            if (elementoData) {
-                elementoData.textContent = dataFormatada;
-            }
         }
 
         // Função para converter horas no formato HH:MM:SS para horas decimais
@@ -1565,20 +1438,12 @@
                 clearDashboard2Filters();
             });
             
-            // Dashboard 3
-            document.getElementById('pesquisarPassageiros').addEventListener('click', function() {
-                applyFilters('dashboard3');
+            // Dashboard 3 - Consulta Individual
+            document.getElementById('pesquisarConsulta').addEventListener('click', function() {
+                realizarConsultaIndividual();
             });
-            document.getElementById('limparFiltrosDashboard3').addEventListener('click', function() {
-                clearDashboard3Filters();
-            });
-            
-            // Dashboard 4
-            document.getElementById('aplicarFiltrosMapa').addEventListener('click', function() {
-                applyFilters('dashboard4');
-            });
-            document.getElementById('limparFiltrosDashboard4').addEventListener('click', function() {
-                clearDashboard4Filters();
+            document.getElementById('limparConsulta').addEventListener('click', function() {
+                limparConsultaIndividual();
             });
             
             // Download
@@ -1598,8 +1463,8 @@
                     setTimeout(() => {
                         if (tabId === 'dashboard1') updateDashboard1();
                         else if (tabId === 'dashboard2') updateDashboard2();
-                        else if (tabId === 'dashboard3') updateDashboard3();
-                        else if (tabId === 'dashboard4') updateDashboard4();
+                        else if (tabId === 'dashboard3') inicializarConsultaIndividual();
+                        iframeUpdateHeight();
                     }, 100);
                 });
             });
@@ -1607,11 +1472,6 @@
             // Itens por página Dashboard 2
             document.getElementById('itemsPerPageDashboard2').addEventListener('change', function() {
                 updateDashboard2();
-            });
-            
-            // Mapa - mostrar/ocultar rotas
-            document.getElementById('mostrarRotas').addEventListener('change', function() {
-                updateMapaRotas();
             });
         }
 
@@ -1623,8 +1483,6 @@
                 updateFilterOptions();
                 updateDashboard1();
                 updateDashboard2();
-                updateDashboard3();
-                updateDashboard4();
                 console.log('Dashboard inicializado com sucesso!');
                 console.log(`Dados carregados: ${voosData.length} registros de voos`);
             } catch (error) {
@@ -1782,8 +1640,6 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                         updateFilterOptions();
                         updateDashboard1();
                         updateDashboard2();
-                        updateDashboard3();
-                        updateDashboard4();
                         
                         resolve();
                     }
@@ -1797,7 +1653,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             const anosUnicos = [...new Set(voosData.map(v => v.ano))].sort((a, b) => b - a);
             
             // Atualizar todos os selects de ano
-            ['Dashboard1', 'Dashboard2', 'Dashboard3', 'Dashboard4', 'Download'].forEach(suffix => {
+            ['Dashboard1', 'Dashboard2', 'Download', 'Consulta'].forEach(suffix => {
                 const selectId = `ano${suffix}`;
                 const select = document.getElementById(selectId);
                 if (select) {
@@ -1831,7 +1687,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             
             // Obter origens únicas
             const origensUnicas = [...new Set(voosData.map(v => v.origem))].sort();
-            ['Dashboard1', 'Dashboard2', 'Dashboard4'].forEach(suffix => {
+            ['Dashboard1', 'Dashboard2'].forEach(suffix => {
                 const datalistId = `origensList${suffix}`;
                 const datalist = document.getElementById(datalistId);
                 if (datalist) {
@@ -1848,38 +1704,21 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             
             // Obter destinos únicos
             const destinosUnicos = [...new Set(voosData.map(v => v.destino))].sort();
-            ['Dashboard2', 'Dashboard4'].forEach(suffix => {
-                const datalistId = `destinosList${suffix}`;
-                const datalist = document.getElementById(datalistId);
-                if (datalist) {
-                    datalist.innerHTML = '<option value="all">Todos os Destinos</option>';
-                    destinosUnicos.forEach(destino => {
-                        if (destino) {
-                            const option = document.createElement('option');
-                            option.value = destino;
-                            datalist.appendChild(option);
-                        }
-                    });
-                }
-            });
-            
-            // Obter cargos únicos
-            const cargosUnicos = [...new Set(voosData.map(v => v.cargo_passageiro))].sort();
-            const cargosDatalist = document.getElementById('cargosListDashboard3');
-            if (cargosDatalist) {
-                cargosDatalist.innerHTML = '<option value="all">Todos os Cargos</option>';
-                cargosUnicos.forEach(cargo => {
-                    if (cargo) {
+            const destinosDatalist = document.getElementById('destinosListDashboard2');
+            if (destinosDatalist) {
+                destinosDatalist.innerHTML = '<option value="all">Todos os Destinos</option>';
+                destinosUnicos.forEach(destino => {
+                    if (destino) {
                         const option = document.createElement('option');
-                        option.value = cargo;
-                        cargosDatalist.appendChild(option);
+                        option.value = destino;
+                        destinosDatalist.appendChild(option);
                     }
                 });
             }
             
-            // Obter órgãos únicos
+            // Obter órgãos únicos para consulta
             const orgaosUnicos = [...new Set(voosData.map(v => v.orgao_passageiro))].sort();
-            const orgaosDatalist = document.getElementById('orgaosListDashboard3');
+            const orgaosDatalist = document.getElementById('orgaosListConsulta');
             if (orgaosDatalist) {
                 orgaosDatalist.innerHTML = '<option value="all">Todos os Órgãos</option>';
                 orgaosUnicos.forEach(orgao => {
@@ -1995,71 +1834,10 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                 
                 currentYear = ano;
                 updateDashboard2();
-                
-            } else if (dashboard === 'dashboard3') {
-                const ano = document.getElementById('anoDashboard3').value;
-                const cargoInput = document.getElementById('cargoDashboard3').value;
-                const orgaoInput = document.getElementById('orgaoDashboard3').value;
-                
-                const cargo = cargoInput === 'all' || cargoInput === '' ? 'all' : cargoInput;
-                const orgao = orgaoInput === 'all' || orgaoInput === '' ? 'all' : orgaoInput;
-                
-                // Filtrar dados
-                filteredData = voosData.filter(voo => {
-                    // Filtro por ano
-                    if (ano !== 'all' && voo.ano !== ano) {
-                        return false;
-                    }
-                    
-                    // Filtro por cargo
-                    if (cargo !== 'all' && voo.cargo_passageiro !== cargo) {
-                        return false;
-                    }
-                    
-                    // Filtro por órgão
-                    if (orgao !== 'all' && voo.orgao_passageiro !== orgao) {
-                        return false;
-                    }
-                    
-                    return true;
-                });
-                
-                currentYear = ano;
-                updateDashboard3();
-                
-            } else if (dashboard === 'dashboard4') {
-                const ano = document.getElementById('anoDashboard4').value;
-                const origemInput = document.getElementById('origemDashboard4').value;
-                const destinoInput = document.getElementById('destinoDashboard4').value;
-                
-                const origem = origemInput === 'all' || origemInput === '' ? 'all' : origemInput;
-                const destino = destinoInput === 'all' || destinoInput === '' ? 'all' : destinoInput;
-                
-                // Filtrar dados
-                filteredData = voosData.filter(voo => {
-                    // Filtro por ano
-                    if (ano !== 'all' && voo.ano !== ano) {
-                        return false;
-                    }
-                    
-                    // Filtro por origem
-                    if (origem !== 'all' && voo.origem !== origem) {
-                        return false;
-                    }
-                    
-                    // Filtro por destino
-                    if (destino !== 'all' && voo.destino !== destino) {
-                        return false;
-                    }
-                    
-                    return true;
-                });
-                
-                currentYear = ano;
-                updateDashboard4();
             }
             
             showLoading(false);
+            iframeUpdateHeight();
         }
 
         function converterDataParaComparacao(dataStr) {
@@ -2105,6 +1883,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             filteredData = [...voosData];
             
             updateDashboard1();
+            iframeUpdateHeight();
         }
 
         function clearDashboard2Filters() {
@@ -2121,28 +1900,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             filteredData = [...voosData];
             
             updateDashboard2();
-        }
-
-        function clearDashboard3Filters() {
-            document.getElementById('anoDashboard3').value = 'all';
-            document.getElementById('cargoDashboard3').value = '';
-            document.getElementById('orgaoDashboard3').value = '';
-            
-            currentYear = 'all';
-            filteredData = [...voosData];
-            
-            updateDashboard3();
-        }
-
-        function clearDashboard4Filters() {
-            document.getElementById('anoDashboard4').value = 'all';
-            document.getElementById('origemDashboard4').value = '';
-            document.getElementById('destinoDashboard4').value = '';
-            
-            currentYear = 'all';
-            filteredData = [...voosData];
-            
-            updateDashboard4();
+            iframeUpdateHeight();
         }
 
         // ==================== DASHBOARD 1: VISÃO GERAL ====================
@@ -2150,6 +1908,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             updateSummaryCards();
             updateResumoTable();
             updateCharts1();
+            iframeUpdateHeight();
         }
 
         function updateSummaryCards() {
@@ -2518,7 +2277,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             });
         }
 
-        // ==================== DASHBOARD 2: DETALHAMENTO DE VOOS ====================
+        // ==================== DASHBOARD 2: DESTINO ====================
         function updateDashboard2() {
             const tbody = document.getElementById('voosTableBody');
             const countElement = document.getElementById('resumoCountDashboard2');
@@ -2559,21 +2318,28 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             // Paginação
             const itemsPerPage = parseInt(document.getElementById('itemsPerPageDashboard2').value) || 50;
             const totalPages = Math.ceil(voosArray.length / itemsPerPage);
-            const currentPage = 1; // Sempre começa na página 1 para esta implementação simples
+            const currentPage = 1;
             
             const startIndex = (currentPage - 1) * itemsPerPage;
             const endIndex = Math.min(startIndex + itemsPerPage, voosArray.length);
             const currentData = voosArray.slice(startIndex, endIndex);
             
-            // Gerar HTML da tabela
+            // Gerar HTML da tabela com link na primeira coluna
             const rowsHTML = currentData.map(voo => {
                 // Limitar histórico se for muito longo
                 const historicoCurto = voo.historico.length > 50 ? 
                     voo.historico.substring(0, 50) + '...' : voo.historico;
                 
+                // Criar link para consulta individual
+                const linkConsulta = `javascript:abrirConsultaIndividual('${voo.passageiro}')`;
+                
                 return `
                 <tr>
-                    <td>${voo.data_voo || '-'}</td>
+                    <td>
+                        <a href="${linkConsulta}" class="link-consulta" title="Clique para consultar este passageiro">
+                            ${voo.data_voo || '-'}
+                        </a>
+                    </td>
                     <td>${voo.origem || '-'}</td>
                     <td>${voo.destino || '-'}</td>
                     <td title="${voo.historico || ''}">${historicoCurto}</td>
@@ -2588,6 +2354,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             if (paginationInfo) paginationInfo.textContent = `Mostrando ${startIndex + 1}-${endIndex} de ${voosArray.length.toLocaleString('pt-BR')} registros`;
             
             updateSortIconsDashboard2();
+            iframeUpdateHeight();
         }
 
         function updateSortIconsDashboard2() {
@@ -2610,478 +2377,138 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             });
         }
 
-        // ==================== DASHBOARD 3: PASSAGEIROS E COMITIVA ====================
-        function updateDashboard3() {
-            if (filteredData.length === 0) {
-                document.getElementById('totalPassageiros').textContent = '0';
-                document.getElementById('maiorComitiva').textContent = '0';
-                document.getElementById('totalOrgaos').textContent = '0';
-                document.getElementById('totalCargos').textContent = '0';
-                document.getElementById('passageirosTableBody').innerHTML = '<tr><td colspan="5" class="text-center text-muted">Nenhum passageiro encontrado.</td></tr>';
-                document.getElementById('resumoCountDashboard3').textContent = '0 passageiros';
+        // ==================== DASHBOARD 3: CONSULTA INDIVIDUAL ====================
+        function inicializarConsultaIndividual() {
+            // Esta função é chamada quando a aba de consulta individual é aberta
+            document.getElementById('mensagemConsulta').style.display = 'block';
+            document.getElementById('resultadoConsulta').style.display = 'none';
+            iframeUpdateHeight();
+        }
+
+        function abrirConsultaIndividual(nomePassageiro) {
+            // Abrir a aba de consulta individual
+            const tab = document.getElementById('dashboard3-tab');
+            if (tab) {
+                tab.click();
+            }
+            
+            // Preencher o campo com o nome do passageiro
+            document.getElementById('nomePassageiro').value = nomePassageiro;
+            
+            // Realizar a consulta automaticamente
+            setTimeout(() => {
+                realizarConsultaIndividual();
+            }, 300);
+        }
+
+        function realizarConsultaIndividual() {
+            const nomePassageiro = document.getElementById('nomePassageiro').value.trim();
+            const cpfPassageiro = document.getElementById('cpfPassageiro').value.trim();
+            const anoConsulta = document.getElementById('anoConsulta').value;
+            const orgaoConsulta = document.getElementById('orgaoConsulta').value;
+            
+            if (!nomePassageiro) {
+                alert('Por favor, informe o nome do passageiro para realizar a consulta.');
                 return;
             }
             
-            // Agrupar por passageiro
-            const passageirosMap = {};
-            filteredData.forEach(voo => {
-                const passageiro = voo.passageiro;
-                const cargo = voo.cargo_passageiro;
-                const orgao = voo.orgao_passageiro;
-                
-                if (!passageiro) return;
-                
-                if (!passageirosMap[passageiro]) {
-                    passageirosMap[passageiro] = {
-                        passageiro: passageiro,
-                        cargo_passageiro: cargo,
-                        orgao_passageiro: orgao,
-                        total_voos: 0,
-                        total_horas: 0
-                    };
+            showLoading(true);
+            
+            // Filtrar dados pelo passageiro
+            let dadosFiltrados = voosData.filter(voo => {
+                // Filtro por nome (busca parcial)
+                if (!voo.passageiro || !voo.passageiro.toLowerCase().includes(nomePassageiro.toLowerCase())) {
+                    return false;
                 }
                 
-                passageirosMap[passageiro].total_voos++;
-                passageirosMap[passageiro].total_horas += voo.horas_decimais;
-            });
-            
-            // Converter para array
-            const passageirosArray = Object.values(passageirosMap);
-            
-            // Ordenar
-            passageirosArray.sort((a, b) => {
-                const order = currentSortDashboard3.order === 'asc' ? 1 : -1;
+                // Filtro por ano
+                if (anoConsulta !== 'all' && voo.ano !== anoConsulta) {
+                    return false;
+                }
                 
-                if (currentSortDashboard3.column === 'passageiro') {
-                    return order * a.passageiro.localeCompare(b.passageiro);
-                } else if (currentSortDashboard3.column === 'cargo_passageiro') {
-                    return order * a.cargo_passageiro.localeCompare(b.cargo_passageiro);
-                } else if (currentSortDashboard3.column === 'orgao_passageiro') {
-                    return order * a.orgao_passageiro.localeCompare(b.orgao_passageiro);
-                } else if (currentSortDashboard3.column === 'total_voos') {
-                    return order * (a.total_voos - b.total_voos);
-                } else if (currentSortDashboard3.column === 'total_horas') {
-                    return order * (a.total_horas - b.total_horas);
+                // Filtro por órgão
+                if (orgaoConsulta && orgaoConsulta !== 'all' && voo.orgao_passageiro !== orgaoConsulta) {
+                    return false;
                 }
-                return 0;
+                
+                return true;
             });
             
-            // Atualizar estatísticas
-            document.getElementById('totalPassageiros').textContent = passageirosArray.length.toLocaleString('pt-BR');
-            document.getElementById('totalOrgaos').textContent = [...new Set(passageirosArray.map(p => p.orgao_passageiro))].length.toLocaleString('pt-BR');
-            document.getElementById('totalCargos').textContent = [...new Set(passageirosArray.map(p => p.cargo_passageiro))].length.toLocaleString('pt-BR');
-            
-            // Encontrar maior comitiva (maior número de passageiros em um único voo por data+origem+destino)
-            const voosAgrupados = {};
-            filteredData.forEach(voo => {
-                const key = `${voo.data_voo}_${voo.origem}_${voo.destino}`;
-                if (!voosAgrupados[key]) {
-                    voosAgrupados[key] = 0;
-                }
-                voosAgrupados[key]++;
-            });
-            
-            const maiorComitiva = Math.max(...Object.values(voosAgrupados), 0);
-            document.getElementById('maiorComitiva').textContent = maiorComitiva.toLocaleString('pt-BR');
-            
-            // Gerar HTML da tabela
-            const rowsHTML = passageirosArray.map(passageiro => {
-                return `
-                    <tr>
-                        <td><strong>${passageiro.passageiro}</strong></td>
-                        <td>${passageiro.cargo_passageiro || '-'}</td>
-                        <td>${passageiro.orgao_passageiro || '-'}</td>
-                        <td class="text-center">${passageiro.total_voos.toLocaleString('pt-BR')}</td>
-                        <td class="text-center">${formatarHoras(passageiro.total_horas)}</td>
-                    </tr>
+            if (dadosFiltrados.length === 0) {
+                document.getElementById('mensagemConsulta').innerHTML = `
+                    <i class="material-icons" style="font-size: 60px; color: #ccc;">search_off</i>
+                    <h4 class="mt-3 text-muted">Nenhum resultado encontrado</h4>
+                    <p class="text-muted">Não foram encontrados voos para o passageiro "${nomePassageiro}" com os filtros aplicados.</p>
                 `;
-            }).join('');
-            
-            document.getElementById('passageirosTableBody').innerHTML = rowsHTML;
-            document.getElementById('resumoCountDashboard3').textContent = `${passageirosArray.length.toLocaleString('pt-BR')} passageiros`;
-            
-            updateSortIconsDashboard3();
-            updatePassageirosChart(passageirosArray);
-            updateOrgaosChart(passageirosArray);
-        }
-
-        function updatePassageirosChart(passageirosArray) {
-            const ctx = document.getElementById('chartPassageiros')?.getContext('2d');
-            if (!ctx || passageirosArray.length === 0) return;
-            
-            // Pegar top 10 passageiros por número de voos
-            const topPassageiros = [...passageirosArray]
-                .sort((a, b) => b.total_voos - a.total_voos)
-                .slice(0, 10);
-            
-            const labels = topPassageiros.map(p => {
-                const nome = p.passageiro;
-                return nome.length > 15 ? nome.substring(0, 15) + '...' : nome;
-            });
-            const data = topPassageiros.map(p => p.total_voos);
-            
-            if (charts.passageiros) {
-                charts.passageiros.destroy();
-            }
-            
-            charts.passageiros = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Número de Voos',
-                        data: data,
-                        backgroundColor: chartColors.accent,
-                        borderColor: chartColors.primary,
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    indexAxis: 'y',
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            ticks: {
-                                font: {
-                                    size: 10
-                                }
-                            }
-                        },
-                        y: {
-                            ticks: {
-                                font: {
-                                    size: 10
-                                }
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    }
-                }
-            });
-        }
-
-        function updateOrgaosChart(passageirosArray) {
-            const ctx = document.getElementById('chartOrgaosPassageiros')?.getContext('2d');
-            if (!ctx || passageirosArray.length === 0) return;
-            
-            // Agrupar por órgão
-            const orgaosCount = {};
-            passageirosArray.forEach(p => {
-                const orgao = p.orgao_passageiro || 'Não informado';
-                orgaosCount[orgao] = (orgaosCount[orgao] || 0) + 1;
-            });
-            
-            const labels = Object.keys(orgaosCount);
-            const data = Object.values(orgaosCount);
-            
-            if (charts.orgaosPassageiros) {
-                charts.orgaosPassageiros.destroy();
-            }
-            
-            charts.orgaosPassageiros = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: labels.map(label => label.length > 20 ? label.substring(0, 20) + '...' : label),
-                    datasets: [{
-                        data: data,
-                        backgroundColor: [
-                            chartColors.primary,
-                            chartColors.accent,
-                            chartColors.success,
-                            chartColors.warning,
-                            chartColors.info,
-                            chartColors.purple,
-                            chartColors.orange,
-                            chartColors.teal
-                        ],
-                        borderWidth: 2,
-                        borderColor: '#fff'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                            labels: {
-                                padding: 10,
-                                usePointStyle: true,
-                                font: {
-                                    size: 9
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function updateSortIconsDashboard3() {
-            const headers = document.querySelectorAll('#passageirosTable thead th');
-            headers.forEach(header => {
-                const sortIcon = header.querySelector('.sort-icon');
-                const column = header.getAttribute('data-sort');
+                document.getElementById('mensagemConsulta').style.display = 'block';
+                document.getElementById('resultadoConsulta').style.display = 'none';
+            } else {
+                // Exibir resultados
+                document.getElementById('mensagemConsulta').style.display = 'none';
+                document.getElementById('resultadoConsulta').style.display = 'block';
                 
-                if (column === currentSortDashboard3.column) {
-                    header.classList.add('sorted-' + currentSortDashboard3.order);
-                    if (sortIcon) {
-                        sortIcon.innerHTML = currentSortDashboard3.order === 'asc' ? '↑' : '↓';
-                    }
+                // Atualizar estatísticas
+                const primeiroRegistro = dadosFiltrados[0];
+                document.getElementById('consultaNome').textContent = primeiroRegistro.passageiro;
+                document.getElementById('consultaTotalVoos').textContent = dadosFiltrados.length;
+                
+                // Calcular total de horas
+                const totalHoras = dadosFiltrados.reduce((sum, voo) => sum + voo.horas_decimais, 0);
+                document.getElementById('consultaTotalHoras').textContent = formatarHoras(totalHoras);
+                
+                // Determinar período
+                const datas = dadosFiltrados.map(v => converterDataParaComparacao(v.data_voo)).filter(d => d);
+                if (datas.length > 0) {
+                    const minData = new Date(Math.min(...datas));
+                    const maxData = new Date(Math.max(...datas));
+                    document.getElementById('consultaPeriodo').textContent = 
+                        `${minData.toLocaleDateString('pt-BR')} a ${maxData.toLocaleDateString('pt-BR')}`;
                 } else {
-                    header.classList.remove('sorted-asc', 'sorted-desc');
-                    if (sortIcon) {
-                        sortIcon.innerHTML = '▼';
-                    }
+                    document.getElementById('consultaPeriodo').textContent = '-';
                 }
-            });
+                
+                // Atualizar contador
+                document.getElementById('consultaCount').textContent = `${dadosFiltrados.length} registros`;
+                
+                // Gerar tabela
+                const tbody = document.getElementById('consultaTableBody');
+                const rowsHTML = dadosFiltrados.map(voo => {
+                    return `
+                        <tr>
+                            <td>${voo.data_voo || '-'}</td>
+                            <td>${voo.origem || '-'}</td>
+                            <td>${voo.destino || '-'}</td>
+                            <td title="${voo.historico || ''}">${voo.historico.length > 40 ? voo.historico.substring(0, 40) + '...' : voo.historico}</td>
+                            <td>${voo.horas_voadas || '00:00:00'}</td>
+                            <td>${voo.aernova || '-'}</td>
+                            <td>${voo.cargo_passageiro || '-'}</td>
+                            <td>${voo.orgao_passageiro || '-'}</td>
+                        </tr>
+                    `;
+                }).join('');
+                
+                tbody.innerHTML = rowsHTML;
+            }
+            
+            showLoading(false);
+            iframeUpdateHeight();
         }
 
-        // ==================== DASHBOARD 4: MAPA DE ROTAS ====================
-        function updateDashboard4() {
-            if (filteredData.length === 0) {
-                document.getElementById('totalRotas').textContent = '0';
-                document.getElementById('rotaFrequente').textContent = '-';
-                document.getElementById('totalCidades').textContent = '0';
-                document.getElementById('totalEstados').textContent = '0';
-                document.getElementById('rotasTableBody').innerHTML = '<tr><td colspan="5" class="text-center text-muted">Nenhuma rota encontrada.</td></tr>';
-                document.getElementById('resumoCountDashboard4').textContent = '0 rotas';
-                return;
-            }
+        function limparConsultaIndividual() {
+            document.getElementById('nomePassageiro').value = '';
+            document.getElementById('cpfPassageiro').value = '';
+            document.getElementById('anoConsulta').value = 'all';
+            document.getElementById('orgaoConsulta').value = '';
             
-            // Agrupar por rota (origem -> destino)
-            const rotasMap = {};
-            filteredData.forEach(voo => {
-                const origem = voo.origem;
-                const destino = voo.destino;
-                
-                if (!origem || !destino) return;
-                
-                const rotaKey = `${origem} → ${destino}`;
-                
-                if (!rotasMap[rotaKey]) {
-                    rotasMap[rotaKey] = {
-                        rota: rotaKey,
-                        origem: origem,
-                        destino: destino,
-                        frequencia: 0,
-                        total_passageiros: 0,
-                        total_horas: 0,
-                        ultima_data: ''
-                    };
-                }
-                
-                rotasMap[rotaKey].frequencia++;
-                rotasMap[rotaKey].total_passageiros++;
-                rotasMap[rotaKey].total_horas += voo.horas_decimais;
-                
-                // Atualizar última data
-                if (!rotasMap[rotaKey].ultima_data || 
-                    converterDataParaComparacao(voo.data_voo) > converterDataParaComparacao(rotasMap[rotaKey].ultima_data)) {
-                    rotasMap[rotaKey].ultima_data = voo.data_voo;
-                }
-            });
-            
-            // Converter para array
-            const rotasArray = Object.values(rotasMap);
-            
-            // Ordenar
-            rotasArray.sort((a, b) => {
-                const order = currentSortDashboard4.order === 'asc' ? 1 : -1;
-                
-                if (currentSortDashboard4.column === 'rota') {
-                    return order * a.rota.localeCompare(b.rota);
-                } else if (currentSortDashboard4.column === 'frequencia') {
-                    return order * (a.frequencia - b.frequencia);
-                } else if (currentSortDashboard4.column === 'total_passageiros') {
-                    return order * (a.total_passageiros - b.total_passageiros);
-                } else if (currentSortDashboard4.column === 'total_horas') {
-                    return order * (a.total_horas - b.total_horas);
-                } else if (currentSortDashboard4.column === 'ultima_data') {
-                    const dataA = converterDataParaComparacao(a.ultima_data);
-                    const dataB = converterDataParaComparacao(b.ultima_data);
-                    return order * (dataA - dataB);
-                }
-                return 0;
-            });
-            
-            // Atualizar estatísticas
-            document.getElementById('totalRotas').textContent = rotasArray.length.toLocaleString('pt-BR');
-            
-            // Encontrar rota mais frequente
-            if (rotasArray.length > 0) {
-                const rotaMaisFrequente = rotasArray.reduce((prev, current) => 
-                    (prev.frequencia > current.frequencia) ? prev : current
-                );
-                document.getElementById('rotaFrequente').textContent = rotaMaisFrequente.rota;
-            }
-            
-            // Contar cidades únicas (origens e destinos)
-            const todasCidades = [
-                ...new Set([
-                    ...rotasArray.map(r => r.origem),
-                    ...rotasArray.map(r => r.destino)
-                ])
-            ];
-            document.getElementById('totalCidades').textContent = todasCidades.length.toLocaleString('pt-BR');
-            
-            // Para estados, assumindo siglas de 2-3 letras no final após /
-            const estados = todasCidades
-                .map(cidade => {
-                    const partes = cidade.split('/');
-                    return partes.length > 1 ? partes[1].trim() : null;
-                })
-                .filter(estado => estado && estado.length <= 3);
-            
-            const estadosUnicos = [...new Set(estados)];
-            document.getElementById('totalEstados').textContent = estadosUnicos.length.toLocaleString('pt-BR');
-            
-            // Gerar HTML da tabela
-            const rowsHTML = rotasArray.map(rota => {
-                return `
-                    <tr>
-                        <td><strong>${rota.rota}</strong></td>
-                        <td class="text-center">${rota.frequencia.toLocaleString('pt-BR')}</td>
-                        <td class="text-center">${rota.total_passageiros.toLocaleString('pt-BR')}</td>
-                        <td class="text-center">${formatarHoras(rota.total_horas)}</td>
-                        <td class="text-center">${rota.ultima_data || '-'}</td>
-                    </tr>
-                `;
-            }).join('');
-            
-            document.getElementById('rotasTableBody').innerHTML = rowsHTML;
-            document.getElementById('resumoCountDashboard4').textContent = `${rotasArray.length.toLocaleString('pt-BR')} rotas`;
-            
-            updateSortIconsDashboard4();
-            updateMapaRotas(rotasArray);
-        }
-
-        function updateMapaRotas(rotasArray = null) {
-            // Esta é uma implementação simplificada do mapa
-            // Em uma implementação real, você usaria uma biblioteca como Leaflet ou Google Maps
-            
-            const mapaContainer = document.getElementById('mapaRotas');
-            if (!mapaContainer) return;
-            
-            if (!rotasArray) {
-                // Obter rotas dos dados filtrados
-                const rotasMap = {};
-                filteredData.forEach(voo => {
-                    const origem = voo.origem;
-                    const destino = voo.destino;
-                    
-                    if (!origem || !destino) return;
-                    
-                    const rotaKey = `${origem} → ${destino}`;
-                    
-                    if (!rotasMap[rotaKey]) {
-                        rotasMap[rotaKey] = {
-                            rota: rotaKey,
-                            origem: origem,
-                            destino: destino,
-                            frequencia: 0
-                        };
-                    }
-                    
-                    rotasMap[rotaKey].frequencia++;
-                });
-                
-                rotasArray = Object.values(rotasMap);
-            }
-            
-            if (rotasArray.length === 0) {
-                mapaContainer.innerHTML = `
-                    <div class="d-flex justify-content-center align-items-center h-100">
-                        <div class="text-center">
-                            <i class="material-icons" style="font-size: 48px; color: #ccc;">map</i>
-                            <p class="mt-3 text-muted">Nenhuma rota encontrada para os filtros aplicados</p>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Pegar as rotas mais frequentes (máximo 5 para visualização)
-            const rotasParaMapa = [...rotasArray]
-                .sort((a, b) => b.frequencia - a.frequencia)
-                .slice(0, 5);
-            
-            // Criar visualização simplificada do mapa
-            let htmlMapa = `
-                <div class="h-100 d-flex flex-column justify-content-center">
-                    <div class="text-center mb-4">
-                        <h5><i class="material-icons me-2">flight_takeoff</i> Principais Rotas</h5>
-                        <p class="text-muted" style="font-size: 12px;">${rotasParaMapa.length} rotas mais frequentes</p>
-                    </div>
-                    
-                    <div class="px-4">
+            document.getElementById('mensagemConsulta').innerHTML = `
+                <i class="material-icons" style="font-size: 60px; color: #ccc;">person_search</i>
+                <h4 class="mt-3 text-muted">Consulta Individual</h4>
+                <p class="text-muted">Preencha os campos acima para consultar os voos de um passageiro específico.</p>
             `;
+            document.getElementById('mensagemConsulta').style.display = 'block';
+            document.getElementById('resultadoConsulta').style.display = 'none';
             
-            rotasParaMapa.forEach((rota, index) => {
-                const largura = 20 + (rota.frequencia * 5); // Largura proporcional à frequência
-                const cores = ['#3498DB', '#E74C3C', '#27AE60', '#F39C12', '#8E44AD'];
-                
-                htmlMapa += `
-                    <div class="mb-3">
-                        <div class="d-flex justify-content-between align-items-center mb-1">
-                            <span style="font-size: 12px; font-weight: 600;">${rota.origem}</span>
-                            <span style="font-size: 10px; color: #666;">${rota.frequencia} voos</span>
-                            <span style="font-size: 12px; font-weight: 600;">${rota.destino}</span>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div style="width: 20px; text-align: center;">
-                                <i class="material-icons" style="font-size: 16px; color: ${cores[index % cores.length]};">flight_takeoff</i>
-                            </div>
-                            <div class="flex-grow-1 mx-2">
-                                <div style="height: 4px; background-color: ${cores[index % cores.length]}; width: ${largura}%; border-radius: 2px;"></div>
-                            </div>
-                            <div style="width: 20px; text-align: center;">
-                                <i class="material-icons" style="font-size: 16px; color: ${cores[index % cores.length]};">flight_land</i>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            htmlMapa += `
-                    </div>
-                    
-                    <div class="text-center mt-4">
-                        <p class="text-muted" style="font-size: 11px;">
-                            <i class="material-icons" style="font-size: 14px; vertical-align: middle;">info</i>
-                            Representação visual das rotas mais frequentes
-                        </p>
-                    </div>
-                </div>
-            `;
-            
-            mapaContainer.innerHTML = htmlMapa;
-        }
-
-        function updateSortIconsDashboard4() {
-            const headers = document.querySelectorAll('#rotasTable thead th');
-            headers.forEach(header => {
-                const sortIcon = header.querySelector('.sort-icon');
-                const column = header.getAttribute('data-sort');
-                
-                if (column === currentSortDashboard4.column) {
-                    header.classList.add('sorted-' + currentSortDashboard4.order);
-                    if (sortIcon) {
-                        sortIcon.innerHTML = currentSortDashboard4.order === 'asc' ? '↑' : '↓';
-                    }
-                } else {
-                    header.classList.remove('sorted-asc', 'sorted-desc');
-                    if (sortIcon) {
-                        sortIcon.innerHTML = '▼';
-                    }
-                }
-            });
+            iframeUpdateHeight();
         }
 
         // ==================== FUNÇÕES DE ORDENAÇÃO ====================
@@ -3102,22 +2529,6 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                     currentSortDashboard2.order = 'asc';
                 }
                 updateDashboard2();
-            } else if (tableType === 'passageiros') {
-                if (currentSortDashboard3.column === column) {
-                    currentSortDashboard3.order = currentSortDashboard3.order === 'asc' ? 'desc' : 'asc';
-                } else {
-                    currentSortDashboard3.column = column;
-                    currentSortDashboard3.order = 'asc';
-                }
-                updateDashboard3();
-            } else if (tableType === 'rotas') {
-                if (currentSortDashboard4.column === column) {
-                    currentSortDashboard4.order = currentSortDashboard4.order === 'asc' ? 'desc' : 'asc';
-                } else {
-                    currentSortDashboard4.column = column;
-                    currentSortDashboard4.order = 'asc';
-                }
-                updateDashboard4();
             }
         };
 
