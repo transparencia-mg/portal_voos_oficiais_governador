@@ -2477,6 +2477,8 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             const tbody = document.getElementById('resumoTableBody');
             const countElement = document.getElementById('resumoCountDashboard1');
             const totalCountElement = document.getElementById('totalCountDashboard1');
+
+            console.log("Total de dados filtrados:", filteredData.length);
             
             if (filteredData.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">Nenhum voo encontrado para os filtros aplicados.</td></tr>';
@@ -2484,6 +2486,131 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                 if (totalCountElement) totalCountElement.textContent = '0 registros';
                 return;
             }
+
+    // DEBUG: Mostrar alguns dados para verificar
+    console.log("Primeiros 3 registros:", filteredData.slice(0, 3));
+    
+    // Inicializar array com todos os meses
+    const mesesDoAno = [];
+    for (let i = 1; i <= 12; i++) {
+        const mesNumero = i.toString().padStart(2, '0');
+        const mesNome = mesesMap[mesNumero];
+        mesesDoAno.push({
+            mes: mesNome,
+            mesNumero: mesNumero,
+            total_voos: 0,
+            total_passageiros: 0,
+            total_horas: 0,
+            registros: []
+        });
+    }
+    
+    // Agrupar dados por mês
+    const mesesData = {};
+    
+    filteredData.forEach(voo => {
+        const mes = voo.mes;
+        
+        if (!mes) {
+            console.log("Voo sem mês:", voo);
+            return;
+        }
+        
+        const mesNumero = mes.padStart(2, '0');
+        const mesNome = mesesMap[mesNumero] || `Mês ${mesNumero}`;
+        
+        if (!mesesData[mesNumero]) {
+            mesesData[mesNumero] = {
+                mes: mesNome,
+                mesNumero: mesNumero,
+                voosUnicos: new Set(),
+                total_passageiros: 0,
+                total_horas: 0,
+                registros: []
+            };
+        }
+        
+        // Contar voos únicos (combinando data+origem+destino)
+        const vooKey = `${voo.data_voo}_${voo.origem}_${voo.destino}`;
+        mesesData[mesNumero].voosUnicos.add(vooKey);
+        
+        // Contar passageiros (cada linha é um passageiro)
+        mesesData[mesNumero].total_passageiros++;
+        
+        // Somar horas
+        mesesData[mesNumero].total_horas += voo.horas_decimais || 0;
+        
+        // Armazenar registro
+        mesesData[mesNumero].registros.push(voo);
+    });
+    
+    console.log("Dados agrupados por mês:", mesesData);
+    
+    // Preencher mesesDoAno com os dados reais
+    mesesDoAno.forEach(item => {
+        const mesData = mesesData[item.mesNumero];
+        if (mesData) {
+            item.total_voos = mesData.voosUnicos.size;
+            item.total_passageiros = mesData.total_passageiros;
+            item.total_horas = mesData.total_horas;
+            item.registros = mesData.registros;
+        }
+    });
+    
+    // Ordenar pelo critério atual
+    let resumoArray = [...mesesDoAno];
+    resumoArray.sort((a, b) => {
+        const order = currentSortDashboard1.order === 'asc' ? 1 : -1;
+        
+        if (currentSortDashboard1.column === 'mes') {
+            return order * (parseInt(a.mesNumero) - parseInt(b.mesNumero));
+        } else if (currentSortDashboard1.column === 'total_voos') {
+            return order * (a.total_voos - b.total_voos);
+        } else if (currentSortDashboard1.column === 'total_passageiros') {
+            return order * (a.total_passageiros - b.total_passageiros);
+        } else if (currentSortDashboard1.column === 'total_horas') {
+            return order * (a.total_horas - b.total_horas);
+        } else if (currentSortDashboard1.column === 'media_horas') {
+            const mediaA = a.total_voos > 0 ? a.total_horas / a.total_voos : 0;
+            const mediaB = b.total_voos > 0 ? b.total_horas / b.total_voos : 0;
+            return order * (mediaA - mediaB);
+        }
+        return 0;
+    });
+    
+    // Gerar HTML da tabela
+    const rowsHTML = resumoArray.map(item => {
+        const mediaHoras = item.total_voos > 0 ? item.total_horas / item.total_voos : 0;
+        
+        return `
+            <tr>
+                <td>
+                    <a href="javascript:consultarPorMes('${item.mesNumero}')" class="link-mes" title="Clique para consultar voos deste mês">
+                        ${item.mes}
+                    </a>
+                </td>
+                <td class="text-center">${item.total_voos.toLocaleString('pt-BR')}</td>
+                <td class="text-center">${item.total_passageiros.toLocaleString('pt-BR')}</td>
+                <td class="text-center">${formatarHoras(item.total_horas)}</td>
+                <td class="text-center">${formatarHoras(mediaHoras)}</td>
+            </tr>
+        `;
+    }).join('');
+    
+    tbody.innerHTML = rowsHTML;
+    
+    // Contar meses com dados
+    const mesesComDados = resumoArray.filter(mes => mes.total_voos > 0).length;
+    
+    if (countElement) countElement.textContent = `${mesesComDados} meses`;
+    if (totalCountElement) totalCountElement.textContent = `${mesesComDados} meses`;
+    
+    updateSortIconsDashboard1();
+    
+    // DEBUG: Verificar se há dados
+    console.log("Meses com dados:", mesesComDados);
+    console.log("Resumo array:", resumoArray);
+}
             
             // Obter ano selecionado
             const anoSelecionado = document.getElementById('anoDashboard1').value;
