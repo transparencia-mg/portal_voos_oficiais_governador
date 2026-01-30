@@ -2169,8 +2169,16 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             }
         }
 
-        function applyFilters(dashboard) {
-            showLoading(true);
+function applyFilters(dashboard) {
+    showLoading(true);
+    
+    console.log("Aplicando filtros para:", dashboard);
+    console.log("Dados antes do filtro:", voosData.length);
+    
+    // ... resto do código ...
+    
+    console.log("Dados após filtro:", filteredData.length);
+}
             
             if (dashboard === 'dashboard1') {
                 const ano = document.getElementById('anoDashboard1').value;
