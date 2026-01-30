@@ -1917,7 +1917,39 @@
                                     mes = partesData[1];
                                 }
                             }
-                            
+
+                            // POR ESTE:
+let ano = year;
+let mes = '';
+
+if (row.data_voo) {
+    // Normalizar a data - remover espaços e garantir formato correto
+    const dataStr = row.data_voo.trim();
+    
+    // Verificar diferentes formatos de data
+    if (dataStr.includes('/')) {
+        // Formato dd/mm/aaaa
+        const partesData = dataStr.split('/');
+        if (partesData.length === 3) {
+            const dia = partesData[0].padStart(2, '0');
+            mes = partesData[1].padStart(2, '0');
+            ano = partesData[2];
+        }
+    } else if (dataStr.includes('-')) {
+        // Formato aaaa-mm-dd
+        const partesData = dataStr.split('-');
+        if (partesData.length === 3) {
+            ano = partesData[0];
+            mes = partesData[1].padStart(2, '0');
+        }
+    }
+    
+    // Se ainda não conseguiu extrair o mês, usar padrão
+    if (!mes && dataStr.length >= 10) {
+        // Tentar extrair baseado em posições
+        mes = dataStr.substring(3, 5) || '01';
+    }
+}
                             return {
                                 __id: `${ano}_${index}`,
                                 ano: ano,
