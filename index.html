@@ -910,11 +910,9 @@
             
             <!-- ==================== DATA DE ATUALIZAÇÃO ==================== -->
             <div class="data-atualizacao-container">
-                <div class="data-atualizacao-texto">
-                    <i class="material-icons me-2">update</i>Última atualização dos dados:
-                </div>
-                <div class="data-atualizacao-valor" id="dataAtualizacao">
-                    Carregando...
+                <div class="data-atualizacao-box">
+                    <i class="material-icons">update</i>
+                    Atualizado em: <span id="data-atualizacao-header">Carregando...</span>
                 </div>
             </div>
 
@@ -982,39 +980,6 @@
                         <!-- Cards serão carregados aqui -->
                     </div>
 
-                    <!-- Barra de Ferramentas Dashboard 1 -->
-                    <div class="actions-container mb-4">
-                        <div class="export-buttons">
-                            <button class="btn-export" id="exportCSVDashboard1">
-                                <i class="material-icons me-2">description</i>Exportar CSV
-                            </button>
-                            <button class="btn-print" id="printDashboard1">
-                                <i class="material-icons me-2">print</i>Imprimir
-                            </button>
-                        </div>
-
-                        <div class="right-aligned-container">
-                            <div class="items-per-page-container">
-                                <div class="search-box-container">
-                                    <label for="searchDashboard1">Buscar registros:</label>
-                                    <input type="text" id="searchDashboard1" placeholder="Buscar por mês...">
-                                </div>
-                                
-                                <div class="items-per-page">
-                                    <span>Itens por página:</span>
-                                    <select id="itemsPerPageDashboard1">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50" selected>50</option>
-                                        <option value="100">100</option>
-                                    </select>
-                                </div>
-                                
-                                <span class="table-badge" id="totalCountDashboard1">0 registros</span>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Gráficos Dashboard 1 -->
                     <div class="row mb-4">
                         <div class="col-md-4 col-12">
@@ -1049,12 +1014,41 @@
                         </div>
                     </div>
 
+                    <!-- Barra de Ferramentas Dashboard 1 -->
+                    <div class="actions-container mb-4">
+                        <div class="export-buttons">
+                            <button class="btn-export" id="exportCSVDashboard1">
+                                <i class="material-icons me-2">description</i>Exportar CSV
+                            </button>
+                            <button class="btn-print" id="printDashboard1">
+                                <i class="material-icons me-2">print</i>Imprimir
+                            </button>
+                        </div>
+
+                        <div class="right-aligned-container">
+                            <div class="items-per-page-container">
+                                <div class="search-box-container">
+                                    <label for="searchDashboard1">Buscar registros:</label>
+                                    <input type="text" id="searchDashboard1" placeholder="Buscar por mês...">
+                                </div>
+                                
+                                <div class="items-per-page">
+                                    <span>Itens por página:</span>
+                                    <select id="itemsPerPageDashboard1">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50" selected>50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                </div>
+                                
+                                <span class="table-badge" id="totalCountDashboard1">0 registros</span>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <!-- Tabela Resumo Dashboard 1 -->
                     <div class="table-container">
-                        <div class="table-header">
-                            <h3 class="table-title">Resumo de Voos por Mês</h3>
-                            <span class="table-badge" id="resumoCountDashboard1">0 registros</span>
-                        </div>
                         <div class="table-fixed-header-container">
                             <table class="table table-hover" id="visaoGeralTable">
                                 <thead>
