@@ -129,6 +129,32 @@
             margin: 2px 0 0 0;
         }
         
+        /* ==================== DATA DE ATUALIZAÇÃO ==================== */
+        .data-atualizacao-container {
+            background: white;
+            border-radius: 10px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .data-atualizacao-texto {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .data-atualizacao-valor {
+            font-size: 13px;
+            color: var(--accent-red);
+            font-weight: 700;
+        }
+        
         /* ==================== FILTROS ==================== */
         .filter-container {
             background: white;
@@ -160,6 +186,85 @@
         .form-control:focus, .form-select:focus {
             border-color: var(--accent-blue);
             box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
+        }
+        
+        /* ==================== BOTÕES DE FILTRO ==================== */
+        .btn-pesquisa {
+            background: var(--accent-red);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .btn-pesquisa:hover {
+            background: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+        
+        .btn-limpar {
+            background: white;
+            color: var(--primary-dark);
+            border: 2px solid var(--primary-dark);
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .btn-limpar:hover {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+        
+        .btn-export {
+            background: var(--success-green);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .btn-export:hover {
+            background: #219653;
+            transform: translateY(-2px);
+        }
+        
+        .btn-print {
+            background: var(--warning-yellow);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .btn-print:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
         }
         
         /* ==================== CARDS DE MÉTRICAS ==================== */
@@ -275,6 +380,80 @@
             position: relative;
             height: 220px;
             width: 100%;
+        }
+        
+        /* ==================== BARRA DE FERRAMENTAS ==================== */
+        .actions-container {
+            background: white;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .right-aligned-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .items-per-page-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .search-box-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .search-box-container label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            white-space: nowrap;
+        }
+        
+        .search-box-container input {
+            width: 250px;
+            padding: 8px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        
+        .items-per-page {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .items-per-page span {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            white-space: nowrap;
+        }
+        
+        .items-per-page select {
+            padding: 6px 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 13px;
+            background: white;
         }
         
         /* ==================== TABELAS ==================== */
@@ -439,6 +618,61 @@
             font-size: 13px;
         }
         
+        /* ==================== BOTÃO DE AÇÃO (OLHINHO) ==================== */
+        .btn-action {
+            background: transparent;
+            color: var(--primary-dark);
+            border: 1px solid var(--primary-dark);
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-action:hover {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+        
+        /* ==================== LINKS CLICÁVEIS ==================== */
+        .link-clickable {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        .link-clickable:hover {
+            color: var(--accent-red);
+            text-decoration: underline;
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+        
+        .link-mes {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .link-mes:hover {
+            color: var(--accent-red);
+            text-decoration: underline;
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+        
         /* ==================== MENU DE NAVEGAÇÃO ==================== */
         .nav-tabs-container {
             background: white;
@@ -500,62 +734,58 @@
             color: white !important;
         }
         
-        /* ==================== BOTÕES ==================== */
-        .btn-pesquisa {
+        /* ==================== PAGINAÇÃO ==================== */
+        .pagination-container {
+            background: white;
+            padding: 15px 20px;
+            border-top: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .pagination-info {
+            font-size: 13px;
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+        
+        .pagination {
+            margin-bottom: 0;
+        }
+        
+        .page-link {
+            padding: 6px 12px;
+            font-size: 13px;
+            color: var(--primary-dark);
+            border: 1px solid #dee2e6;
+        }
+        
+        .page-link:hover {
+            background-color: rgba(26, 82, 118, 0.1);
+            color: var(--primary-dark);
+        }
+        
+        .page-item.active .page-link {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        /* ==================== MODAL ==================== */
+        .modal-viagens .modal-header {
             background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-darker) 100%);
             color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
+        }
+        
+        .modal-viagens .modal-title {
             font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
         }
         
-        .btn-pesquisa:hover {
-            background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
-            transform: translateY(-2px);
-        }
-        
-        .btn-secondary-custom {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-        }
-        
-        .btn-secondary-custom:hover {
-            background: #5a6268;
-            transform: translateY(-2px);
-        }
-        
-        .btn-export {
-            background: var(--success-green);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-        }
-        
-        .btn-export:hover {
-            background: #219653;
-            transform: translateY(-2px);
+        .modal-viagens .modal-body {
+            max-height: 500px;
+            overflow-y: auto;
         }
         
         /* ==================== LOADING OVERLAY ==================== */
@@ -584,20 +814,6 @@
         
         @keyframes spin {
             100% { transform: rotate(360deg); }
-        }
-        
-        /* ==================== LINK PARA CONSULTA INDIVIDUAL ==================== */
-        .link-consulta {
-            color: var(--primary-dark);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .link-consulta:hover {
-            color: var(--accent-blue);
-            text-decoration: underline;
         }
         
         /* ==================== RESPONSIVIDADE ==================== */
@@ -638,6 +854,25 @@
                 padding: 8px 6px;
                 font-size: 11px;
             }
+            
+            .actions-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box-container input {
+                width: 100%;
+            }
+            
+            .items-per-page-container {
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+            
+            .data-atualizacao-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
@@ -672,6 +907,16 @@
                     </li>
                 </ul>
             </div>
+            
+            <!-- ==================== DATA DE ATUALIZAÇÃO ==================== -->
+            <div class="data-atualizacao-container">
+                <div class="data-atualizacao-texto">
+                    <i class="material-icons me-2">update</i>Última atualização dos dados:
+                </div>
+                <div class="data-atualizacao-valor" id="dataAtualizacao">
+                    Carregando...
+                </div>
+            </div>
 
             <!-- ==================== CONTEÚDO DAS ABAS ==================== -->
             <div class="tab-content" id="dashboardTabsContent">
@@ -687,26 +932,6 @@
                                     <label for="anoDashboard1" class="form-label filter-label">Ano</label>
                                     <select class="form-select" id="anoDashboard1">
                                         <!-- Opções serão carregadas dinamicamente -->
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-6">
-                                <div class="mb-3">
-                                    <label for="mesDashboard1" class="form-label filter-label">Mês</label>
-                                    <select class="form-select" id="mesDashboard1">
-                                        <option value="all">Todos os Meses</option>
-                                        <option value="01">Janeiro</option>
-                                        <option value="02">Fevereiro</option>
-                                        <option value="03">Março</option>
-                                        <option value="04">Abril</option>
-                                        <option value="05">Maio</option>
-                                        <option value="06">Junho</option>
-                                        <option value="07">Julho</option>
-                                        <option value="08">Agosto</option>
-                                        <option value="09">Setembro</option>
-                                        <option value="10">Outubro</option>
-                                        <option value="11">Novembro</option>
-                                        <option value="12">Dezembro</option>
                                     </select>
                                 </div>
                             </div>
@@ -728,6 +953,15 @@
                                     </datalist>
                                 </div>
                             </div>
+                            <div class="col-md-3 col-6">
+                                <div class="mb-3">
+                                    <label for="destinoDashboard1" class="form-label filter-label">Destino</label>
+                                    <input type="text" class="form-control" list="destinosListDashboard1" id="destinoDashboard1" placeholder="Digite ou selecione...">
+                                    <datalist id="destinosListDashboard1">
+                                        <option value="all">Todos os Destinos</option>
+                                    </datalist>
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-12">
@@ -735,7 +969,7 @@
                                     <button class="btn-pesquisa" id="aplicarFiltros">
                                         <i class="material-icons me-2">search</i>Pesquisar
                                     </button>
-                                    <button class="btn-secondary-custom" id="limparFiltros">
+                                    <button class="btn-limpar" id="limparFiltros">
                                         <i class="material-icons me-2">clear</i>Limpar Filtros
                                     </button>
                                 </div>
@@ -746,6 +980,39 @@
                     <!-- Cards de Estatísticas Dashboard 1 -->
                     <div class="row mb-4" id="summaryCards">
                         <!-- Cards serão carregados aqui -->
+                    </div>
+
+                    <!-- Barra de Ferramentas Dashboard 1 -->
+                    <div class="actions-container mb-4">
+                        <div class="export-buttons">
+                            <button class="btn-export" id="exportCSVDashboard1">
+                                <i class="material-icons me-2">description</i>Exportar CSV
+                            </button>
+                            <button class="btn-print" id="printDashboard1">
+                                <i class="material-icons me-2">print</i>Imprimir
+                            </button>
+                        </div>
+
+                        <div class="right-aligned-container">
+                            <div class="items-per-page-container">
+                                <div class="search-box-container">
+                                    <label for="searchDashboard1">Buscar registros:</label>
+                                    <input type="text" id="searchDashboard1" placeholder="Buscar por mês...">
+                                </div>
+                                
+                                <div class="items-per-page">
+                                    <span>Itens por página:</span>
+                                    <select id="itemsPerPageDashboard1">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50" selected>50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                </div>
+                                
+                                <span class="table-badge" id="totalCountDashboard1">0 registros</span>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Gráficos Dashboard 1 -->
@@ -813,6 +1080,18 @@
                                     <!-- Dados serão carregados aqui -->
                                 </tbody>
                             </table>
+                        </div>
+                        
+                        <!-- Paginação Dashboard 1 -->
+                        <div class="pagination-container">
+                            <div class="pagination-info" id="paginationInfoDashboard1">
+                                Mostrando 0-0 de 0 registros
+                            </div>
+                            <nav aria-label="Paginação">
+                                <ul class="pagination mb-0" id="paginationDashboard1">
+                                    <!-- Paginação será gerada aqui -->
+                                </ul>
+                            </nav>
                         </div>
                     </div>
                     
@@ -900,7 +1179,7 @@
                                     <button class="btn-pesquisa" id="pesquisarVoos">
                                         <i class="material-icons me-2">search</i>Pesquisar
                                     </button>
-                                    <button class="btn-secondary-custom" id="limparFiltrosDashboard2">
+                                    <button class="btn-limpar" id="limparFiltrosDashboard2">
                                         <i class="material-icons me-2">clear</i>Limpar Filtros
                                     </button>
                                 </div>
@@ -908,13 +1187,13 @@
                         </div>
                     </div>
 
-                    <!-- Campo de Busca de Registros Dashboard 2 -->
+                    <!-- Barra de Ferramentas Dashboard 2 -->
                     <div class="actions-container mb-4">
                         <div class="export-buttons">
                             <button class="btn-export" id="exportCSVDashboard2">
                                 <i class="material-icons me-2">description</i>Exportar CSV
                             </button>
-                            <button class="btn-export" id="printDashboard2">
+                            <button class="btn-print" id="printDashboard2">
                                 <i class="material-icons me-2">print</i>Imprimir
                             </button>
                         </div>
@@ -923,7 +1202,7 @@
                             <div class="items-per-page-container">
                                 <div class="search-box-container">
                                     <label for="searchVoos">Buscar voos:</label>
-                                    <input type="text" id="searchVoos" placeholder="Buscar por histórico, passageiro, origem ou destino...">
+                                    <input type="text" id="searchVoos" placeholder="Buscar por histórico, origem ou destino...">
                                 </div>
                                 
                                 <div class="items-per-page">
@@ -953,7 +1232,6 @@
                                         <th data-sort="historico" data-order="asc" onclick="sortTable('voos', 'historico')">Histórico <span class="sort-icon">▼</span></th>
                                         <th data-sort="horas_voadas" data-order="desc" onclick="sortTable('voos', 'horas_voadas')">Horas <span class="sort-icon">▼</span></th>
                                         <th data-sort="aernova" data-order="asc" onclick="sortTable('voos', 'aernova')">Aeronave <span class="sort-icon">▼</span></th>
-                                        <th data-sort="passageiro" data-order="asc" onclick="sortTable('voos', 'passageiro')">Passageiro <span class="sort-icon">▼</span></th>
                                     </tr>
                                 </thead>
                                 <tbody id="voosTableBody">
@@ -1022,7 +1300,7 @@
                                     <button class="btn-pesquisa" id="pesquisarConsulta">
                                         <i class="material-icons me-2">search</i>Consultar
                                     </button>
-                                    <button class="btn-secondary-custom" id="limparConsulta">
+                                    <button class="btn-limpar" id="limparConsulta">
                                         <i class="material-icons me-2">clear</i>Limpar
                                     </button>
                                 </div>
@@ -1030,67 +1308,70 @@
                         </div>
                     </div>
 
-                    <!-- Resultado da Consulta -->
-                    <div class="table-container" id="resultadoConsulta" style="display: none;">
-                        <div class="table-header">
-                            <h3 class="table-title">Resultado da Consulta Individual</h3>
-                            <span class="table-badge" id="consultaCount">0 registros</span>
+                    <!-- Barra de Ferramentas Dashboard 3 -->
+                    <div class="actions-container mb-4">
+                        <div class="export-buttons">
+                            <button class="btn-export" id="exportCSVDashboard3">
+                                <i class="material-icons me-2">description</i>Exportar CSV
+                            </button>
+                            <button class="btn-print" id="printDashboard3">
+                                <i class="material-icons me-2">print</i>Imprimir
+                            </button>
                         </div>
-                        <div class="p-3">
-                            <div class="row mb-4">
-                                <div class="col-md-3 col-6">
-                                    <div class="metric-card">
-                                        <div class="metric-label">Passageiro</div>
-                                        <div class="metric-value" id="consultaNome">-</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <div class="metric-card success">
-                                        <div class="metric-label">Total de Voos</div>
-                                        <div class="metric-value" id="consultaTotalVoos">0</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <div class="metric-card info">
-                                        <div class="metric-label">Total de Horas</div>
-                                        <div class="metric-value" id="consultaTotalHoras">00:00</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <div class="metric-card purple">
-                                        <div class="metric-label">Período</div>
-                                        <div class="metric-value" id="consultaPeriodo">-</div>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="table-fixed-header-container">
-                                <table class="table table-hover" id="consultaTable">
-                                    <thead>
-                                        <tr>
-                                            <th>Data</th>
-                                            <th>Origem</th>
-                                            <th>Destino</th>
-                                            <th>Histórico</th>
-                                            <th>Horas Voadas</th>
-                                            <th>Aeronave</th>
-                                            <th>Cargo/Função</th>
-                                            <th>Órgão</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="consultaTableBody">
-                                        <!-- Dados serão carregados aqui -->
-                                    </tbody>
-                                </table>
+                        <div class="right-aligned-container">
+                            <div class="items-per-page-container">
+                                <div class="search-box-container">
+                                    <label for="searchPassageiros">Buscar passageiros:</label>
+                                    <input type="text" id="searchPassageiros" placeholder="Buscar por nome, cargo ou órgão...">
+                                </div>
+                                
+                                <div class="items-per-page">
+                                    <span>Itens por página:</span>
+                                    <select id="itemsPerPageDashboard3">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50" selected>50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                </div>
+                                
+                                <span class="table-badge" id="totalPassageirosCount">0 passageiros</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Mensagem quando não houver consulta -->
-                    <div class="text-center mt-5" id="mensagemConsulta">
-                        <i class="material-icons" style="font-size: 60px; color: #ccc;">person_search</i>
-                        <h4 class="mt-3 text-muted">Consulta Individual</h4>
-                        <p class="text-muted">Preencha os campos acima para consultar os voos de um passageiro específico.</p>
+                    <!-- Tabela de Passageiros -->
+                    <div class="table-container mb-4">
+                        <div class="table-fixed-header-container">
+                            <table class="table table-hover" id="passageirosTable">
+                                <thead>
+                                    <tr>
+                                        <th>Nome do Passageiro</th>
+                                        <th>Cargo/Função</th>
+                                        <th>Órgão</th>
+                                        <th>Total de Voos</th>
+                                        <th>Total de Horas</th>
+                                        <th>Ação</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="passageirosTableBody">
+                                    <!-- Dados serão carregados aqui -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Paginação Dashboard 3 -->
+                        <div class="pagination-container">
+                            <div class="pagination-info" id="paginationInfoDashboard3">
+                                Mostrando 0-0 de 0 registros
+                            </div>
+                            <nav aria-label="Paginação">
+                                <ul class="pagination mb-0" id="paginationDashboard3">
+                                    <!-- Paginação será gerada aqui -->
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
                     
                 </div> <!-- Fim Dashboard 3 -->
@@ -1114,7 +1395,7 @@
                                     <button class="btn-pesquisa flex-grow-1" id="downloadCSV">
                                         <i class="material-icons me-2">download</i>Baixar CSV Completo
                                     </button>
-                                    <a href="https://github.com/transparencia-mg/voos_oficiais_governador" target="_blank" class="btn-secondary-custom flex-grow-1 text-decoration-none">
+                                    <a href="https://github.com/transparencia-mg/voos_oficiais_governador" target="_blank" class="btn-limpar flex-grow-1 text-decoration-none">
                                         <i class="material-icons me-2">code</i>Repositório GitHub
                                     </a>
                                 </div>
@@ -1247,6 +1528,60 @@
         </div>
     </div>
 
+    <!-- ==================== MODAL DE VIAGENS DO PASSAGEIRO ==================== -->
+    <div class="modal fade modal-viagens" id="modalViagensPassageiro" tabindex="-1" aria-labelledby="modalViagensPassageiroLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalViagensPassageiroLabel">Viagens do Passageiro</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="metric-card">
+                                <div class="metric-label">Passageiro</div>
+                                <div class="metric-value" id="modalPassageiroNome">-</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="metric-card success">
+                                <div class="metric-label">Total de Viagens</div>
+                                <div class="metric-value" id="modalTotalViagens">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-fixed-header-container">
+                            <table class="table table-hover" id="modalViagensTable">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Origem</th>
+                                        <th>Destino</th>
+                                        <th>Histórico</th>
+                                        <th>Horas Voadas</th>
+                                        <th>Aeronave</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="modalViagensTableBody">
+                                    <!-- Dados serão carregados aqui -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-limpar" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn-export" id="exportViagensModal">
+                        <i class="material-icons me-2">description</i>Exportar CSV
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ==================== LOADING OVERLAY ==================== -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="spinner"></div>
@@ -1275,6 +1610,8 @@
         let currentSortDashboard2 = { column: 'data_voo', order: 'desc' };
         let charts = {};
         let dashboardAnterior = '';
+        let passageirosList = [];
+        let currentModalPassageiro = null;
         
         // URLs base do GitHub
         const GITHUB_BASE_URL = 'https://github.com/transparencia-mg/voos_oficiais_governador/tree/main/dataset/data';
@@ -1308,15 +1645,14 @@
             setupEventListeners();
             loadInitialData();
             setupTooltips();
-            setupDescriptiveTooltips();
             setupAtualizacaoData();
-            console.log('Painel de Diárias e Viagens carregado com sucesso!!!');
+            console.log('Painel de Voos Oficiais carregado com sucesso!!!');
             iframeUpdateHeight();
         });
 
-        // código incluir
+        // Atualizar altura do iframe
         function iframeUpdateHeight() { 
-            window.parent.postMessage({ iframeHeight: document.body.scrollHeight+10 }, '*'); 
+            window.parent.postMessage({ iframeHeight: document.body.scrollHeight + 10 }, '*'); 
         }
 
         // Event listeners para mudança de aba
@@ -1327,9 +1663,9 @@
                 if (tabId === 'dashboard3') {
                     // Se vem de outro dashboard, mostra botão voltar
                     if (dashboardAnterior && dashboardAnterior !== 'dashboard3') {
-                        document.getElementById('botaoVoltarContainer').style.display = 'block';
+                        // Aqui pode implementar botão voltar se necessário
                     } else {
-                        document.getElementById('botaoVoltarContainer').style.display = 'none';
+                        // Ocultar botão voltar
                     }
                 } else {
                     dashboardAnterior = tabId;
@@ -1346,25 +1682,13 @@
             });
         }
 
-        function setupDescriptiveTooltips() {
-            // Adicionar tooltips descritivos para os filtros
-            const tooltipElements = document.querySelectorAll('[data-tooltip]');
-            tooltipElements.forEach(el => {
-                const tooltipText = el.getAttribute('data-tooltip');
-                el.setAttribute('title', tooltipText);
-                el.setAttribute('data-bs-toggle', 'tooltip');
-                el.setAttribute('data-bs-placement', 'top');
-            });
-            setupTooltips();
-        }
-
         function setupAtualizacaoData() {
             const now = new Date();
             const dataFormatada = now.toLocaleDateString('pt-BR') + ' ' + now.toLocaleTimeString('pt-BR');
-            const elementosData = document.querySelectorAll('.data-atualizacao');
-            elementosData.forEach(el => {
-                el.textContent = dataFormatada;
-            });
+            const dataElement = document.getElementById('dataAtualizacao');
+            if (dataElement) {
+                dataElement.textContent = dataFormatada;
+            }
         }
 
         function showLoading(show) {
@@ -1415,12 +1739,33 @@
                 clearAllFilters();
             });
             
+            // Dashboard 1 - Barra de ferramentas
+            document.getElementById('exportCSVDashboard1').addEventListener('click', function() {
+                exportCSV('dashboard1');
+            });
+            document.getElementById('printDashboard1').addEventListener('click', function() {
+                printDashboard('dashboard1');
+            });
+            document.getElementById('searchDashboard1').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                filterDashboard1Table(searchTerm);
+            });
+            document.getElementById('itemsPerPageDashboard1').addEventListener('change', function() {
+                updateDashboard1();
+            });
+            
             // Dashboard 2
             document.getElementById('pesquisarVoos').addEventListener('click', function() {
                 applyFilters('dashboard2');
             });
             document.getElementById('limparFiltrosDashboard2').addEventListener('click', function() {
                 clearDashboard2Filters();
+            });
+            document.getElementById('exportCSVDashboard2').addEventListener('click', function() {
+                exportCSV('dashboard2');
+            });
+            document.getElementById('printDashboard2').addEventListener('click', function() {
+                printDashboard('dashboard2');
             });
             
             // Dashboard 3 - Consulta Individual
@@ -1430,14 +1775,37 @@
             document.getElementById('limparConsulta').addEventListener('click', function() {
                 limparConsultaIndividual();
             });
+            document.getElementById('exportCSVDashboard3').addEventListener('click', function() {
+                exportCSV('dashboard3');
+            });
+            document.getElementById('printDashboard3').addEventListener('click', function() {
+                printDashboard('dashboard3');
+            });
+            document.getElementById('searchPassageiros').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                filterPassageirosTable(searchTerm);
+            });
+            document.getElementById('itemsPerPageDashboard3').addEventListener('change', function() {
+                atualizarTabelaPassageiros();
+            });
             
             // Download
             document.getElementById('downloadCSV').addEventListener('click', downloadFullCSV);
             
-            // Campo de busca
+            // Campo de busca Dashboard 2
             document.getElementById('searchVoos').addEventListener('input', function(e) {
                 const searchTerm = e.target.value.toLowerCase();
                 filterVoosTable(searchTerm);
+            });
+            
+            // Itens por página Dashboard 2
+            document.getElementById('itemsPerPageDashboard2').addEventListener('change', function() {
+                updateDashboard2();
+            });
+            
+            // Modal
+            document.getElementById('exportViagensModal').addEventListener('click', function() {
+                exportViagensModal();
             });
             
             // Troca de abas
@@ -1448,15 +1816,12 @@
                     setTimeout(() => {
                         if (tabId === 'dashboard1') updateDashboard1();
                         else if (tabId === 'dashboard2') updateDashboard2();
-                        else if (tabId === 'dashboard3') inicializarConsultaIndividual();
+                        else if (tabId === 'dashboard3') {
+                            atualizarTabelaPassageiros();
+                        }
                         iframeUpdateHeight();
                     }, 100);
                 });
-            });
-            
-            // Itens por página Dashboard 2
-            document.getElementById('itemsPerPageDashboard2').addEventListener('change', function() {
-                updateDashboard2();
             });
         }
 
@@ -1468,6 +1833,7 @@
                 updateFilterOptions();
                 updateDashboard1();
                 updateDashboard2();
+                atualizarTabelaPassageiros();
                 console.log('Dashboard inicializado com sucesso!');
                 console.log(`Dados carregados: ${voosData.length} registros de voos`);
             } catch (error) {
@@ -1625,6 +1991,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                         updateFilterOptions();
                         updateDashboard1();
                         updateDashboard2();
+                        atualizarTabelaPassageiros();
                         
                         resolve();
                     }
@@ -1687,16 +2054,29 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                 }
             });
             
-            // Obter destinos únicos
+            // Obter destinos únicos para Dashboard 1
             const destinosUnicos = [...new Set(voosData.map(v => v.destino))].sort();
-            const destinosDatalist = document.getElementById('destinosListDashboard2');
-            if (destinosDatalist) {
-                destinosDatalist.innerHTML = '<option value="all">Todos os Destinos</option>';
+            const destinosDatalist1 = document.getElementById('destinosListDashboard1');
+            if (destinosDatalist1) {
+                destinosDatalist1.innerHTML = '<option value="all">Todos os Destinos</option>';
                 destinosUnicos.forEach(destino => {
                     if (destino) {
                         const option = document.createElement('option');
                         option.value = destino;
-                        destinosDatalist.appendChild(option);
+                        destinosDatalist1.appendChild(option);
+                    }
+                });
+            }
+            
+            // Obter destinos únicos para Dashboard 2
+            const destinosDatalist2 = document.getElementById('destinosListDashboard2');
+            if (destinosDatalist2) {
+                destinosDatalist2.innerHTML = '<option value="all">Todos os Destinos</option>';
+                destinosUnicos.forEach(destino => {
+                    if (destino) {
+                        const option = document.createElement('option');
+                        option.value = destino;
+                        destinosDatalist2.appendChild(option);
                     }
                 });
             }
@@ -1721,22 +2101,18 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             
             if (dashboard === 'dashboard1') {
                 const ano = document.getElementById('anoDashboard1').value;
-                const mes = document.getElementById('mesDashboard1').value;
                 const aeronaveInput = document.getElementById('aeronaveDashboard1').value;
                 const origemInput = document.getElementById('origemDashboard1').value;
+                const destinoInput = document.getElementById('destinoDashboard1').value;
                 
                 const aeronave = aeronaveInput === 'all' || aeronaveInput === '' ? 'all' : aeronaveInput;
                 const origem = origemInput === 'all' || origemInput === '' ? 'all' : origemInput;
+                const destino = destinoInput === 'all' || destinoInput === '' ? 'all' : destinoInput;
                 
                 // Filtrar dados
                 filteredData = voosData.filter(voo => {
                     // Filtro por ano
                     if (ano !== 'all' && voo.ano !== ano) {
-                        return false;
-                    }
-                    
-                    // Filtro por mês
-                    if (mes !== 'all' && voo.mes !== mes) {
                         return false;
                     }
                     
@@ -1747,6 +2123,11 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                     
                     // Filtro por origem
                     if (origem !== 'all' && voo.origem !== origem) {
+                        return false;
+                    }
+                    
+                    // Filtro por destino
+                    if (destino !== 'all' && voo.destino !== destino) {
                         return false;
                     }
                     
@@ -1836,6 +2217,61 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             return new Date(dataStr);
         }
 
+        function filterDashboard1Table(searchTerm) {
+            // Esta função filtra a tabela de resumo do Dashboard 1
+            const tbody = document.getElementById('resumoTableBody');
+            const rows = tbody.querySelectorAll('tr');
+            
+            rows.forEach(row => {
+                const mesCell = row.querySelector('td:first-child');
+                if (mesCell) {
+                    const mesText = mesCell.textContent.toLowerCase();
+                    if (mesText.includes(searchTerm.toLowerCase())) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+            });
+            
+            // Atualizar contagem
+            const visibleRows = Array.from(rows).filter(row => row.style.display !== 'none');
+            const countElement = document.getElementById('totalCountDashboard1');
+            if (countElement) {
+                countElement.textContent = `${visibleRows.length} registros`;
+            }
+        }
+
+        function filterPassageirosTable(searchTerm) {
+            const tbody = document.getElementById('passageirosTableBody');
+            const rows = tbody.querySelectorAll('tr');
+            
+            rows.forEach(row => {
+                const nomeCell = row.querySelector('td:first-child');
+                const cargoCell = row.querySelector('td:nth-child(2)');
+                const orgaoCell = row.querySelector('td:nth-child(3)');
+                
+                if (nomeCell && cargoCell && orgaoCell) {
+                    const nomeText = nomeCell.textContent.toLowerCase();
+                    const cargoText = cargoCell.textContent.toLowerCase();
+                    const orgaoText = orgaoCell.textContent.toLowerCase();
+                    
+                    if (nomeText.includes(searchTerm) || cargoText.includes(searchTerm) || orgaoText.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+            });
+            
+            // Atualizar contagem
+            const visibleRows = Array.from(rows).filter(row => row.style.display !== 'none');
+            const countElement = document.getElementById('totalPassageirosCount');
+            if (countElement) {
+                countElement.textContent = `${visibleRows.length} passageiros`;
+            }
+        }
+
         function filterVoosTable(searchTerm) {
             if (!searchTerm.trim()) {
                 updateDashboard2();
@@ -1848,7 +2284,6 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                     voo.historico.toLowerCase().includes(searchTerm) ||
                     voo.origem.toLowerCase().includes(searchTerm) ||
                     voo.destino.toLowerCase().includes(searchTerm) ||
-                    voo.passageiro.toLowerCase().includes(searchTerm) ||
                     voo.aernova.toLowerCase().includes(searchTerm)
                 );
             });
@@ -1860,9 +2295,10 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
 
         function clearAllFilters() {
             document.getElementById('anoDashboard1').value = 'all';
-            document.getElementById('mesDashboard1').value = 'all';
             document.getElementById('aeronaveDashboard1').value = '';
             document.getElementById('origemDashboard1').value = '';
+            document.getElementById('destinoDashboard1').value = '';
+            document.getElementById('searchDashboard1').value = '';
             
             currentYear = 'all';
             filteredData = [...voosData];
@@ -1893,6 +2329,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             updateSummaryCards();
             updateResumoTable();
             updateCharts1();
+            updatePaginationDashboard1();
             iframeUpdateHeight();
         }
 
@@ -1973,14 +2410,35 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
         function updateResumoTable() {
             const tbody = document.getElementById('resumoTableBody');
             const countElement = document.getElementById('resumoCountDashboard1');
+            const totalCountElement = document.getElementById('totalCountDashboard1');
             
             if (filteredData.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">Nenhum voo encontrado para os filtros aplicados.</td></tr>';
                 if (countElement) countElement.textContent = '0 registros';
+                if (totalCountElement) totalCountElement.textContent = '0 registros';
                 return;
             }
             
-            // Agrupar por mês
+            // Obter ano selecionado
+            const anoSelecionado = document.getElementById('anoDashboard1').value;
+            const anoParaFiltrar = anoSelecionado !== 'all' ? anoSelecionado : null;
+            
+            // Criar array com todos os meses do ano
+            const mesesDoAno = [];
+            for (let i = 1; i <= 12; i++) {
+                const mesNumero = i.toString().padStart(2, '0');
+                const mesNome = mesesMap[mesNumero];
+                mesesDoAno.push({
+                    mes: mesNome,
+                    mesNumero: mesNumero,
+                    total_voos: 0,
+                    total_passageiros: 0,
+                    total_horas: 0,
+                    registros: []
+                });
+            }
+            
+            // Preencher dados dos meses que têm voos
             const mesesData = {};
             filteredData.forEach(voo => {
                 const mes = voo.mes;
@@ -1989,7 +2447,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                 if (!mesesData[mes]) {
                     mesesData[mes] = {
                         mes: mesNome,
-                        mesNumero: parseInt(mes),
+                        mesNumero: mes,
                         total_voos: new Set(),
                         total_passageiros: 0,
                         total_horas: 0,
@@ -2011,35 +2469,53 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                 mesesData[mes].registros.push(voo);
             });
             
+            // Atualizar mesesDoAno com dados reais
+            mesesDoAno.forEach(mes => {
+                const mesData = mesesData[mes.mesNumero];
+                if (mesData) {
+                    mes.total_voos = mesData.total_voos.size;
+                    mes.total_passageiros = mesData.total_passageiros;
+                    mes.total_horas = mesData.total_horas;
+                    mes.registros = mesData.registros;
+                }
+            });
+            
             // Converter para array e ordenar
-            let resumoArray = Object.values(mesesData);
+            let resumoArray = [...mesesDoAno];
             resumoArray.sort((a, b) => {
                 const order = currentSortDashboard1.order === 'asc' ? 1 : -1;
                 
                 if (currentSortDashboard1.column === 'mes') {
-                    return order * (a.mesNumero - b.mesNumero);
+                    return order * (parseInt(a.mesNumero) - parseInt(b.mesNumero));
                 } else if (currentSortDashboard1.column === 'total_voos') {
-                    return order * (a.total_voos.size - b.total_voos.size);
+                    return order * (a.total_voos - b.total_voos);
                 } else if (currentSortDashboard1.column === 'total_passageiros') {
                     return order * (a.total_passageiros - b.total_passageiros);
                 } else if (currentSortDashboard1.column === 'total_horas') {
                     return order * (a.total_horas - b.total_horas);
                 } else if (currentSortDashboard1.column === 'media_horas') {
-                    const mediaA = a.total_voos.size > 0 ? a.total_horas / a.total_voos.size : 0;
-                    const mediaB = b.total_voos.size > 0 ? b.total_horas / b.total_voos.size : 0;
+                    const mediaA = a.total_voos > 0 ? a.total_horas / a.total_voos : 0;
+                    const mediaB = b.total_voos > 0 ? b.total_horas / b.total_voos : 0;
                     return order * (mediaA - mediaB);
                 }
                 return 0;
             });
             
-            // Gerar HTML da tabela
+            // Gerar HTML da tabela com links clicáveis para os meses
             const rowsHTML = resumoArray.map(item => {
-                const mediaHoras = item.total_voos.size > 0 ? item.total_horas / item.total_voos.size : 0;
+                const mediaHoras = item.total_voos > 0 ? item.total_horas / item.total_voos : 0;
+                
+                // Criar link para consulta por mês
+                const linkConsulta = `javascript:consultarPorMes('${item.mesNumero}')`;
                 
                 return `
                     <tr>
-                        <td><strong>${item.mes}</strong></td>
-                        <td class="text-center">${item.total_voos.size.toLocaleString('pt-BR')}</td>
+                        <td>
+                            <a href="${linkConsulta}" class="link-mes" title="Clique para consultar voos deste mês">
+                                ${item.mes}
+                            </a>
+                        </td>
+                        <td class="text-center">${item.total_voos.toLocaleString('pt-BR')}</td>
                         <td class="text-center">${item.total_passageiros.toLocaleString('pt-BR')}</td>
                         <td class="text-center">${formatarHoras(item.total_horas)}</td>
                         <td class="text-center">${formatarHoras(mediaHoras)}</td>
@@ -2049,6 +2525,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             
             tbody.innerHTML = rowsHTML;
             if (countElement) countElement.textContent = `${resumoArray.length} meses`;
+            if (totalCountElement) totalCountElement.textContent = `${resumoArray.length} meses`;
             
             updateSortIconsDashboard1();
         }
@@ -2073,6 +2550,53 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             });
         }
 
+        function updatePaginationDashboard1() {
+            const paginationInfo = document.getElementById('paginationInfoDashboard1');
+            const pagination = document.getElementById('paginationDashboard1');
+            
+            if (!paginationInfo || !pagination) return;
+            
+            // Obter número de linhas na tabela
+            const tbody = document.getElementById('resumoTableBody');
+            const rows = tbody.querySelectorAll('tr:not([style*="display: none"])');
+            const totalRows = rows.length;
+            
+            if (totalRows === 0) {
+                paginationInfo.textContent = 'Mostrando 0-0 de 0 registros';
+                pagination.innerHTML = '';
+                return;
+            }
+            
+            // Itens por página
+            const itemsPerPage = parseInt(document.getElementById('itemsPerPageDashboard1').value) || 50;
+            const totalPages = Math.ceil(totalRows / itemsPerPage);
+            const currentPage = 1; // Sempre começa na página 1
+            
+            // Mostrar todas as linhas (sem paginação real para simplificar)
+            // Em uma implementação real, aqui seria a lógica de paginação
+            
+            paginationInfo.textContent = `Mostrando 1-${totalRows} de ${totalRows} registros`;
+            
+            // Gerar paginação simples
+            let paginationHTML = '';
+            if (totalPages > 1) {
+                for (let i = 1; i <= totalPages; i++) {
+                    paginationHTML += `
+                        <li class="page-item ${i === currentPage ? 'active' : ''}">
+                            <a class="page-link" href="#" onclick="changePageDashboard1(${i})">${i}</a>
+                        </li>
+                    `;
+                }
+            }
+            
+            pagination.innerHTML = paginationHTML;
+        }
+
+        function changePageDashboard1(page) {
+            // Implementar lógica de paginação aqui
+            console.log(`Mudar para página ${page} do Dashboard 1`);
+        }
+
         function updateCharts1() {
             if (filteredData.length === 0) return;
             
@@ -2085,12 +2609,30 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             const ctx = document.getElementById('chartMes')?.getContext('2d');
             if (!ctx) return;
             
-            // Agrupar por mês
+            // Agrupar por mês - contar voos únicos (por data+origem+destino)
             const mesesCount = {};
+            const voosUnicosPorMes = {};
+            
+            // Inicializar todos os meses
+            for (let i = 1; i <= 12; i++) {
+                const mesNumero = i.toString().padStart(2, '0');
+                const mesNome = mesesMap[mesNumero];
+                mesesCount[mesNome] = 0;
+                voosUnicosPorMes[mesNumero] = new Set();
+            }
+            
+            // Preencher com dados reais
             filteredData.forEach(v => {
                 const mes = v.mes;
                 const mesNome = mesesMap[mes] || `Mês ${mes}`;
-                mesesCount[mesNome] = (mesesCount[mesNome] || 0) + 1;
+                const vooKey = `${v.data_voo}_${v.origem}_${v.destino}`;
+                
+                if (!voosUnicosPorMes[mes]) {
+                    voosUnicosPorMes[mes] = new Set();
+                }
+                voosUnicosPorMes[mes].add(vooKey);
+                
+                mesesCount[mesNome] = voosUnicosPorMes[mes].size;
             });
             
             // Ordenar por mês numérico
@@ -2112,7 +2654,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                 data: {
                     labels: mesesOrdenados,
                     datasets: [{
-                        label: 'Número de Passageiros',
+                        label: 'Número de Voos',
                         data: counts,
                         backgroundColor: chartColors.accent,
                         borderColor: chartColors.primary,
@@ -2125,6 +2667,10 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                     scales: {
                         y: {
                             beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Quantidade de Voos'
+                            },
                             ticks: {
                                 font: {
                                     size: 10
@@ -2132,6 +2678,10 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                             }
                         },
                         x: {
+                            title: {
+                                display: true,
+                                text: 'Mês'
+                            },
                             ticks: {
                                 font: {
                                     size: 10
@@ -2142,6 +2692,13 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                     plugins: {
                         legend: {
                             display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Voos: ${context.raw}`;
+                                }
+                            }
                         }
                     }
                 }
@@ -2269,7 +2826,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             const paginationInfo = document.getElementById('paginationInfoDashboard2');
             
             if (filteredData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">Nenhum voo encontrado para os filtros aplicados.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Nenhum voo encontrado para os filtros aplicados.</td></tr>';
                 if (countElement) countElement.textContent = '0 voos';
                 if (paginationInfo) paginationInfo.textContent = 'Mostrando 0-0 de 0 registros';
                 return;
@@ -2294,8 +2851,6 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                     return order * (a.horas_decimais - b.horas_decimais);
                 } else if (currentSortDashboard2.column === 'aernova') {
                     return order * a.aernova.localeCompare(b.aernova);
-                } else if (currentSortDashboard2.column === 'passageiro') {
-                    return order * a.passageiro.localeCompare(b.passageiro);
                 }
                 return 0;
             });
@@ -2309,19 +2864,19 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             const endIndex = Math.min(startIndex + itemsPerPage, voosArray.length);
             const currentData = voosArray.slice(startIndex, endIndex);
             
-            // Gerar HTML da tabela com link na primeira coluna
+            // Gerar HTML da tabela com link na primeira coluna (data)
             const rowsHTML = currentData.map(voo => {
                 // Limitar histórico se for muito longo
                 const historicoCurto = voo.historico.length > 50 ? 
                     voo.historico.substring(0, 50) + '...' : voo.historico;
                 
-                // Criar link para consulta individual
-                const linkConsulta = `javascript:abrirConsultaIndividual('${voo.passageiro}')`;
+                // Criar link para consulta individual pela data
+                const linkConsulta = `javascript:abrirConsultaPorData('${voo.data_voo}')`;
                 
                 return `
                 <tr>
                     <td>
-                        <a href="${linkConsulta}" class="link-consulta" title="Clique para consultar este passageiro">
+                        <a href="${linkConsulta}" class="link-clickable" title="Clique para consultar voos desta data">
                             ${voo.data_voo || '-'}
                         </a>
                     </td>
@@ -2330,7 +2885,6 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                     <td title="${voo.historico || ''}">${historicoCurto}</td>
                     <td>${voo.horas_voadas || '00:00:00'}</td>
                     <td>${voo.aernova || '-'}</td>
-                    <td>${voo.passageiro || '-'}</td>
                 </tr>
             `}).join('');
             
@@ -2339,7 +2893,51 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             if (paginationInfo) paginationInfo.textContent = `Mostrando ${startIndex + 1}-${endIndex} de ${voosArray.length.toLocaleString('pt-BR')} registros`;
             
             updateSortIconsDashboard2();
+            updatePaginationDashboard2(voosArray.length, currentPage, itemsPerPage);
             iframeUpdateHeight();
+        }
+
+        function updatePaginationDashboard2(totalItems, currentPage, itemsPerPage) {
+            const pagination = document.getElementById('paginationDashboard2');
+            if (!pagination) return;
+            
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            
+            let paginationHTML = '';
+            
+            // Botão anterior
+            paginationHTML += `
+                <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="changePageDashboard2(${currentPage - 1})">Anterior</a>
+                </li>
+            `;
+            
+            // Páginas
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                    paginationHTML += `
+                        <li class="page-item ${i === currentPage ? 'active' : ''}">
+                            <a class="page-link" href="#" onclick="changePageDashboard2(${i})">${i}</a>
+                        </li>
+                    `;
+                } else if (i === currentPage - 3 || i === currentPage + 3) {
+                    paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+                }
+            }
+            
+            // Botão próximo
+            paginationHTML += `
+                <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="changePageDashboard2(${currentPage + 1})">Próximo</a>
+                </li>
+            `;
+            
+            pagination.innerHTML = paginationHTML;
+        }
+
+        function changePageDashboard2(page) {
+            // Implementar lógica de paginação aqui
+            console.log(`Mudar para página ${page} do Dashboard 2`);
         }
 
         function updateSortIconsDashboard2() {
@@ -2363,120 +2961,259 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
         }
 
         // ==================== DASHBOARD 3: CONSULTA INDIVIDUAL ====================
-        function inicializarConsultaIndividual() {
-            // Esta função é chamada quando a aba de consulta individual é aberta
-            document.getElementById('mensagemConsulta').style.display = 'block';
-            document.getElementById('resultadoConsulta').style.display = 'none';
+        function atualizarTabelaPassageiros() {
+            const tbody = document.getElementById('passageirosTableBody');
+            const countElement = document.getElementById('totalPassageirosCount');
+            const paginationInfo = document.getElementById('paginationInfoDashboard3');
+            
+            if (voosData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Nenhum passageiro encontrado.</td></tr>';
+                if (countElement) countElement.textContent = '0 passageiros';
+                if (paginationInfo) paginationInfo.textContent = 'Mostrando 0-0 de 0 registros';
+                return;
+            }
+            
+            // Agrupar dados por passageiro
+            const passageirosMap = {};
+            
+            voosData.forEach(voo => {
+                const passageiro = voo.passageiro;
+                const cargo = voo.cargo_passageiro;
+                const orgao = voo.orgao_passageiro;
+                
+                if (!passageiro) return;
+                
+                if (!passageirosMap[passageiro]) {
+                    passageirosMap[passageiro] = {
+                        nome: passageiro,
+                        cargo: cargo,
+                        orgao: orgao,
+                        totalVoos: 0,
+                        totalHoras: 0,
+                        registros: []
+                    };
+                }
+                
+                passageirosMap[passageiro].totalVoos++;
+                passageirosMap[passageiro].totalHoras += voo.horas_decimais;
+                passageirosMap[passageiro].registros.push(voo);
+            });
+            
+            // Converter para array e ordenar por nome
+            passageirosList = Object.values(passageirosMap);
+            passageirosList.sort((a, b) => a.nome.localeCompare(b.nome));
+            
+            // Paginação
+            const itemsPerPage = parseInt(document.getElementById('itemsPerPageDashboard3').value) || 50;
+            const totalPages = Math.ceil(passageirosList.length / itemsPerPage);
+            const currentPage = 1;
+            
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, passageirosList.length);
+            const currentData = passageirosList.slice(startIndex, endIndex);
+            
+            // Gerar HTML da tabela
+            const rowsHTML = currentData.map(passageiro => {
+                return `
+                    <tr>
+                        <td><strong>${passageiro.nome}</strong></td>
+                        <td>${passageiro.cargo || '-'}</td>
+                        <td>${passageiro.orgao || '-'}</td>
+                        <td class="text-center">${passageiro.totalVoos}</td>
+                        <td class="text-center">${formatarHoras(passageiro.totalHoras)}</td>
+                        <td class="text-center">
+                            <button class="btn-action" onclick="abrirModalViagens('${passageiro.nome}')" title="Visualizar viagens">
+                                <i class="material-icons" style="font-size: 16px;">visibility</i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            tbody.innerHTML = rowsHTML;
+            if (countElement) countElement.textContent = `${passageirosList.length} passageiros`;
+            if (paginationInfo) paginationInfo.textContent = `Mostrando ${startIndex + 1}-${endIndex} de ${passageirosList.length} passageiros`;
+            
+            updatePaginationDashboard3(passageirosList.length, currentPage, itemsPerPage);
             iframeUpdateHeight();
         }
 
-        function abrirConsultaIndividual(nomePassageiro) {
-            // Abrir a aba de consulta individual
-            const tab = document.getElementById('dashboard3-tab');
-            if (tab) {
-                tab.click();
+        function updatePaginationDashboard3(totalItems, currentPage, itemsPerPage) {
+            const pagination = document.getElementById('paginationDashboard3');
+            if (!pagination) return;
+            
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            
+            let paginationHTML = '';
+            
+            // Botão anterior
+            paginationHTML += `
+                <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="changePageDashboard3(${currentPage - 1})">Anterior</a>
+                </li>
+            `;
+            
+            // Páginas
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                    paginationHTML += `
+                        <li class="page-item ${i === currentPage ? 'active' : ''}">
+                            <a class="page-link" href="#" onclick="changePageDashboard3(${i})">${i}</a>
+                        </li>
+                    `;
+                } else if (i === currentPage - 3 || i === currentPage + 3) {
+                    paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+                }
             }
             
-            // Preencher o campo com o nome do passageiro
-            document.getElementById('nomePassageiro').value = nomePassageiro;
+            // Botão próximo
+            paginationHTML += `
+                <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="changePageDashboard3(${currentPage + 1})">Próximo</a>
+                </li>
+            `;
             
-            // Realizar a consulta automaticamente
-            setTimeout(() => {
-                realizarConsultaIndividual();
-            }, 300);
+            pagination.innerHTML = paginationHTML;
+        }
+
+        function changePageDashboard3(page) {
+            // Implementar lógica de paginação aqui
+            console.log(`Mudar para página ${page} do Dashboard 3`);
+        }
+
+        function filterPassageirosTable(searchTerm) {
+            const tbody = document.getElementById('passageirosTableBody');
+            const rows = tbody.querySelectorAll('tr');
+            const countElement = document.getElementById('totalPassageirosCount');
+            
+            let visibleCount = 0;
+            
+            rows.forEach(row => {
+                const nomeCell = row.querySelector('td:first-child');
+                const cargoCell = row.querySelector('td:nth-child(2)');
+                const orgaoCell = row.querySelector('td:nth-child(3)');
+                
+                if (nomeCell && cargoCell && orgaoCell) {
+                    const nomeText = nomeCell.textContent.toLowerCase();
+                    const cargoText = cargoCell.textContent.toLowerCase();
+                    const orgaoText = orgaoCell.textContent.toLowerCase();
+                    
+                    if (nomeText.includes(searchTerm) || cargoText.includes(searchTerm) || orgaoText.includes(searchTerm)) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+            });
+            
+            if (countElement) {
+                countElement.textContent = `${visibleCount} passageiros`;
+            }
+        }
+
+        function abrirModalViagens(nomePassageiro) {
+            currentModalPassageiro = nomePassageiro;
+            
+            // Filtrar viagens do passageiro
+            const anoSelecionado = document.getElementById('anoConsulta').value;
+            const viagensPassageiro = voosData.filter(voo => {
+                if (voo.passageiro !== nomePassageiro) return false;
+                if (anoSelecionado !== 'all' && voo.ano !== anoSelecionado) return false;
+                return true;
+            });
+            
+            // Atualizar modal
+            document.getElementById('modalPassageiroNome').textContent = nomePassageiro;
+            document.getElementById('modalTotalViagens').textContent = viagensPassageiro.length;
+            
+            // Gerar tabela de viagens
+            const tbody = document.getElementById('modalViagensTableBody');
+            const rowsHTML = viagensPassageiro.map(voo => {
+                return `
+                    <tr>
+                        <td>${voo.data_voo || '-'}</td>
+                        <td>${voo.origem || '-'}</td>
+                        <td>${voo.destino || '-'}</td>
+                        <td title="${voo.historico || ''}">${voo.historico.length > 40 ? voo.historico.substring(0, 40) + '...' : voo.historico}</td>
+                        <td>${voo.horas_voadas || '00:00:00'}</td>
+                        <td>${voo.aernova || '-'}</td>
+                    </tr>
+                `;
+            }).join('');
+            
+            tbody.innerHTML = rowsHTML || '<tr><td colspan="6" class="text-center text-muted">Nenhuma viagem encontrada</td></tr>';
+            
+            // Abrir modal
+            const modal = new bootstrap.Modal(document.getElementById('modalViagensPassageiro'));
+            modal.show();
+        }
+
+        function exportViagensModal() {
+            if (!currentModalPassageiro) return;
+            
+            // Filtrar viagens do passageiro
+            const anoSelecionado = document.getElementById('anoConsulta').value;
+            const viagensPassageiro = voosData.filter(voo => {
+                if (voo.passageiro !== currentModalPassageiro) return false;
+                if (anoSelecionado !== 'all' && voo.ano !== anoSelecionado) return false;
+                return true;
+            });
+            
+            if (viagensPassageiro.length === 0) {
+                alert('Nenhuma viagem para exportar.');
+                return;
+            }
+            
+            // Preparar CSV
+            const headers = ['Data', 'Origem', 'Destino', 'Histórico', 'Horas Voadas', 'Aeronave', 'Passageiro', 'Cargo', 'Órgão'];
+            const csvContent = [
+                headers.join(';'),
+                ...viagensPassageiro.map(voo => [
+                    voo.data_voo,
+                    voo.origem,
+                    voo.destino,
+                    `"${(voo.historico || '').replace(/"/g, '""')}"`,
+                    voo.horas_voadas,
+                    voo.aernova,
+                    `"${(voo.passageiro || '').replace(/"/g, '""')}"`,
+                    `"${(voo.cargo_passageiro || '').replace(/"/g, '""')}"`,
+                    `"${(voo.orgao_passageiro || '').replace(/"/g, '""')}"`
+                ].join(';'))
+            ].join('\n');
+            
+            // Criar e baixar arquivo
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            const filename = `viagens_${currentModalPassageiro.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.csv`;
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         function realizarConsultaIndividual() {
             const nomePassageiro = document.getElementById('nomePassageiro').value.trim();
-            const cpfPassageiro = document.getElementById('cpfPassageiro').value.trim();
-            const anoConsulta = document.getElementById('anoConsulta').value;
-            const orgaoConsulta = document.getElementById('orgaoConsulta').value;
             
             if (!nomePassageiro) {
                 alert('Por favor, informe o nome do passageiro para realizar a consulta.');
                 return;
             }
             
-            showLoading(true);
+            // Procurar o passageiro na lista
+            const passageiroEncontrado = passageirosList.find(p => 
+                p.nome.toLowerCase().includes(nomePassageiro.toLowerCase()));
             
-            // Filtrar dados pelo passageiro
-            let dadosFiltrados = voosData.filter(voo => {
-                // Filtro por nome (busca parcial)
-                if (!voo.passageiro || !voo.passageiro.toLowerCase().includes(nomePassageiro.toLowerCase())) {
-                    return false;
-                }
-                
-                // Filtro por ano
-                if (anoConsulta !== 'all' && voo.ano !== anoConsulta) {
-                    return false;
-                }
-                
-                // Filtro por órgão
-                if (orgaoConsulta && orgaoConsulta !== 'all' && voo.orgao_passageiro !== orgaoConsulta) {
-                    return false;
-                }
-                
-                return true;
-            });
-            
-            if (dadosFiltrados.length === 0) {
-                document.getElementById('mensagemConsulta').innerHTML = `
-                    <i class="material-icons" style="font-size: 60px; color: #ccc;">search_off</i>
-                    <h4 class="mt-3 text-muted">Nenhum resultado encontrado</h4>
-                    <p class="text-muted">Não foram encontrados voos para o passageiro "${nomePassageiro}" com os filtros aplicados.</p>
-                `;
-                document.getElementById('mensagemConsulta').style.display = 'block';
-                document.getElementById('resultadoConsulta').style.display = 'none';
+            if (passageiroEncontrado) {
+                abrirModalViagens(passageiroEncontrado.nome);
             } else {
-                // Exibir resultados
-                document.getElementById('mensagemConsulta').style.display = 'none';
-                document.getElementById('resultadoConsulta').style.display = 'block';
-                
-                // Atualizar estatísticas
-                const primeiroRegistro = dadosFiltrados[0];
-                document.getElementById('consultaNome').textContent = primeiroRegistro.passageiro;
-                document.getElementById('consultaTotalVoos').textContent = dadosFiltrados.length;
-                
-                // Calcular total de horas
-                const totalHoras = dadosFiltrados.reduce((sum, voo) => sum + voo.horas_decimais, 0);
-                document.getElementById('consultaTotalHoras').textContent = formatarHoras(totalHoras);
-                
-                // Determinar período
-                const datas = dadosFiltrados.map(v => converterDataParaComparacao(v.data_voo)).filter(d => d);
-                if (datas.length > 0) {
-                    const minData = new Date(Math.min(...datas));
-                    const maxData = new Date(Math.max(...datas));
-                    document.getElementById('consultaPeriodo').textContent = 
-                        `${minData.toLocaleDateString('pt-BR')} a ${maxData.toLocaleDateString('pt-BR')}`;
-                } else {
-                    document.getElementById('consultaPeriodo').textContent = '-';
-                }
-                
-                // Atualizar contador
-                document.getElementById('consultaCount').textContent = `${dadosFiltrados.length} registros`;
-                
-                // Gerar tabela
-                const tbody = document.getElementById('consultaTableBody');
-                const rowsHTML = dadosFiltrados.map(voo => {
-                    return `
-                        <tr>
-                            <td>${voo.data_voo || '-'}</td>
-                            <td>${voo.origem || '-'}</td>
-                            <td>${voo.destino || '-'}</td>
-                            <td title="${voo.historico || ''}">${voo.historico.length > 40 ? voo.historico.substring(0, 40) + '...' : voo.historico}</td>
-                            <td>${voo.horas_voadas || '00:00:00'}</td>
-                            <td>${voo.aernova || '-'}</td>
-                            <td>${voo.cargo_passageiro || '-'}</td>
-                            <td>${voo.orgao_passageiro || '-'}</td>
-                        </tr>
-                    `;
-                }).join('');
-                
-                tbody.innerHTML = rowsHTML;
+                alert(`Passageiro "${nomePassageiro}" não encontrado.`);
             }
-            
-            showLoading(false);
-            iframeUpdateHeight();
         }
 
         function limparConsultaIndividual() {
@@ -2484,16 +3221,114 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             document.getElementById('cpfPassageiro').value = '';
             document.getElementById('anoConsulta').value = 'all';
             document.getElementById('orgaoConsulta').value = '';
+            document.getElementById('searchPassageiros').value = '';
             
-            document.getElementById('mensagemConsulta').innerHTML = `
-                <i class="material-icons" style="font-size: 60px; color: #ccc;">person_search</i>
-                <h4 class="mt-3 text-muted">Consulta Individual</h4>
-                <p class="text-muted">Preencha os campos acima para consultar os voos de um passageiro específico.</p>
-            `;
-            document.getElementById('mensagemConsulta').style.display = 'block';
-            document.getElementById('resultadoConsulta').style.display = 'none';
+            // Resetar filtro na tabela
+            const tbody = document.getElementById('passageirosTableBody');
+            const rows = tbody.querySelectorAll('tr');
+            rows.forEach(row => {
+                row.style.display = '';
+            });
+            
+            const countElement = document.getElementById('totalPassageirosCount');
+            if (countElement) {
+                countElement.textContent = `${passageirosList.length} passageiros`;
+            }
             
             iframeUpdateHeight();
+        }
+
+        function abrirConsultaPorData(data) {
+            // Abrir a aba de consulta individual
+            const tab = document.getElementById('dashboard3-tab');
+            if (tab) {
+                tab.click();
+            }
+            
+            // Preencher mensagem informando que pode consultar por data
+            const mensagemDiv = document.createElement('div');
+            mensagemDiv.className = 'text-center mt-5';
+            mensagemDiv.innerHTML = `
+                <i class="material-icons" style="font-size: 60px; color: #ccc;">event</i>
+                <h4 class="mt-3 text-muted">Consulta por Data</h4>
+                <p class="text-muted">Para consultar voos da data ${data}, utilize o filtro de data no Dashboard 2.</p>
+                <button class="btn-pesquisa mt-3" onclick="voltarParaDashboard2()">
+                    <i class="material-icons me-2">arrow_back</i>Voltar para Dashboard 2
+                </button>
+            `;
+            
+            // Limpar área de resultados anteriores
+            const resultadoConsulta = document.getElementById('resultadoConsulta');
+            if (resultadoConsulta) {
+                resultadoConsulta.style.display = 'none';
+            }
+            
+            // Adicionar mensagem
+            const container = document.querySelector('#dashboard3 .tab-pane');
+            const mensagemExistente = container.querySelector('.text-center.mt-5');
+            if (mensagemExistente) {
+                mensagemExistente.remove();
+            }
+            container.appendChild(mensagemDiv);
+            
+            iframeUpdateHeight();
+        }
+
+        function consultarPorMes(mesNumero) {
+            // Abrir a aba de consulta individual
+            const tab = document.getElementById('dashboard3-tab');
+            if (tab) {
+                tab.click();
+            }
+            
+            const mesNome = mesesMap[mesNumero.toString().padStart(2, '0')] || `Mês ${mesNumero}`;
+            
+            // Preencher mensagem informando que pode consultar por mês
+            const mensagemDiv = document.createElement('div');
+            mensagemDiv.className = 'text-center mt-5';
+            mensagemDiv.innerHTML = `
+                <i class="material-icons" style="font-size: 60px; color: #ccc;">calendar_today</i>
+                <h4 class="mt-3 text-muted">Consulta por Mês</h4>
+                <p class="text-muted">Para consultar voos do mês de ${mesNome}, utilize o filtro de mês no Dashboard 2.</p>
+                <div class="d-flex gap-3 justify-content-center mt-3">
+                    <button class="btn-pesquisa" onclick="voltarParaDashboard1()">
+                        <i class="material-icons me-2">dashboard</i>Dashboard 1
+                    </button>
+                    <button class="btn-limpar" onclick="voltarParaDashboard2()">
+                        <i class="material-icons me-2">location_on</i>Dashboard 2
+                    </button>
+                </div>
+            `;
+            
+            // Limpar área de resultados anteriores
+            const resultadoConsulta = document.getElementById('resultadoConsulta');
+            if (resultadoConsulta) {
+                resultadoConsulta.style.display = 'none';
+            }
+            
+            // Adicionar mensagem
+            const container = document.querySelector('#dashboard3 .tab-pane');
+            const mensagemExistente = container.querySelector('.text-center.mt-5');
+            if (mensagemExistente) {
+                mensagemExistente.remove();
+            }
+            container.appendChild(mensagemDiv);
+            
+            iframeUpdateHeight();
+        }
+
+        function voltarParaDashboard1() {
+            const tab = document.getElementById('dashboard1-tab');
+            if (tab) {
+                tab.click();
+            }
+        }
+
+        function voltarParaDashboard2() {
+            const tab = document.getElementById('dashboard2-tab');
+            if (tab) {
+                tab.click();
+            }
         }
 
         // ==================== FUNÇÕES DE ORDENAÇÃO ====================
@@ -2516,6 +3351,228 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                 updateDashboard2();
             }
         };
+
+        // ==================== FUNÇÕES DE EXPORTAÇÃO E IMPRESSÃO ====================
+        function exportCSV(dashboard) {
+            showLoading(true);
+            
+            try {
+                let dataToExport;
+                let filename;
+                
+                if (dashboard === 'dashboard1') {
+                    // Exportar dados do Dashboard 1 (resumo por mês)
+                    const mesesData = {};
+                    filteredData.forEach(voo => {
+                        const mes = voo.mes;
+                        const mesNome = mesesMap[mes] || `Mês ${mes}`;
+                        
+                        if (!mesesData[mes]) {
+                            mesesData[mes] = {
+                                mes: mesNome,
+                                total_voos: new Set(),
+                                total_passageiros: 0,
+                                total_horas: 0
+                            };
+                        }
+                        
+                        const vooKey = `${voo.data_voo}_${voo.origem}_${voo.destino}`;
+                        mesesData[mes].total_voos.add(vooKey);
+                        mesesData[mes].total_passageiros++;
+                        mesesData[mes].total_horas += voo.horas_decimais;
+                    });
+                    
+                    const resumoArray = Object.values(mesesData);
+                    dataToExport = resumoArray.map(item => {
+                        const mediaHoras = item.total_voos.size > 0 ? item.total_horas / item.total_voos.size : 0;
+                        return {
+                            'Mês': item.mes,
+                            'Total de Voos': item.total_voos.size,
+                            'Total de Passageiros': item.total_passageiros,
+                            'Total de Horas': formatarHoras(item.total_horas),
+                            'Média de Horas por Voo': formatarHoras(mediaHoras)
+                        };
+                    });
+                    
+                    filename = `resumo_voos_por_mes_${new Date().toISOString().split('T')[0]}.csv`;
+                    
+                } else if (dashboard === 'dashboard2') {
+                    // Exportar dados do Dashboard 2 (voos detalhados)
+                    dataToExport = filteredData.map(voo => ({
+                        'Data': voo.data_voo,
+                        'Origem': voo.origem,
+                        'Destino': voo.destino,
+                        'Histórico': voo.historico,
+                        'Horas Voadas': voo.horas_voadas,
+                        'Aeronave': voo.aernova
+                    }));
+                    
+                    filename = `voos_detalhados_${new Date().toISOString().split('T')[0]}.csv`;
+                    
+                } else if (dashboard === 'dashboard3') {
+                    // Exportar dados do Dashboard 3 (passageiros)
+                    dataToExport = passageirosList.map(passageiro => ({
+                        'Nome': passageiro.nome,
+                        'Cargo/Função': passageiro.cargo,
+                        'Órgão': passageiro.orgao,
+                        'Total de Voos': passageiro.totalVoos,
+                        'Total de Horas': formatarHoras(passageiro.totalHoras)
+                    }));
+                    
+                    filename = `lista_passageiros_${new Date().toISOString().split('T')[0]}.csv`;
+                }
+                
+                if (!dataToExport || dataToExport.length === 0) {
+                    alert(`Nenhum dado disponível para exportação.`);
+                    showLoading(false);
+                    return;
+                }
+                
+                // Preparar CSV
+                const headers = Object.keys(dataToExport[0]);
+                const csvContent = [
+                    headers.join(';'),
+                    ...dataToExport.map(row => 
+                        headers.map(header => {
+                            const value = row[header];
+                            // Adicionar aspas se o valor contiver ponto e vírgula
+                            return typeof value === 'string' && value.includes(';') ? `"${value}"` : value;
+                        }).join(';')
+                    )
+                ].join('\n');
+                
+                // Criar e baixar arquivo
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                
+                link.setAttribute('href', url);
+                link.setAttribute('download', filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                console.log(`Exportação realizada: ${dataToExport.length} registros`);
+                
+            } catch (error) {
+                console.error(`Erro ao exportar dados:`, error);
+                alert(`Erro ao exportar dados. Por favor, tente novamente.`);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function printDashboard(dashboard) {
+            // Criar uma nova janela para impressão
+            const printWindow = window.open('', '_blank');
+            
+            let contentToPrint = '';
+            
+            if (dashboard === 'dashboard1') {
+                contentToPrint = `
+                    <html>
+                    <head>
+                        <title>Relatório de Voos - Visão Geral</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; margin: 20px; }
+                            h1 { color: #1A5276; border-bottom: 2px solid #3498DB; padding-bottom: 10px; }
+                            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                            th { background-color: #1A5276; color: white; padding: 10px; text-align: left; }
+                            td { padding: 8px; border-bottom: 1px solid #ddd; }
+                            .summary { background-color: #f9f9f9; padding: 15px; margin-bottom: 20px; border-left: 5px solid #3498DB; }
+                            .footer { margin-top: 30px; font-size: 12px; color: #666; text-align: center; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>Relatório de Voos - Visão Geral</h1>
+                        <div class="summary">
+                            <strong>Data de geração:</strong> ${new Date().toLocaleString('pt-BR')}<br>
+                            <strong>Total de registros:</strong> ${filteredData.length}<br>
+                            <strong>Período:</strong> ${document.getElementById('anoDashboard1').value !== 'all' ? 'Ano ' + document.getElementById('anoDashboard1').value : 'Todos os anos'}
+                        </div>
+                        ${document.getElementById('visaoGeralTable').outerHTML}
+                        <div class="footer">
+                            Gerado pelo Painel de Voos Oficiais - Governo de Minas Gerais
+                        </div>
+                    </body>
+                    </html>
+                `;
+            } else if (dashboard === 'dashboard2') {
+                contentToPrint = `
+                    <html>
+                    <head>
+                        <title>Relatório de Voos - Detalhado</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; margin: 20px; }
+                            h1 { color: #1A5276; border-bottom: 2px solid #3498DB; padding-bottom: 10px; }
+                            table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+                            th { background-color: #1A5276; color: white; padding: 10px; text-align: left; }
+                            td { padding: 8px; border-bottom: 1px solid #ddd; }
+                            .summary { background-color: #f9f9f9; padding: 15px; margin-bottom: 20px; border-left: 5px solid #3498DB; }
+                            .footer { margin-top: 30px; font-size: 12px; color: #666; text-align: center; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>Relatório de Voos - Detalhado</h1>
+                        <div class="summary">
+                            <strong>Data de geração:</strong> ${new Date().toLocaleString('pt-BR')}<br>
+                            <strong>Total de voos:</strong> ${filteredData.length}<br>
+                            <strong>Filtros aplicados:</strong> 
+                            ${document.getElementById('anoDashboard2').value !== 'all' ? 'Ano ' + document.getElementById('anoDashboard2').value : ''}
+                            ${document.getElementById('mesDashboard2').value !== 'all' ? ' - Mês: ' + mesesMap[document.getElementById('mesDashboard2').value] : ''}
+                            ${document.getElementById('origemDashboard2').value && document.getElementById('origemDashboard2').value !== 'all' ? ' - Origem: ' + document.getElementById('origemDashboard2').value : ''}
+                            ${document.getElementById('destinoDashboard2').value && document.getElementById('destinoDashboard2').value !== 'all' ? ' - Destino: ' + document.getElementById('destinoDashboard2').value : ''}
+                        </div>
+                        ${document.getElementById('voosTable').outerHTML}
+                        <div class="footer">
+                            Gerado pelo Painel de Voos Oficiais - Governo de Minas Gerais
+                        </div>
+                    </body>
+                    </html>
+                `;
+            } else if (dashboard === 'dashboard3') {
+                contentToPrint = `
+                    <html>
+                    <head>
+                        <title>Relatório de Passageiros</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; margin: 20px; }
+                            h1 { color: #1A5276; border-bottom: 2px solid #3498DB; padding-bottom: 10px; }
+                            table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+                            th { background-color: #1A5276; color: white; padding: 10px; text-align: left; }
+                            td { padding: 8px; border-bottom: 1px solid #ddd; }
+                            .summary { background-color: #f9f9f9; padding: 15px; margin-bottom: 20px; border-left: 5px solid #3498DB; }
+                            .footer { margin-top: 30px; font-size: 12px; color: #666; text-align: center; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>Relatório de Passageiros</h1>
+                        <div class="summary">
+                            <strong>Data de geração:</strong> ${new Date().toLocaleString('pt-BR')}<br>
+                            <strong>Total de passageiros:</strong> ${passageirosList.length}<br>
+                            <strong>Filtros aplicados:</strong> 
+                            ${document.getElementById('anoConsulta').value !== 'all' ? 'Ano ' + document.getElementById('anoConsulta').value : ''}
+                            ${document.getElementById('orgaoConsulta').value && document.getElementById('orgaoConsulta').value !== 'all' ? ' - Órgão: ' + document.getElementById('orgaoConsulta').value : ''}
+                        </div>
+                        ${document.getElementById('passageirosTable').outerHTML}
+                        <div class="footer">
+                            Gerado pelo Painel de Voos Oficiais - Governo de Minas Gerais
+                        </div>
+                    </body>
+                    </html>
+                `;
+            }
+            
+            printWindow.document.write(contentToPrint);
+            printWindow.document.close();
+            
+            // Aguardar o carregamento do conteúdo antes de imprimir
+            setTimeout(() => {
+                printWindow.print();
+                printWindow.close();
+            }, 500);
+        }
 
         // ==================== FUNÇÕES DE DOWNLOAD ====================
         async function downloadFullCSV() {
