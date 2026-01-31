@@ -618,6 +618,19 @@
             font-size: 13px;
         }
         
+        /* ==================== RODAPÉ DA TABELA (TOTAIS) ==================== */
+        .table-totals {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            border-top: 2px solid var(--primary-dark);
+        }
+        
+        .table-totals td {
+            padding: 12px 10px;
+            font-size: 13px;
+            color: var(--primary-dark);
+        }
+        
         /* ==================== BOTÃO DE AÇÃO (OLHINHO) ==================== */
         .btn-action {
             background: transparent;
@@ -1093,6 +1106,16 @@
                                 <tbody id="resumoTableBody">
                                     <!-- Dados serão carregados aqui -->
                                 </tbody>
+                                <!-- Rodapé da tabela com totais -->
+                                <tfoot id="tableTotalsDashboard1" style="display: none;">
+                                    <tr class="table-totals">
+                                        <td><strong>TOTAL GERAL</strong></td>
+                                        <td class="text-center" id="totalVoosGeral">0</td>
+                                        <td class="text-center" id="totalPassageirosGeral">0</td>
+                                        <td class="text-center" id="totalHorasGeral">00:00</td>
+                                        <td class="text-center" id="mediaHorasGeral">00:00</td>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                         
@@ -1279,7 +1302,10 @@
                             <div class="col-md-6 col-12">
                                 <div class="mb-3">
                                     <label for="nomePassageiro" class="form-label filter-label">Nome do Passageiro</label>
-                                    <input type="text" class="form-control" id="nomePassageiro" placeholder="Digite o nome completo...">
+                                    <input type="text" class="form-control" list="passageirosListConsulta" id="nomePassageiro" placeholder="Digite ou selecione...">
+                                    <datalist id="passageirosListConsulta">
+                                        <!-- Opções serão carregadas dinamicamente -->
+                                    </datalist>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
@@ -1639,6 +1665,19 @@
         let passageirosList = [];
         let currentModalPassageiro = null;
         
+        // Variáveis para controle de consulta por data
+        let consultaPorDataAtiva = false;
+        let dadosConsultaPorData = [];
+        let filtrosConsultaPorData = {};
+        
+        // Variáveis de paginação
+        let currentPageDashboard1 = 1;
+        let currentPageDashboard2 = 1;
+        let currentPageDashboard3 = 1;
+        let itemsPerPageDashboard1 = 50;
+        let itemsPerPageDashboard2 = 50;
+        let itemsPerPageDashboard3 = 50;
+        
         // URLs base do GitHub
         const GITHUB_BASE_URL = 'https://github.com/transparencia-mg/voos_oficiais_governador/tree/main/dataset/data';
         const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/transparencia-mg/voos_oficiais_governador/main/dataset/data';
@@ -1778,6 +1817,8 @@
                 filterDashboard1Table(searchTerm);
             });
             document.getElementById('itemsPerPageDashboard1').addEventListener('change', function() {
+                itemsPerPageDashboard1 = parseInt(this.value);
+                currentPageDashboard1 = 1;
                 updateDashboard1();
             });
             
@@ -1793,6 +1834,11 @@
             });
             document.getElementById('printDashboard2').addEventListener('click', function() {
                 printDashboard('dashboard2');
+            });
+            document.getElementById('itemsPerPageDashboard2').addEventListener('change', function() {
+                itemsPerPageDashboard2 = parseInt(this.value);
+                currentPageDashboard2 = 1;
+                updateDashboard2();
             });
             
             // Dashboard 3 - Consulta Individual
@@ -1813,6 +1859,8 @@
                 filterPassageirosTable(searchTerm);
             });
             document.getElementById('itemsPerPageDashboard3').addEventListener('change', function() {
+                itemsPerPageDashboard3 = parseInt(this.value);
+                currentPageDashboard3 = 1;
                 atualizarTabelaPassageiros();
             });
             
@@ -1825,26 +1873,36 @@
                 filterVoosTable(searchTerm);
             });
             
-            // Itens por página Dashboard 2
-            document.getElementById('itemsPerPageDashboard2').addEventListener('change', function() {
-                updateDashboard2();
-            });
-            
             // Modal
             document.getElementById('exportViagensModal').addEventListener('click', function() {
                 exportViagensModal();
             });
             
-            // Troca de abas
+            // Event listeners para mudança de aba
             const tabs = document.querySelectorAll('[data-bs-toggle="tab"]');
             tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
+                tab.addEventListener('click', function(e) {
                     const tabId = this.getAttribute('data-bs-target').replace('#', '');
+                    
+                    if (tabId === 'dashboard3') {
+                        // Se vem de outro dashboard, mostra botão voltar
+                        if (dashboardAnterior && dashboardAnterior !== 'dashboard3') {
+                            // Você pode adicionar lógica aqui se necessário
+                        } else {
+                            // Você pode adicionar lógica aqui se necessário
+                        }
+                    } else {
+                        dashboardAnterior = tabId;
+                    }
+                    
                     setTimeout(() => {
                         if (tabId === 'dashboard1') updateDashboard1();
                         else if (tabId === 'dashboard2') updateDashboard2();
                         else if (tabId === 'dashboard3') {
-                            atualizarTabelaPassageiros();
+                            // Se não há consulta por data ativa, mostrar todos os passageiros
+                            if (!consultaPorDataAtiva) {
+                                atualizarTabelaPassageiros();
+                            }
                         }
                         iframeUpdateHeight();
                     }, 100);
@@ -2143,6 +2201,20 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                     }
                 });
             }
+            
+            // Obter nomes de passageiros únicos para consulta individual
+            const passageirosUnicos = [...new Set(voosData.map(v => v.passageiro))].sort();
+            const passageirosDatalist = document.getElementById('passageirosListConsulta');
+            if (passageirosDatalist) {
+                passageirosDatalist.innerHTML = '<option value="all">Todos os Passageiros</option>';
+                passageirosUnicos.forEach(passageiro => {
+                    if (passageiro && passageiro.trim() !== '') {
+                        const option = document.createElement('option');
+                        option.value = passageiro;
+                        passageirosDatalist.appendChild(option);
+                    }
+                });
+            }
         }
 
         function applyFilters(dashboard) {
@@ -2184,6 +2256,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                 });
                 
                 currentYear = ano;
+                currentPageDashboard1 = 1;
                 updateDashboard1();
                 
             } else if (dashboard === 'dashboard2') {
@@ -2248,6 +2321,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                 });
                 
                 currentYear = ano;
+                currentPageDashboard2 = 1;
                 updateDashboard2();
             }
             
@@ -2329,25 +2403,39 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
         }
 
         function filterVoosTable(searchTerm) {
-            if (!searchTerm.trim()) {
-                updateDashboard2();
-                return;
-            }
+            const tbody = document.getElementById('voosTableBody');
+            const rows = tbody.querySelectorAll('tr');
             
-            const tempFiltered = [...filteredData];
-            const filtered = filteredData.filter(voo => {
-                return (
-                    voo.historico.toLowerCase().includes(searchTerm) ||
-                    voo.origem.toLowerCase().includes(searchTerm) ||
-                    voo.destino.toLowerCase().includes(searchTerm) ||
-                    voo.aernova.toLowerCase().includes(searchTerm) ||
-                    voo.numero_db.toLowerCase().includes(searchTerm)
-                );
+            rows.forEach(row => {
+                const origemCell = row.querySelector('td:nth-child(3)');
+                const destinoCell = row.querySelector('td:nth-child(4)');
+                const historicoCell = row.querySelector('td:nth-child(5)');
+                const aeronaveCell = row.querySelector('td:nth-child(7)');
+                
+                let match = false;
+                
+                if (origemCell && origemCell.textContent.toLowerCase().includes(searchTerm)) {
+                    match = true;
+                }
+                if (destinoCell && destinoCell.textContent.toLowerCase().includes(searchTerm)) {
+                    match = true;
+                }
+                if (historicoCell && historicoCell.textContent.toLowerCase().includes(searchTerm)) {
+                    match = true;
+                }
+                if (aeronaveCell && aeronaveCell.textContent.toLowerCase().includes(searchTerm)) {
+                    match = true;
+                }
+                
+                row.style.display = match ? '' : 'none';
             });
             
-            filteredData = filtered;
-            updateDashboard2();
-            filteredData = tempFiltered;
+            // Atualizar contagem
+            const visibleRows = Array.from(rows).filter(row => row.style.display !== 'none');
+            const countElement = document.getElementById('resumoCountDashboard2');
+            if (countElement) {
+                countElement.textContent = `${visibleRows.length} voos`;
+            }
         }
 
         function clearAllFilters() {
@@ -2359,6 +2447,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             
             currentYear = 'all';
             filteredData = [...voosData];
+            currentPageDashboard1 = 1;
             
             updateDashboard1();
             iframeUpdateHeight();
@@ -2376,6 +2465,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             
             currentYear = 'all';
             filteredData = [...voosData];
+            currentPageDashboard2 = 1;
             
             updateDashboard2();
             iframeUpdateHeight();
@@ -2468,11 +2558,13 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             const tbody = document.getElementById('resumoTableBody');
             const countElement = document.getElementById('resumoCountDashboard1');
             const totalCountElement = document.getElementById('totalCountDashboard1');
+            const tableTotals = document.getElementById('tableTotalsDashboard1');
             
             if (filteredData.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">Nenhum voo encontrado para os filtros aplicados.</td></tr>';
                 if (countElement) countElement.textContent = '0 registros';
                 if (totalCountElement) totalCountElement.textContent = '0 registros';
+                if (tableTotals) tableTotals.style.display = 'none';
                 return;
             }
             
@@ -2561,11 +2653,38 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                 return 0;
             });
             
+            // Calcular totais gerais
+            let totalVoosGeral = 0;
+            let totalPassageirosGeral = 0;
+            let totalHorasGeral = 0;
+            
+            resumoArray.forEach(item => {
+                totalVoosGeral += item.total_voos;
+                totalPassageirosGeral += item.total_passageiros;
+                totalHorasGeral += item.total_horas;
+            });
+            
+            const mediaHorasGeral = totalVoosGeral > 0 ? totalHorasGeral / totalVoosGeral : 0;
+            
+            // Atualizar rodapé da tabela
+            if (tableTotals) {
+                tableTotals.style.display = '';
+                document.getElementById('totalVoosGeral').textContent = totalVoosGeral.toLocaleString('pt-BR');
+                document.getElementById('totalPassageirosGeral').textContent = totalPassageirosGeral.toLocaleString('pt-BR');
+                document.getElementById('totalHorasGeral').textContent = formatarHoras(totalHorasGeral);
+                document.getElementById('mediaHorasGeral').textContent = formatarHoras(mediaHorasGeral);
+            }
+            
+            // Aplicar paginação
+            const startIndex = (currentPageDashboard1 - 1) * itemsPerPageDashboard1;
+            const endIndex = Math.min(startIndex + itemsPerPageDashboard1, resumoArray.length);
+            const currentData = resumoArray.slice(startIndex, endIndex);
+            
             // Gerar HTML da tabela com links clicáveis para os meses
-            const rowsHTML = resumoArray.map(item => {
+            const rowsHTML = currentData.map(item => {
                 const mediaHoras = item.total_voos > 0 ? item.total_horas / item.total_voos : 0;
                 
-                // Criar link para consulta por mês - CORREÇÃO AQUI
+                // Criar link para consulta por mês
                 const linkConsulta = `javascript:consultarPorMes('${item.mesNumero}')`;
                 
                 return `
@@ -2589,7 +2708,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             const mesesComDados = resumoArray.filter(mes => mes.total_voos > 0).length;
             
             if (countElement) countElement.textContent = `${mesesComDados} meses`;
-            if (totalCountElement) totalCountElement.textContent = `${mesesComDados} meses`;
+            if (totalCountElement) totalCountElement.textContent = `${resumoArray.length} meses`;
             
             updateSortIconsDashboard1();
         }
@@ -2620,10 +2739,9 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             
             if (!paginationInfo || !pagination) return;
             
-            // Obter número de linhas na tabela
-            const tbody = document.getElementById('resumoTableBody');
-            const rows = tbody.querySelectorAll('tr:not([style*="display: none"])');
-            const totalRows = rows.length;
+            // Obter número de meses com dados
+            const mesesComDados = filteredData.length > 0 ? 12 : 0; // Para simplificar, sempre 12 meses
+            const totalRows = 12; // 12 meses do ano
             
             if (totalRows === 0) {
                 paginationInfo.textContent = 'Mostrando 0-0 de 0 registros';
@@ -2631,33 +2749,49 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                 return;
             }
             
-            // Itens por página
-            const itemsPerPage = parseInt(document.getElementById('itemsPerPageDashboard1').value) || 50;
-            const totalPages = Math.ceil(totalRows / itemsPerPage);
-            const currentPage = 1; // Sempre começa na página 1
+            const totalPages = Math.ceil(totalRows / itemsPerPageDashboard1);
+            const startItem = (currentPageDashboard1 - 1) * itemsPerPageDashboard1 + 1;
+            const endItem = Math.min(currentPageDashboard1 * itemsPerPageDashboard1, totalRows);
             
-            // Mostrar todas as linhas (sem paginação real para simplificar)
-            // Em uma implementação real, aqui seria a lógica de paginação
+            paginationInfo.textContent = `Mostrando ${startItem}-${endItem} de ${totalRows} registros`;
             
-            paginationInfo.textContent = `Mostrando 1-${totalRows} de ${totalRows} registros`;
-            
-            // Gerar paginação simples
+            // Gerar paginação
             let paginationHTML = '';
-            if (totalPages > 1) {
-                for (let i = 1; i <= totalPages; i++) {
+            
+            // Botão anterior
+            paginationHTML += `
+                <li class="page-item ${currentPageDashboard1 === 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="changePageDashboard1(${currentPageDashboard1 - 1}); return false;">Anterior</a>
+                </li>
+            `;
+            
+            // Páginas
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPageDashboard1 - 2 && i <= currentPageDashboard1 + 2)) {
                     paginationHTML += `
-                        <li class="page-item ${i === currentPage ? 'active' : ''}">
-                            <a class="page-link" href="#" onclick="changePageDashboard1(${i})">${i}</a>
+                        <li class="page-item ${i === currentPageDashboard1 ? 'active' : ''}">
+                            <a class="page-link" href="#" onclick="changePageDashboard1(${i}); return false;">${i}</a>
                         </li>
                     `;
+                } else if (i === currentPageDashboard1 - 3 || i === currentPageDashboard1 + 3) {
+                    paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
                 }
             }
+            
+            // Botão próximo
+            paginationHTML += `
+                <li class="page-item ${currentPageDashboard1 === totalPages ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="changePageDashboard1(${currentPageDashboard1 + 1}); return false;">Próximo</a>
+                </li>
+            `;
             
             pagination.innerHTML = paginationHTML;
         }
 
         function changePageDashboard1(page) {
-            console.log(`Mudar para página ${page} do Dashboard 1`);
+            if (page < 1 || page > Math.ceil(12 / itemsPerPageDashboard1)) return;
+            currentPageDashboard1 = page;
+            updateDashboard1();
         }
 
         function updateCharts1() {
@@ -2949,12 +3083,10 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             const voosUnicosArray = Object.values(voosUnicos);
             
             // Paginação
-            const itemsPerPage = parseInt(document.getElementById('itemsPerPageDashboard2').value) || 50;
-            const totalPages = Math.ceil(voosUnicosArray.length / itemsPerPage);
-            const currentPage = 1;
+            const totalPages = Math.ceil(voosUnicosArray.length / itemsPerPageDashboard2);
             
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = Math.min(startIndex + itemsPerPage, voosUnicosArray.length);
+            const startIndex = (currentPageDashboard2 - 1) * itemsPerPageDashboard2;
+            const endIndex = Math.min(startIndex + itemsPerPageDashboard2, voosUnicosArray.length);
             const currentData = voosUnicosArray.slice(startIndex, endIndex);
             
             // Gerar HTML da tabela com link na primeira coluna (data)
@@ -2963,7 +3095,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                 const dataFormatada = formatarDataParaBR(voo.data_voo);
                 
                 // Criar link para consulta individual pela data
-                const linkConsulta = `javascript:consultarPorData('${voo.data_voo}')`;
+                const linkConsulta = `javascript:consultarPorData('${voo.data_voo}', '${voo.origem}', '${voo.destino}')`;
                 
                 // Historico completo (sem cortar)
                 const historicoCompleto = voo.historico || '';
@@ -2989,42 +3121,51 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             if (paginationInfo) paginationInfo.textContent = `Mostrando ${startIndex + 1}-${endIndex} de ${voosUnicosArray.length.toLocaleString('pt-BR')} registros`;
             
             updateSortIconsDashboard2();
-            updatePaginationDashboard2(voosUnicosArray.length, currentPage, itemsPerPage);
+            updatePaginationDashboard2();
             iframeUpdateHeight();
         }
 
-        function updatePaginationDashboard2(totalItems, currentPage, itemsPerPage) {
+        function updatePaginationDashboard2() {
             const pagination = document.getElementById('paginationDashboard2');
             if (!pagination) return;
             
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            // Calcular número de voos únicos
+            const voosUnicosArray = Object.values(
+                filteredData.reduce((acc, voo) => {
+                    const vooKey = `${voo.data_voo}_${voo.origem}_${voo.destino}`;
+                    acc[vooKey] = voo;
+                    return acc;
+                }, {})
+            );
+            
+            const totalPages = Math.ceil(voosUnicosArray.length / itemsPerPageDashboard2);
             
             let paginationHTML = '';
             
             // Botão anterior
             paginationHTML += `
-                <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-                    <a class="page-link" href="#" onclick="changePageDashboard2(${currentPage - 1})">Anterior</a>
+                <li class="page-item ${currentPageDashboard2 === 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="changePageDashboard2(${currentPageDashboard2 - 1}); return false;">Anterior</a>
                 </li>
             `;
             
             // Páginas
             for (let i = 1; i <= totalPages; i++) {
-                if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                if (i === 1 || i === totalPages || (i >= currentPageDashboard2 - 2 && i <= currentPageDashboard2 + 2)) {
                     paginationHTML += `
-                        <li class="page-item ${i === currentPage ? 'active' : ''}">
-                            <a class="page-link" href="#" onclick="changePageDashboard2(${i})">${i}</a>
+                        <li class="page-item ${i === currentPageDashboard2 ? 'active' : ''}">
+                            <a class="page-link" href="#" onclick="changePageDashboard2(${i}); return false;">${i}</a>
                         </li>
                     `;
-                } else if (i === currentPage - 3 || i === currentPage + 3) {
+                } else if (i === currentPageDashboard2 - 3 || i === currentPageDashboard2 + 3) {
                     paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
                 }
             }
             
             // Botão próximo
             paginationHTML += `
-                <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-                    <a class="page-link" href="#" onclick="changePageDashboard2(${currentPage + 1})">Próximo</a>
+                <li class="page-item ${currentPageDashboard2 === totalPages ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="changePageDashboard2(${currentPageDashboard2 + 1}); return false;">Próximo</a>
                 </li>
             `;
             
@@ -3032,7 +3173,20 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
         }
 
         function changePageDashboard2(page) {
-            console.log(`Mudar para página ${page} do Dashboard 2`);
+            // Calcular número de voos únicos
+            const voosUnicosArray = Object.values(
+                filteredData.reduce((acc, voo) => {
+                    const vooKey = `${voo.data_voo}_${voo.origem}_${voo.destino}`;
+                    acc[vooKey] = voo;
+                    return acc;
+                }, {})
+            );
+            
+            const totalPages = Math.ceil(voosUnicosArray.length / itemsPerPageDashboard2);
+            
+            if (page < 1 || page > totalPages) return;
+            currentPageDashboard2 = page;
+            updateDashboard2();
         }
 
         function updateSortIconsDashboard2() {
@@ -3055,85 +3209,31 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             });
         }
 
-        // ==================== FUNÇÕES DE CLIQUE ====================
+        // ==================== FUNÇÕES DE CONSULTA POR DATA ====================
 
-        function consultarPorMes(mesNumero) {
-            console.log(`Consultando por mês: ${mesNumero}`);
+        function consultarPorData(dataVoo, origem, destino) {
+            console.log(`Consultando por data: ${dataVoo}, origem: ${origem}, destino: ${destino}`);
             
-            // Mudar para a aba Dashboard 2
-            const tab = document.getElementById('dashboard2-tab');
-            if (tab) {
-                tab.click();
+            // Armazenar dados da consulta
+            consultaPorDataAtiva = true;
+            filtrosConsultaPorData = {
+                dataVoo: dataVoo,
+                origem: origem,
+                destino: destino
+            };
+            
+            // Filtrar voos pela data, origem e destino selecionados
+            dadosConsultaPorData = voosData.filter(voo => {
+                return voo.data_voo === dataVoo && 
+                       voo.origem === origem && 
+                       voo.destino === destino;
+            });
+            
+            if (dadosConsultaPorData.length === 0) {
+                alert(`Nenhum passageiro encontrado para a data ${formatarDataParaBR(dataVoo)}.`);
+                consultaPorDataAtiva = false;
+                return;
             }
-            
-            // Aplicar filtro do mês
-            document.getElementById('mesDashboard2').value = mesNumero;
-            
-            // Obter ano do Dashboard 1 para manter consistência
-            const anoDashboard1 = document.getElementById('anoDashboard1').value;
-            if (anoDashboard1 !== 'all') {
-                document.getElementById('anoDashboard2').value = anoDashboard1;
-            }
-            
-            // Limpar outros filtros para mostrar apenas o mês selecionado
-            document.getElementById('origemDashboard2').value = '';
-            document.getElementById('destinoDashboard2').value = '';
-            document.getElementById('dataInicio').value = '';
-            document.getElementById('dataFim').value = '';
-            document.getElementById('aeronaveDashboard2').value = '';
-            document.getElementById('searchVoos').value = '';
-            
-            // Aplicar filtros
-            setTimeout(() => {
-                applyFilters('dashboard2');
-                
-                // Mostrar mensagem informativa
-                const mesNome = mesesMap[mesNumero] || `Mês ${mesNumero}`;
-                const ano = document.getElementById('anoDashboard2').value;
-                
-                // Adicionar mensagem no topo da tabela
-                const tableHeader = document.querySelector('#dashboard2 .table-header');
-                if (tableHeader) {
-                    const infoDiv = document.createElement('div');
-                    infoDiv.className = 'alert alert-info mt-2 mb-0';
-                    infoDiv.innerHTML = `
-                        <i class="material-icons me-2">info</i>
-                        <strong>Filtro aplicado:</strong> Mostrando voos do mês de ${mesNome}${ano !== 'all' ? ` do ano ${ano}` : ''}.
-                        <button class="btn btn-sm btn-outline-info ms-3" onclick="limparFiltroMes()">
-                            <i class="material-icons" style="font-size: 14px;">clear</i> Remover filtro
-                        </button>
-                    `;
-                    
-                    // Remover mensagem anterior se existir
-                    const existingAlert = tableHeader.querySelector('.alert');
-                    if (existingAlert) {
-                        existingAlert.remove();
-                    }
-                    
-                    tableHeader.appendChild(infoDiv);
-                }
-            }, 300);
-        }
-
-        function limparFiltroMes() {
-            // Limpar filtro de mês
-            document.getElementById('mesDashboard2').value = 'all';
-            
-            // Remover mensagem informativa
-            const tableHeader = document.querySelector('#dashboard2 .table-header');
-            if (tableHeader) {
-                const existingAlert = tableHeader.querySelector('.alert');
-                if (existingAlert) {
-                    existingAlert.remove();
-                }
-            }
-            
-            // Aplicar filtros sem o mês
-            applyFilters('dashboard2');
-        }
-
-        function consultarPorData(dataVoo) {
-            console.log(`Consultando por data: ${dataVoo}`);
             
             // Mudar para a aba Dashboard 3
             const tab = document.getElementById('dashboard3-tab');
@@ -3141,22 +3241,34 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                 tab.click();
             }
             
-            // Limpar filtros existentes
-            limparConsultaIndividual();
+            // Limpar outros filtros
+            document.getElementById('nomePassageiro').value = '';
+            document.getElementById('cpfPassageiro').value = '';
+            document.getElementById('anoConsulta').value = 'all';
+            document.getElementById('orgaoConsulta').value = '';
+            document.getElementById('searchPassageiros').value = '';
             
-            // Filtrar voos pela data selecionada
-            const voosNaData = voosData.filter(voo => voo.data_voo === dataVoo);
+            // Atualizar a tabela de passageiros com os dados filtrados
+            atualizarTabelaConsultaPorData();
+        }
+
+        function atualizarTabelaConsultaPorData() {
+            const tbody = document.getElementById('passageirosTableBody');
+            const countElement = document.getElementById('totalPassageirosCount');
+            const paginationInfo = document.getElementById('paginationInfoDashboard3');
             
-            if (voosNaData.length === 0) {
-                alert(`Nenhum passageiro encontrado para a data ${formatarDataParaBR(dataVoo)}.`);
+            if (dadosConsultaPorData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Nenhum passageiro encontrado.</td></tr>';
+                if (countElement) countElement.textContent = '0 passageiros';
+                if (paginationInfo) paginationInfo.textContent = 'Mostrando 0-0 de 0 registros';
                 return;
             }
             
-            // Agrupar passageiros por nome
+            // Agrupar passageiros por nome (para o voo específico)
             const passageirosMap = {};
             let totalHorasVoo = 0;
             
-            voosNaData.forEach(voo => {
+            dadosConsultaPorData.forEach(voo => {
                 const passageiro = voo.passageiro;
                 const cargo = voo.cargo_passageiro;
                 const orgao = voo.orgao_passageiro;
@@ -3187,11 +3299,18 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             // Ordenar por nome
             passageirosDataArray.sort((a, b) => a.nome.localeCompare(b.nome));
             
-            // Atualizar a tabela de passageiros
-            const tbody = document.getElementById('passageirosTableBody');
-            const countElement = document.getElementById('totalPassageirosCount');
+            // Atualizar lista de passageiros para esta consulta
+            passageirosList = passageirosDataArray;
             
-            const rowsHTML = passageirosDataArray.map(passageiro => {
+            // Paginação
+            const totalPages = Math.ceil(passageirosList.length / itemsPerPageDashboard3);
+            
+            const startIndex = (currentPageDashboard3 - 1) * itemsPerPageDashboard3;
+            const endIndex = Math.min(startIndex + itemsPerPageDashboard3, passageirosList.length);
+            const currentData = passageirosList.slice(startIndex, endIndex);
+            
+            // Gerar HTML da tabela
+            const rowsHTML = currentData.map(passageiro => {
                 return `
                     <tr>
                         <td><strong>${passageiro.nome}</strong></td>
@@ -3209,61 +3328,63 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             }).join('');
             
             tbody.innerHTML = rowsHTML;
-            if (countElement) countElement.textContent = `${passageirosDataArray.length} passageiros`;
+            if (countElement) countElement.textContent = `${passageirosList.length} passageiros`;
+            if (paginationInfo) paginationInfo.textContent = `Mostrando ${startIndex + 1}-${endIndex} de ${passageirosList.length} passageiros`;
             
-            // Adicionar mensagem informativa
-            const dataFormatada = formatarDataParaBR(dataVoo);
-            const vooInfo = voosNaData[0]; // Pegar informações do primeiro voo
+            // Atualizar informações do voo no filtro
+            const dataFormatada = formatarDataParaBR(filtrosConsultaPorData.dataVoo);
+            const vooInfo = dadosConsultaPorData[0];
             
+            // Adicionar informação sobre a consulta atual
             const filterContainer = document.querySelector('#dashboard3 .filter-container');
             if (filterContainer) {
+                // Remover informação anterior se existir
+                const existingInfo = filterContainer.querySelector('.consulta-ativa-info');
+                if (existingInfo) {
+                    existingInfo.remove();
+                }
+                
                 const infoDiv = document.createElement('div');
-                infoDiv.className = 'alert alert-success mt-3 mb-0';
+                infoDiv.className = 'consulta-ativa-info alert alert-info mt-3 mb-0';
                 infoDiv.innerHTML = `
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <i class="material-icons me-2">event</i>
-                            <strong>Consulta por Data:</strong> Mostrando passageiros do voo de ${dataFormatada}.
+                            <i class="material-icons me-2">info</i>
+                            <strong>Consulta por Voo:</strong> Mostrando passageiros do voo de ${dataFormatada}.
                             <br>
                             <small>
                                 <strong>Origem:</strong> ${vooInfo.origem || '-'} | 
                                 <strong>Destino:</strong> ${vooInfo.destino || '-'} | 
                                 <strong>Histórico:</strong> ${vooInfo.historico || '-'} | 
-                                <strong>Total de passageiros:</strong> ${passageirosDataArray.length} | 
+                                <strong>Total de passageiros:</strong> ${passageirosList.length} | 
                                 <strong>Horas totais:</strong> ${formatarHoras(totalHorasVoo)}
                             </small>
                         </div>
-                        <button class="btn btn-sm btn-outline-success" onclick="limparConsultaPorData()">
-                            <i class="material-icons" style="font-size: 14px;">clear</i> Limpar consulta
+                        <button class="btn btn-sm btn-outline-info" onclick="limparConsultaPorData()">
+                            <i class="material-icons" style="font-size: 14px;">clear</i> Voltar para todos
                         </button>
                     </div>
                 `;
                 
-                // Remover mensagem anterior se existir
-                const existingAlert = filterContainer.querySelector('.alert');
-                if (existingAlert) {
-                    existingAlert.remove();
-                }
-                
                 filterContainer.appendChild(infoDiv);
             }
             
-            // Atualizar paginação
-            updatePaginationDashboard3(passageirosDataArray.length, 1, 50);
-            
+            updateSortIconsPassageiros();
+            updatePaginationDashboard3();
             iframeUpdateHeight();
         }
 
         function limparConsultaPorData() {
-            // Limpar a consulta individual
-            limparConsultaIndividual();
+            consultaPorDataAtiva = false;
+            dadosConsultaPorData = [];
+            filtrosConsultaPorData = {};
             
-            // Remover mensagem informativa
+            // Remover informação da consulta ativa
             const filterContainer = document.querySelector('#dashboard3 .filter-container');
             if (filterContainer) {
-                const existingAlert = filterContainer.querySelector('.alert');
-                if (existingAlert) {
-                    existingAlert.remove();
+                const existingInfo = filterContainer.querySelector('.consulta-ativa-info');
+                if (existingInfo) {
+                    existingInfo.remove();
                 }
             }
             
@@ -3273,6 +3394,12 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
 
         // ==================== DASHBOARD 3: CONSULTA INDIVIDUAL ====================
         function atualizarTabelaPassageiros() {
+            // Se há consulta por data ativa, mostrar apenas esses dados
+            if (consultaPorDataAtiva) {
+                atualizarTabelaConsultaPorData();
+                return;
+            }
+            
             const tbody = document.getElementById('passageirosTableBody');
             const countElement = document.getElementById('totalPassageirosCount');
             const paginationInfo = document.getElementById('paginationInfoDashboard3');
@@ -3284,7 +3411,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                 return;
             }
             
-            // Agrupar dados por passageiro
+            // Agrupar dados por passageiro (todos os passageiros)
             const passageirosMap = {};
             
             // Aplicar filtros da consulta individual
@@ -3348,12 +3475,10 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             });
             
             // Paginação
-            const itemsPerPage = parseInt(document.getElementById('itemsPerPageDashboard3').value) || 50;
-            const totalPages = Math.ceil(passageirosList.length / itemsPerPage);
-            const currentPage = 1;
+            const totalPages = Math.ceil(passageirosList.length / itemsPerPageDashboard3);
             
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = Math.min(startIndex + itemsPerPage, passageirosList.length);
+            const startIndex = (currentPageDashboard3 - 1) * itemsPerPageDashboard3;
+            const endIndex = Math.min(startIndex + itemsPerPageDashboard3, passageirosList.length);
             const currentData = passageirosList.slice(startIndex, endIndex);
             
             // Gerar HTML da tabela
@@ -3379,7 +3504,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             if (paginationInfo) paginationInfo.textContent = `Mostrando ${startIndex + 1}-${endIndex} de ${passageirosList.length} passageiros`;
             
             updateSortIconsPassageiros();
-            updatePaginationDashboard3(passageirosList.length, currentPage, itemsPerPage);
+            updatePaginationDashboard3();
             iframeUpdateHeight();
         }
 
@@ -3410,41 +3535,46 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                 currentSortPassageiros.column = column;
                 currentSortPassageiros.order = 'asc';
             }
-            atualizarTabelaPassageiros();
+            
+            if (consultaPorDataAtiva) {
+                atualizarTabelaConsultaPorData();
+            } else {
+                atualizarTabelaPassageiros();
+            }
         };
 
-        function updatePaginationDashboard3(totalItems, currentPage, itemsPerPage) {
+        function updatePaginationDashboard3() {
             const pagination = document.getElementById('paginationDashboard3');
             if (!pagination) return;
             
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const totalPages = Math.ceil(passageirosList.length / itemsPerPageDashboard3);
             
             let paginationHTML = '';
             
             // Botão anterior
             paginationHTML += `
-                <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-                    <a class="page-link" href="#" onclick="changePageDashboard3(${currentPage - 1})">Anterior</a>
+                <li class="page-item ${currentPageDashboard3 === 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="changePageDashboard3(${currentPageDashboard3 - 1}); return false;">Anterior</a>
                 </li>
             `;
             
             // Páginas
             for (let i = 1; i <= totalPages; i++) {
-                if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                if (i === 1 || i === totalPages || (i >= currentPageDashboard3 - 2 && i <= currentPageDashboard3 + 2)) {
                     paginationHTML += `
-                        <li class="page-item ${i === currentPage ? 'active' : ''}">
-                            <a class="page-link" href="#" onclick="changePageDashboard3(${i})">${i}</a>
+                        <li class="page-item ${i === currentPageDashboard3 ? 'active' : ''}">
+                            <a class="page-link" href="#" onclick="changePageDashboard3(${i}); return false;">${i}</a>
                         </li>
                     `;
-                } else if (i === currentPage - 3 || i === currentPage + 3) {
+                } else if (i === currentPageDashboard3 - 3 || i === currentPageDashboard3 + 3) {
                     paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
                 }
             }
             
             // Botão próximo
             paginationHTML += `
-                <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-                    <a class="page-link" href="#" onclick="changePageDashboard3(${currentPage + 1})">Próximo</a>
+                <li class="page-item ${currentPageDashboard3 === totalPages ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="changePageDashboard3(${currentPageDashboard3 + 1}); return false;">Próximo</a>
                 </li>
             `;
             
@@ -3452,19 +3582,47 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
         }
 
         function changePageDashboard3(page) {
-            console.log(`Mudar para página ${page} do Dashboard 3`);
+            const totalPages = Math.ceil(passageirosList.length / itemsPerPageDashboard3);
+            
+            if (page < 1 || page > totalPages) return;
+            currentPageDashboard3 = page;
+            
+            if (consultaPorDataAtiva) {
+                atualizarTabelaConsultaPorData();
+            } else {
+                atualizarTabelaPassageiros();
+            }
         }
 
         function abrirModalViagens(nomePassageiro) {
             currentModalPassageiro = nomePassageiro;
             
-            // Filtrar viagens do passageiro
-            const anoSelecionado = document.getElementById('anoConsulta').value;
-            const viagensPassageiro = voosData.filter(voo => {
-                if (voo.passageiro !== nomePassageiro) return false;
-                if (anoSelecionado !== 'all' && voo.ano !== anoSelecionado) return false;
-                return true;
-            });
+            // Filtrar viagens do passageiro considerando a consulta atual
+            let viagensPassageiro;
+            
+            if (consultaPorDataAtiva) {
+                // Se estamos em uma consulta por data, mostrar apenas viagens daquele voo específico
+                viagensPassageiro = dadosConsultaPorData.filter(voo => voo.passageiro === nomePassageiro);
+            } else {
+                // Senão, mostrar todas as viagens do passageiro com filtros aplicados
+                const anoSelecionado = document.getElementById('anoConsulta').value;
+                const orgaoSelecionado = document.getElementById('orgaoConsulta').value;
+                
+                viagensPassageiro = voosData.filter(voo => {
+                    if (voo.passageiro !== nomePassageiro) return false;
+                    
+                    // Aplicar filtros do Dashboard 3
+                    if (anoSelecionado !== 'all' && voo.ano !== anoSelecionado) return false;
+                    
+                    if (orgaoSelecionado && orgaoSelecionado !== 'all' && orgaoSelecionado.trim() !== '') {
+                        if (!voo.orgao_passageiro || !voo.orgao_passageiro.toLowerCase().includes(orgaoSelecionado.toLowerCase())) {
+                            return false;
+                        }
+                    }
+                    
+                    return true;
+                });
+            }
             
             // Ordenar por data (mais recente primeiro)
             viagensPassageiro.sort((a, b) => {
@@ -3505,13 +3663,29 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
         function exportViagensModal() {
             if (!currentModalPassageiro) return;
             
-            // Filtrar viagens do passageiro
-            const anoSelecionado = document.getElementById('anoConsulta').value;
-            const viagensPassageiro = voosData.filter(voo => {
-                if (voo.passageiro !== currentModalPassageiro) return false;
-                if (anoSelecionado !== 'all' && voo.ano !== anoSelecionado) return false;
-                return true;
-            });
+            // Filtrar viagens do passageiro considerando a consulta atual
+            let viagensPassageiro;
+            
+            if (consultaPorDataAtiva) {
+                viagensPassageiro = dadosConsultaPorData.filter(voo => voo.passageiro === currentModalPassageiro);
+            } else {
+                const anoSelecionado = document.getElementById('anoConsulta').value;
+                const orgaoSelecionado = document.getElementById('orgaoConsulta').value;
+                
+                viagensPassageiro = voosData.filter(voo => {
+                    if (voo.passageiro !== currentModalPassageiro) return false;
+                    
+                    if (anoSelecionado !== 'all' && voo.ano !== anoSelecionado) return false;
+                    
+                    if (orgaoSelecionado && orgaoSelecionado !== 'all' && orgaoSelecionado.trim() !== '') {
+                        if (!voo.orgao_passageiro || !voo.orgao_passageiro.toLowerCase().includes(orgaoSelecionado.toLowerCase())) {
+                            return false;
+                        }
+                    }
+                    
+                    return true;
+                });
+            }
             
             if (viagensPassageiro.length === 0) {
                 alert('Nenhuma viagem para exportar.');
@@ -3554,7 +3728,8 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             const nomePassageiro = document.getElementById('nomePassageiro').value.trim();
             
             if (!nomePassageiro) {
-                alert('Por favor, informe o nome do passageiro para realizar a consulta.');
+                // Se não há nome, mostrar todos os passageiros com filtros aplicados
+                atualizarTabelaPassageiros();
                 return;
             }
             
@@ -3576,24 +3751,20 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             document.getElementById('orgaoConsulta').value = '';
             document.getElementById('searchPassageiros').value = '';
             
-            // Resetar filtro na tabela
-            const tbody = document.getElementById('passageirosTableBody');
-            const rows = tbody.querySelectorAll('tr');
-            rows.forEach(row => {
-                row.style.display = '';
-            });
-            
-            const countElement = document.getElementById('totalPassageirosCount');
-            if (countElement) {
-                countElement.textContent = `${passageirosList.length} passageiros`;
-            }
-            
-            // Remover mensagem informativa se existir
-            const filterContainer = document.querySelector('#dashboard3 .filter-container');
-            if (filterContainer) {
-                const existingAlert = filterContainer.querySelector('.alert');
-                if (existingAlert) {
-                    existingAlert.remove();
+            // Se há consulta por data ativa, limpar também
+            if (consultaPorDataAtiva) {
+                limparConsultaPorData();
+            } else {
+                // Resetar filtro na tabela
+                const tbody = document.getElementById('passageirosTableBody');
+                const rows = tbody.querySelectorAll('tr');
+                rows.forEach(row => {
+                    row.style.display = '';
+                });
+                
+                const countElement = document.getElementById('totalPassageirosCount');
+                if (countElement) {
+                    countElement.textContent = `${passageirosList.length} passageiros`;
                 }
             }
             
