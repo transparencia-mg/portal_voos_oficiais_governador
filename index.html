@@ -132,10 +132,11 @@
         /* ==================== DATA ATUALIZAÇÃO MINIMALISTA ==================== */
         .data-atualizacao-container {
             text-align: center;
-            margin: 10px 0 20px 0;
+            margin: 0px 0 20px 0;
             font-size: 12px;
             color: var(--primary-darker);
             opacity: 0.8;
+            padding: 0 15px;
         }
         
         /* ==================== FILTROS ==================== */
@@ -670,6 +671,7 @@
         }
         
         /* ==================== MENU DE NAVEGAÇÃO ==================== */
+        /* Container principal - CORRIGIDO */
         .nav-tabs-container {
             background: white;
             border-radius: 10px;
@@ -677,40 +679,43 @@
             margin-bottom: 20px;
             box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
             margin-top: 10px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
+            overflow-x: auto; /* Adicionado para controlar overflow */
+            -webkit-overflow-scrolling: touch; /* Melhor rolagem no iOS */
         }
 
+        /* Nav tabs - CORRIGIDO */
         .nav-tabs {
-            border: none !important;
+            border: none !important; /* !important para sobrescrever Bootstrap */
             gap: 4px;
-            flex-wrap: nowrap;
-            min-width: max-content;
-            padding-bottom: 5px;
+            flex-wrap: nowrap; /* Mantém em uma linha */
+            min-width: max-content; /* Garante largura mínima baseada no conteúdo */
+            padding-bottom: 5px; /* Espaço para scrollbar */
             margin-bottom: 0 !important;
         }
 
+        /* Itens dos tabs - NOVO, necessário */
         .nav-tabs .nav-item {
-            flex-shrink: 0;
+            flex-shrink: 0; /* Não permite que os tabs encolham */
         }
 
+        /* Links dos tabs - CORRIGIDO */
         .nav-tabs .nav-link {
             border: none !important;
             border-radius: 6px !important;
             padding: 10px 15px !important;
             font-weight: 600;
-            color: #1a5276 !important;
+            color: #1a5276 !important; /* Fallback para var(--primary-dark) */
             transition: all 0.3s ease;
             font-size: 13px;
             white-space: nowrap;
-            display: inline-flex !important;
+            display: inline-flex !important; /* Mudado de flex para inline-flex */
             align-items: center;
             background: none !important;
         }
 
         .nav-tabs .nav-link:hover {
             background-color: rgba(26, 82, 118, 0.05) !important;
-            color: #3498db !important;
+            color: #3498db !important; /* Fallback para var(--accent-blue) */
         }
 
         .nav-tabs .nav-link.active {
@@ -719,6 +724,7 @@
             border: none !important;
         }
 
+        /* Ícones - CORRIGIDO */
         .nav-tabs .nav-link .material-icons {
             font-size: 16px !important;
             margin-right: 8px !important;
@@ -728,6 +734,36 @@
 
         .nav-tabs .nav-link.active .material-icons {
             color: white !important;
+        }
+
+        /* Estilizar a scrollbar para ficar discreta */
+        .nav-tabs-container::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .nav-tabs-container::-webkit-scrollbar-track {
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .nav-tabs-container::-webkit-scrollbar-thumb {
+            background: #dee2e6;
+            border-radius: 4px;
+        }
+
+        .nav-tabs-container::-webkit-scrollbar-thumb:hover {
+            background: #adb5bd;
+        }
+
+        /* Para Firefox */
+        .nav-tabs-container {
+            scrollbar-width: thin;
+            scrollbar-color: #dee2e6 #f8f9fa;
+        }
+
+        /* Remover a borda inferior padrão do Bootstrap */
+        .nav-tabs {
+            border-bottom: none !important;
         }
         
         /* ==================== MODAL ==================== */
@@ -917,15 +953,12 @@
                     </li>
                 </ul>
             </div>
-            
+
             <!-- ==================== Data de Atualização ==================== -->
-
-
-                <!-- Data de Atualização -->
-                <div class="data-atualizacao-container">
-                    <i class="fas fa-sync-alt me-2"></i>
-                    <span id="data-atualizacao-body">Última atualização: Carregando...</span>
-                </div>
+            <div class="data-atualizacao-container">
+                <i class="fas fa-sync-alt me-2"></i>
+                <span id="data-atualizacao">Carregando...</span>
+            </div>
 
             <!-- ==================== CONTEÚDO DAS ABAS ==================== -->
             <div class="tab-content" id="dashboardTabsContent">
@@ -1693,9 +1726,15 @@
             iframeUpdateHeight();
         });
 
-        // Atualizar altura do iframe
+        // ==================== FUNÇÃO IFRAME HEIGHT ====================
         function iframeUpdateHeight() { 
-            window.parent.postMessage({ iframeHeight: document.body.scrollHeight + 10 }, '*'); 
+            try {
+                // Calcula a altura uma vez para evitar múltiplas chamadas
+                const height = document.body.scrollHeight + 10;
+                window.parent.postMessage({ iframeHeight: height }, '*'); 
+            } catch (error) {
+                // Ignora erro se não estiver em iframe
+            }
         }
 
         function setupTooltips() {
@@ -1709,9 +1748,9 @@
         function setupAtualizacaoData() {
             const now = new Date();
             const dataFormatada = now.toLocaleDateString('pt-BR') + ' ' + now.toLocaleTimeString('pt-BR');
-            const dataElement = document.getElementById('dataAtualizacao');
+            const dataElement = document.getElementById('data-atualizacao');
             if (dataElement) {
-                dataElement.textContent = dataFormatada;
+                dataElement.textContent = 'Última atualização: ' + dataFormatada;
             }
         }
 
@@ -1874,14 +1913,6 @@
                     }
                     
                     setTimeout(() => {
-                        if (tabId === 'dashboard1') updateDashboard1();
-                        else if (tabId === 'dashboard2') updateDashboard2();
-                        else if (tabId === 'dashboard3') {
-                            // Se não há consulta por data ativa, mostrar todos os passageiros
-                            if (!consultaPorDataAtiva) {
-                                atualizarTabelaPassageiros();
-                            }
-                        }
                         iframeUpdateHeight();
                     }, 100);
                 });
@@ -1906,6 +1937,7 @@
                 await loadDadosExemplo();
             } finally {
                 showLoading(false);
+                iframeUpdateHeight();
             }
         }
 
@@ -2534,14 +2566,12 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
 
         function updateResumoTable() {
             const tbody = document.getElementById('resumoTableBody');
-            const countElement = document.getElementById('resumoCountDashboard1');
-            const totalCountElement = document.getElementById('totalCountDashboard1');
+            const countElement = document.getElementById('totalCountDashboard1');
             const tableTotals = document.getElementById('tableTotalsDashboard1');
             
             if (filteredData.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">Nenhum voo encontrado para os filtros aplicados.</td></tr>';
                 if (countElement) countElement.textContent = '0 registros';
-                if (totalCountElement) totalCountElement.textContent = '0 registros';
                 if (tableTotals) tableTotals.style.display = 'none';
                 return;
             }
@@ -2686,9 +2716,45 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             const mesesComDados = resumoArray.filter(mes => mes.total_voos > 0).length;
             
             if (countElement) countElement.textContent = `${mesesComDados} meses`;
-            if (totalCountElement) totalCountElement.textContent = `${resumoArray.length} meses`;
             
             updateSortIconsDashboard1();
+        }
+
+        function consultarPorMes(mesNumero) {
+            console.log(`Consultando por mês: ${mesNumero} (${mesesMap[mesNumero]})`);
+            
+            // Mudar para a aba Dashboard 2
+            const tab = document.getElementById('dashboard2-tab');
+            if (tab) {
+                tab.click();
+            }
+            
+            // Aplicar o filtro do mês
+            document.getElementById('mesDashboard2').value = mesNumero;
+            
+            // Manter o ano atual se estiver filtrado
+            const anoSelecionado = document.getElementById('anoDashboard1').value;
+            if (anoSelecionado !== 'all') {
+                document.getElementById('anoDashboard2').value = anoSelecionado;
+            }
+            
+            // Limpar outros filtros do Dashboard 2
+            document.getElementById('origemDashboard2').value = '';
+            document.getElementById('destinoDashboard2').value = '';
+            document.getElementById('dataInicio').value = '';
+            document.getElementById('dataFim').value = '';
+            document.getElementById('aeronaveDashboard2').value = '';
+            
+            // Aplicar os filtros
+            applyFilters('dashboard2');
+            
+            // Scroll para o topo do Dashboard 2
+            setTimeout(() => {
+                const dashboard2 = document.getElementById('dashboard2');
+                if (dashboard2) {
+                    dashboard2.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 100);
         }
 
         function updateSortIconsDashboard1() {
