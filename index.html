@@ -3388,31 +3388,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                     existingInfo.remove();
                 }
                 
-                const infoDiv = document.createElement('div');
-                infoDiv.className = 'consulta-ativa-info alert alert-info mt-3 mb-0';
-                infoDiv.innerHTML = `
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <i class="material-icons me-2">info</i>
-                            <strong>Consulta por Voo:</strong> Mostrando passageiros do voo de ${dataFormatada}.
-                            <br>
-                            <small>
-                                <strong>Origem:</strong> ${vooInfo.origem || '-'} | 
-                                <strong>Destino:</strong> ${vooInfo.destino || '-'} | 
-                                <strong>Histórico:</strong> ${vooInfo.historico || '-'} | 
-                                <strong>Total de passageiros:</strong> ${passageirosList.length} | 
-                                <strong>Horas totais:</strong> ${formatarHoras(totalHorasVoo)}
-                            </small>
-                        </div>
-                        <button class="btn btn-sm btn-outline-info" onclick="limparConsultaPorData()">
-                            <i class="material-icons" style="font-size: 14px;">clear</i> Voltar para todos
-                        </button>
-                    </div>
-                `;
-                
-                filterContainer.appendChild(infoDiv);
-            }
-            
+           
             updateSortIconsPassageiros();
             updatePaginationDashboard3();
             iframeUpdateHeight();
