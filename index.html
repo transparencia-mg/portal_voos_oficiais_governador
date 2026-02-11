@@ -1452,16 +1452,6 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-8">
-                                <div class="d-flex gap-3 flex-wrap">
-                                    <button class="btn-pesquisa flex-grow-1" id="downloadCSV">
-                                        <i class="material-icons me-2">download</i>Baixar CSV Completo
-                                    </button>
-                                    <a href="https://github.com/transparencia-mg/voos_oficiais_governador" target="_blank" class="btn-limpar flex-grow-1 text-decoration-none">
-                                        <i class="material-icons me-2">code</i>Repositório GitHub
-                                    </a>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -1474,13 +1464,15 @@
                             <div class="row">
                                 <div class="col-md-6 col-12">
                                     <div class="card-stats">
-                                        <i class="material-icons fa-3x mb-3" style="color: var(--primary-dark);">flight</i>
-                                        <h4>Dados de Voos Oficiais</h4>
-                                        <p class="text-muted" style="font-size: 13px;">Registro detalhado dos voos oficiais do Governador de Minas Gerais</p>
+                                        <i class="fas fa-database fa-3x mb-3" style="color: var(--primary-dark);"></i>
+                                        <h4>Fonte de Dados</h4>
+                                        <p class="text-muted" style="font-size: 13px;">Dados atualizados automaticamente do GitHub</p>
                                         <div class="mt-3">
-                                            <button class="btn-export w-100" onclick="downloadAmostra()">
-                                                <i class="material-icons me-2">file_download</i>Baixar Amostra
-                                            </button>
+                                            <a href="https://github.com/transparencia-mg/voos_oficiais_governador" 
+                                               target="_blank"
+                                                class="btn-export w-100 d-block text-decoration-none">
+                                            <i class="fab fa-github me-2"></i>Acessar Repositório
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
