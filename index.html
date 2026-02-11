@@ -57,7 +57,7 @@
             font-family: 'Montserrat', Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--background-light);
             padding-bottom: 15px;
-            overflow-y: visible !important;
+            overflow-y: hidden !important;
             overflow-x: hidden !important;
             min-height: auto !important;
             height: auto !important;
@@ -65,7 +65,7 @@
         }
 
         html {
-            overflow-y: visible !important;
+            overflow-y: hidden !important;
             height: auto !important;
         }
 
@@ -241,9 +241,10 @@
             transform: translateY(-2px);
         }
         
+        /* ==================== BOTÕES DE AÇÃO - FUNDO BRANCO ==================== */
         .btn-export {
-            background: var(--success-green);
-            color: white;
+            background: white;
+            color: var(--primary-darker);
             border: 2px solid var(--primary-darker);
             padding: 8px 15px;
             border-radius: 6px;
@@ -257,13 +258,14 @@
         
         .btn-export:hover {
             background: var(--primary-darker);
+            color: white;
             border-color: var(--primary-darker);
             transform: translateY(-2px);
         }
         
         .btn-print {
-            background: var(--warning-yellow);
-            color: white;
+            background: white;
+            color: var(--primary-darker);
             border: 2px solid var(--primary-darker);
             padding: 8px 15px;
             border-radius: 6px;
@@ -277,13 +279,14 @@
         
         .btn-print:hover {
             background: var(--primary-darker);
+            color: white;
             border-color: var(--primary-darker);
             transform: translateY(-2px);
         }
         
         .btn-share {
-            background: var(--info-blue);
-            color: white;
+            background: white;
+            color: var(--primary-darker);
             border: 2px solid var(--primary-darker);
             padding: 8px 15px;
             border-radius: 6px;
@@ -296,6 +299,29 @@
         }
         
         .btn-share:hover {
+            background: var(--primary-darker);
+            color: white;
+            border-color: var(--primary-darker);
+            transform: translateY(-2px);
+        }
+        
+        /* ==================== BOTÕES AZUIS PARA DOWNLOADS ==================== */
+        .btn-download-blue {
+            background: var(--primary-dark);
+            color: white;
+            border: 2px solid var(--primary-darker);
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-download-blue:hover {
             background: var(--primary-darker);
             border-color: var(--primary-darker);
             transform: translateY(-2px);
@@ -931,6 +957,41 @@
             text-align: left;
         }
         
+        /* ==================== LINKS DE MÊS - CORES CORRIGIDAS ==================== */
+        .link-mes {
+            color: var(--primary-dark) !important;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .link-mes:hover {
+            color: var(--accent-red) !important;
+            text-decoration: underline;
+            background-color: rgba(185, 60, 66, 0.05);
+        }
+        
+        /* ==================== LINKS CLICÁVEIS ==================== */
+        .link-clickable {
+            color: var(--accent-red);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        .link-clickable:hover {
+            color: var(--primary-darker);
+            text-decoration: underline;
+            background-color: rgba(19, 40, 55, 0.05);
+        }
+        
         /* ==================== RODAPÉ DA TABELA (TOTAIS) ==================== */
         .table-totals {
             background-color: #f8f9fa;
@@ -965,38 +1026,18 @@
             border-color: var(--accent-red);
         }
         
-        /* ==================== LINKS CLICÁVEIS ==================== */
-        .link-clickable {
-            color: var(--accent-red);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            padding: 2px 4px;
-            border-radius: 3px;
+        /* ==================== CARDS DE DOWNLOAD CENTRALIZADOS ==================== */
+        .download-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
         }
         
-        .link-clickable:hover {
-            color: var(--primary-darker);
-            text-decoration: underline;
-            background-color: rgba(19, 40, 55, 0.05);
-        }
-        
-        .link-mes {
-            color: var(--accent-red);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-        
-        .link-mes:hover {
-            color: var(--primary-darker);
-            text-decoration: underline;
-            background-color: rgba(19, 40, 55, 0.05);
+        .download-card .btn-download-blue {
+            width: 100%;
+            justify-content: center;
         }
         
         /* ==================== MODAL ==================== */
@@ -1745,7 +1786,7 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label filter-label">&nbsp;</label>
-                                    <button class="btn-export w-100" id="downloadCSV">
+                                    <button class="btn-download-blue w-100" id="downloadCSV">
                                         <i class="material-icons me-2">download</i>Baixar CSV
                                     </button>
                                 </div>
@@ -1761,28 +1802,28 @@
                         <div class="p-4">
                             <div class="row">
                                 <div class="col-md-6 col-12">
-                                    <div class="card-chart" style="height: auto; padding: 20px;">
+                                    <div class="card-chart download-card" style="height: auto; padding: 20px;">
                                         <i class="fas fa-database fa-3x mb-3" style="color: var(--primary-dark);"></i>
-                                        <h4>Fonte de Dados</h4>
-                                        <p class="text-muted" style="font-size: 13px;">Dados atualizados automaticamente do GitHub</p>
-                                        <div class="mt-3">
+                                        <h4 class="text-center">Fonte de Dados</h4>
+                                        <p class="text-muted text-center" style="font-size: 13px;">Dados atualizados automaticamente do GitHub</p>
+                                        <div class="mt-3 w-100">
                                             <a href="https://github.com/transparencia-mg/voos_oficiais_governador" 
                                                target="_blank"
-                                                class="btn-export w-100 d-block text-decoration-none text-center">
+                                                class="btn-download-blue w-100 d-block text-decoration-none text-center">
                                             <i class="fab fa-github me-2"></i>Acessar Repositório
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-12">
-                                    <div class="card-chart" style="height: auto; padding: 20px;">
+                                    <div class="card-chart download-card" style="height: auto; padding: 20px;">
                                         <i class="material-icons fa-3x mb-3" style="color: var(--primary-dark); font-size: 48px;">public</i>
-                                        <h4>Portal de Dados Abertos</h4>
-                                        <p class="text-muted" style="font-size: 13px;">Acesse o portal oficial de dados abertos de Minas Gerais</p>
-                                        <div class="mt-3">
+                                        <h4 class="text-center">Portal de Dados Abertos</h4>
+                                        <p class="text-muted text-center" style="font-size: 13px;">Acesse o portal oficial de dados abertos de Minas Gerais</p>
+                                        <div class="mt-3 w-100">
                                             <a href="https://dados.mg.gov.br/" 
                                                target="_blank" 
-                                               class="btn-export w-100 d-block text-decoration-none text-center">
+                                               class="btn-download-blue w-100 d-block text-decoration-none text-center">
                                                 <i class="material-icons me-2">open_in_new</i>Acessar Portal
                                             </a>
                                         </div>
