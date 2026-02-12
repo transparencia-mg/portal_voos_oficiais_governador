@@ -3355,36 +3355,6 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             atualizarLegendChartDestino(labels, data);
         }
 
-        function atualizarLegendChartDestino(labels, data) {
-            const legendContainer = document.getElementById('legendChartDestino');
-            if (!legendContainer) return;
-            
-            const total = data.reduce((a, b) => a + b, 0);
-            
-            let legendHTML = '';
-            
-            data.forEach((value, index) => {
-                const percent = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
-                legendHTML += `
-                    <div class="legend-item-compact">
-                        <div class="legend-dot-compact" style="background-color: ${chartColors[index]};"></div>
-                        <div class="legend-content-compact">
-                            <div class="legend-stats-compact">
-                                <span class="legend-label-compact">${labels[index]}</span>
-                                <span class="legend-percent-compact">${percent}%</span>
-                            </div>
-                            <div class="legend-bar-mini">
-                                <div class="legend-bar-fill-mini" style="width: ${percent}%; background-color: ${chartColors[index]};"></div>
-                            </div>
-                            <span class="legend-count-compact">${value} passageiros</span>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            legendContainer.innerHTML = legendHTML;
-        }
-
         function updateAeronaveChart() {
             const ctx = document.getElementById('chartAeronave')?.getContext('2d');
             if (!ctx) return;
@@ -3440,35 +3410,6 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             atualizarLegendChartAeronave(labels, data);
         }
 
-        function atualizarLegendChartAeronave(labels, data) {
-            const legendContainer = document.getElementById('legendChartAeronave');
-            if (!legendContainer) return;
-            
-            const total = data.reduce((a, b) => a + b, 0);
-            
-            let legendHTML = '';
-            
-            data.forEach((value, index) => {
-                const percent = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
-                legendHTML += `
-                    <div class="legend-item-compact">
-                        <div class="legend-dot-compact" style="background-color: ${chartColors[index + 6]};"></div>
-                        <div class="legend-content-compact">
-                            <div class="legend-stats-compact">
-                                <span class="legend-label-compact">${labels[index]}</span>
-                                <span class="legend-percent-compact">${percent}%</span>
-                            </div>
-                            <div class="legend-bar-mini">
-                                <div class="legend-bar-fill-mini" style="width: ${percent}%; background-color: ${chartColors[index + 6]};"></div>
-                            </div>
-                            <span class="legend-count-compact">${value} passageiros</span>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            legendContainer.innerHTML = legendHTML;
-        }
 
         // ==================== DASHBOARD 2: DESTINO ====================
         function updateDashboard2() {
