@@ -3300,36 +3300,6 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             atualizarLegendChartMes(mesesOrdenados, counts);
         }
 
-        function atualizarLegendChartMes(labels, data) {
-            const legendContainer = document.getElementById('legendChartMes');
-            if (!legendContainer) return;
-            
-            const total = data.reduce((a, b) => a + b, 0);
-            
-            let legendHTML = '';
-            
-            data.forEach((value, index) => {
-                const percent = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
-                legendHTML += `
-                    <div class="legend-item-compact">
-                        <div class="legend-dot-compact" style="background-color: ${chartColors[index % chartColors.length]};"></div>
-                        <div class="legend-content-compact">
-                            <div class="legend-stats-compact">
-                                <span class="legend-label-compact">${labels[index]}</span>
-                                <span class="legend-percent-compact">${percent}%</span>
-                            </div>
-                            <div class="legend-bar-mini">
-                                <div class="legend-bar-fill-mini" style="width: ${percent}%; background-color: ${chartColors[index % chartColors.length]};"></div>
-                            </div>
-                            <span class="legend-count-compact">${value} voos</span>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            legendContainer.innerHTML = legendHTML;
-        }
-
         function updateDestinoChart() {
             const ctx = document.getElementById('chartDestino')?.getContext('2d');
             if (!ctx) return;
