@@ -2273,7 +2273,7 @@
             showLoading(true);
             try {
                 // Tentar carregar anos múltiplos
-                const anos = ['2023', '2024', '2025'];
+                const anos = ['2023', '2024', '2025', '2026'];
                 for (const ano of anos) {
                     try {
                         await loadData(ano);
@@ -2413,7 +2413,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                         );
                         
                         voosData = dadosValidos.map((row, index) => {
-                            let ano = '2025';
+                            let ano = '2026';
                             let mes = '';
                             
                             if (row.data_voo) {
@@ -2475,7 +2475,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                         const option = document.createElement('option');
                         option.value = ano;
                         option.textContent = ano;
-                        if (ano === '2025') option.selected = true;
+                        if (ano === '2026') option.selected = true;
                         select.appendChild(option);
                     });
                 }
