@@ -2461,28 +2461,6 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                 });
             });
         }
-
-
-        // Adicione este script no final da sua página ou em um arquivo .js
-document.addEventListener('DOMContentLoaded', function() {
-    // Substitua '#seuBotaoDeAbrirModal' pelo seletor correto do seu botão
-    var meuBotao = document.querySelector('#seuBotaoDeAbrirModal');
-    
-    if (meuBotao) {
-        meuBotao.addEventListener('click', function() {
-            // Opção 1: Rola a página para o topo (mais comum)
-            window.scrollTo(0, 0);
-            
-            // Opção 2: Tenta garantir que o modal fique visível (se ele existir no DOM)
-            // Um pequeno atraso pode ser necessário para o Bootstrap criar o elemento
-            setTimeout(function() {
-                var modalElement = document.querySelector('.modal-viagens.show');
-                if (modalElement) {
-                    modalElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }, 300);
-        });
-    }
 });
 
         // ==================== FUNÇÕES DE FILTRO ====================
