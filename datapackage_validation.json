@@ -1,6 +1,6 @@
 {
   "version": "4.16.6",
-  "time": 0.084,
+  "time": 0.075,
   "errors": [],
   "tasks": [
     {
@@ -66,13 +66,13 @@
         "scheme": "file",
         "title": "Insira um título humanamente legível para este recurso.",
         "stats": {
-          "hash": "66a20d491836071cb7ca36bf417a00b0",
-          "bytes": 303388,
+          "hash": "c2bd0305743d4cef03e875c931babaa8",
+          "bytes": 303389,
           "fields": 11,
           "rows": 1098
         }
       },
-      "time": 0.072,
+      "time": 0.064,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -94,16 +94,49 @@
         "unique-error"
       ],
       "partial": false,
-      "errors": [],
+      "errors": [
+        {
+          "label": "aeronave",
+          "fieldName": "aernova",
+          "fieldNumber": 3,
+          "fieldPosition": 3,
+          "labels": [
+            "historico",
+            "horas_voadas",
+            "aeronave",
+            "numero_db",
+            "base",
+            "data_voo",
+            "origem",
+            "destino",
+            "passageiro",
+            "cargo_passageiro",
+            "orgao_passageiro"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"aeronave\" in field aernova at position \"3\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        }
+      ],
       "stats": {
-        "errors": 0
+        "errors": 1
       },
-      "valid": true
+      "valid": false
     }
   ],
   "stats": {
-    "errors": 0,
+    "errors": 1,
     "tasks": 1
   },
-  "valid": true
+  "valid": false
 }
