@@ -1457,7 +1457,7 @@
                                         <th data-sort="destino" data-order="asc" onclick="sortTable('voos', 'destino')">Destino <span class="sort-icon">▼</span></th>
                                         <th data-sort="historico" data-order="asc" onclick="sortTable('voos', 'historico')">Histórico <span class="sort-icon">▼</span></th>
                                         <th data-sort="horas_voadas" data-order="desc" onclick="sortTable('voos', 'horas_voadas')">Horas <span class="sort-icon">▼</span></th>
-                                        <th data-sort="aernova" data-order="asc" onclick="sortTable('voos', 'aernova')">Aeronave <span class="sort-icon">▼</span></th>
+                                        <th data-sort="aeronove" data-order="asc" onclick="sortTable('voos', 'aeronove')">Aeronave <span class="sort-icon">▼</span></th>
                                     </tr>
                                 </thead>
                                 <tbody id="voosTableBody">
@@ -1722,7 +1722,7 @@
                                                 <td>Tempo (HH:MM:SS)</td>
                                             </tr>
                                             <tr>
-                                                <td>aernova</td>
+                                                <td>aeronove</td>
                                                 <td>Identificação da aeronave</td>
                                                 <td>Texto</td>
                                             </tr>
@@ -2362,7 +2362,7 @@
                                 historico: row.historico || '',
                                 horas_voadas: row.horas_voadas || '00:00:00',
                                 horas_decimais: horasParaDecimal(row.horas_voadas || '00:00:00'),
-                                aernova: row.aernova || '',
+                                aeronave: row.aeronave || '',
                                 numero_db: row.numero_db || '',
                                 base: row.base || '',
                                 data_voo: row.data_voo || '',
@@ -2435,7 +2435,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                                 historico: row.historico || '',
                                 horas_voadas: row.horas_voadas || '00:00:00',
                                 horas_decimais: horasParaDecimal(row.horas_voadas || '00:00:00'),
-                                aernova: row.aernova || '',
+                                aeronave: row.aeronave || '',
                                 numero_db: row.numero_db || '',
                                 base: row.base || '',
                                 data_voo: row.data_voo || '',
@@ -2631,7 +2631,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (mes !== '' && voo.mes !== mes) return false;
                     if (origem !== '' && voo.origem !== origem) return false;
                     if (destino !== '' && voo.destino !== destino) return false;
-                    if (aeronave !== '' && voo.aernova !== aeronave) return false;
+                    if (aeronave !== '' && voo.aeronave !== aeronave) return false;
                     
                     if (dataInicio) {
                         const dataVoo = converterDataParaComparacao(voo.data_voo);
@@ -2798,7 +2798,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const totalVoos = [...new Set(filteredData.map(v => `${v.data_voo}_${v.origem}_${v.destino}`))].length;
             const totalPassageiros = filteredData.length;
             const totalHoras = filteredData.reduce((sum, voo) => sum + voo.horas_decimais, 0);
-            const aeronavesDiferentes = [...new Set(filteredData.map(v => v.aernova))].length;
+            const aeronavesDiferentes = [...new Set(filteredData.map(v => v.aeronave))].length;
             
             const voosAgrupados = {};
             filteredData.forEach(voo => {
@@ -3264,8 +3264,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     return order * a.historico.localeCompare(b.historico);
                 } else if (currentSortDashboard2.column === 'horas_voadas') {
                     return order * (a.horas_decimais - b.horas_decimais);
-                } else if (currentSortDashboard2.column === 'aernova') {
-                    return order * a.aernova.localeCompare(b.aernova);
+                } else if (currentSortDashboard2.column === 'aeronave') {
+                    return order * a.aeronave.localeCompare(b.aeronave);
                 }
                 return 0;
             });
@@ -3282,7 +3282,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         historico: voo.historico,
                         horas_voadas: voo.horas_voadas,
                         horas_decimais: voo.horas_decimais,
-                        aernova: voo.aernova,
+                        aeronave: voo.aeronave,
                         passageiros: []
                     };
                 }
@@ -3318,7 +3318,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <td>${voo.destino || '-'}</td>
                     <td title="${historicoCompleto}">${historicoCompleto.length > 50 ? historicoCompleto.substring(0, 50) + '...' : historicoCompleto}</td>
                     <td>${voo.horas_voadas || '00:00:00'}</td>
-                    <td>${voo.aernova || '-'}</td>
+                    <td>${voo.aeronave || '-'}</td>
                 </tr>
             `}).join('');
             
@@ -3785,7 +3785,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td>${voo.destino || '-'}</td>
                         <td>${voo.historico || ''}</td>
                         <td>${voo.horas_voadas || '00:00:00'}</td>
-                        <td>${voo.aernova || '-'}</td>
+                        <td>${voo.aeronave || '-'}</td>
                     </tr>
                 `;
             }).join('');
@@ -3976,7 +3976,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 destino: voo.destino,
                                 historico: voo.historico,
                                 horas_voadas: voo.horas_voadas,
-                                aernova: voo.aernova
+                                aeronave: voo.aeronave
                             };
                         }
                     });
@@ -3988,7 +3988,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         'Destino': voo.destino,
                         'Histórico': voo.historico,
                         'Horas Voadas': voo.horas_voadas,
-                        'Aeronave': voo.aernova
+                        'Aeronave': voo.aeronave
                     }));
                     
                     filename = `voos_detalhados_${new Date().toISOString().split('T')[0]}.csv`;
@@ -4183,7 +4183,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         voo.mes,
                         `"${(voo.historico || '').replace(/"/g, '""')}"`,
                         voo.horas_voadas,
-                        voo.aernova,
+                        voo.aeronave,
                         voo.numero_db,
                         voo.base,
                         voo.data_voo,
