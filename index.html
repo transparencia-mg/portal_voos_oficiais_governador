@@ -1490,8 +1490,8 @@
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="mb-3">
-                                    <label for="nomePassageiro" class="form-label filter-label">Passageiro</label>
-                                    <input type="text" class="form-control" list="passageirosListConsulta" id="nomePassageiro" placeholder="Digite ou selecione...">
+                                    <label for="Passageiro" class="form-label filter-label">Passageiro</label>
+                                    <input type="text" class="form-control" list="passageirosListConsulta" id="Passageiro" placeholder="Digite ou selecione...">
                                     <datalist id="passageirosListConsulta">
                                         <!-- Opções serão carregadas dinamicamente -->
                                     </datalist>
@@ -1600,7 +1600,7 @@
                                 <thead>
                                     <tr>
                                         <th data-sort="nome" data-order="asc" onclick="sortTablePassageiros('nome')">
-                                            Nome do Passageiro <span class="sort-icon">▼</span>
+                                            Passageiro <span class="sort-icon">▼</span>
                                         </th>
                                         <th data-sort="cargo" data-order="asc" onclick="sortTablePassageiros('cargo')">
                                             Cargo/Função <span class="sort-icon">▼</span>
@@ -1754,7 +1754,7 @@
                                             </tr>
                                             <tr>
                                                 <td>passageiro</td>
-                                                <td>Nome do passageiro</td>
+                                                <td>Passageiro</td>
                                                 <td>Texto</td>
                                             </tr>
                                             <tr>
@@ -3414,7 +3414,7 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             const tab = document.getElementById('dashboard3-tab');
             if (tab) tab.click();
             
-            document.getElementById('nomePassageiro').value = '';
+            document.getElementById('Passageiro').value = '';
             document.getElementById('cpfPassageiro').value = '';
             document.getElementById('anoConsulta').value = '';
             document.getElementById('orgaoConsulta').value = '';
