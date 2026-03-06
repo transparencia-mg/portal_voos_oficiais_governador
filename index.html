@@ -666,7 +666,7 @@
                         <div class="row g-3">
                             <div class="col-md-3">
                                 <label class="filter-label"><i class="material-icons">calendar_today</i>Ano</label>
-                                <select class="form-select" id="anoDashboard1"></select>
+                                <select class="form-select" id="anoDashboard1" onchange="atualizarFiltrosPorAno('dashboard1')"></select>
                             </div>
                             <div class="col-md-3">
                                 <label class="filter-label"><i class="material-icons">flight</i>Aeronave</label>
@@ -756,7 +756,7 @@
                 <div class="tab-pane fade" id="dashboard2" role="tabpanel">
                     <div class="filter-container">
                         <div class="row g-3">
-                            <div class="col-md-3"><label class="filter-label"><i class="material-icons">calendar_today</i>Ano</label><select class="form-select" id="anoDashboard2"></select></div>
+                            <div class="col-md-3"><label class="filter-label"><i class="material-icons">calendar_today</i>Ano</label><select class="form-select" id="anoDashboard2" onchange="atualizarFiltrosPorAno('dashboard2')"></select></div>
                             <div class="col-md-3"><label class="filter-label"><i class="material-icons">date_range</i>Mês</label><select class="form-select" id="mesDashboard2"><option value="">Todos</option></select></div>
                             <div class="col-md-3"><label class="filter-label"><i class="material-icons">flight_takeoff</i>Origem</label><input type="text" class="form-control" list="origensListDashboard2" id="origemDashboard2"><datalist id="origensListDashboard2"></datalist></div>
                             <div class="col-md-3"><label class="filter-label"><i class="material-icons">flight_land</i>Destino</label><input type="text" class="form-control" list="destinosListDashboard2" id="destinoDashboard2"><datalist id="destinosListDashboard2"></datalist></div>
@@ -776,7 +776,15 @@
                         <div class="export-buttons">
                             <button class="btn-export" id="exportCSVDashboard2"><i class="material-icons me-2">description</i>CSV</button>
                             <button class="btn-print" id="printDashboard2"><i class="material-icons me-2">print</i>PDF</button>
-                            <div class="share-wrapper"><button class="btn-share" onclick="toggleShareOptions(event, 'dashboard2')"><i class="material-icons me-2">share</i>Compartilhar</button><div class="share-options" id="shareOptions-dashboard2">[mesmos links]</div></div>
+                            <div class="share-wrapper"><button class="btn-share" onclick="toggleShareOptions(event, 'dashboard2')"><i class="material-icons me-2">share</i>Compartilhar</button>
+                                <div class="share-options" id="shareOptions-dashboard2">
+                                    <a href="#" onclick="copiarLink(); return false;"><i class="fas fa-link"></i> Copiar Link</a>
+                                    <a href="#" onclick="compartilharFacebook(event);"><i class="fab fa-facebook-f"></i> Facebook</a>
+                                    <a href="#" onclick="compartilharTwitter(event);"><i class="fab fa-twitter"></i> Twitter</a>
+                                    <a href="#" onclick="compartilharLinkedIn(event);"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+                                    <a href="#" onclick="compartilharWhatsApp(event);"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                                </div>
+                            </div>
                         </div>
                         <div class="right-aligned-container">
                             <div class="items-per-page-container">
@@ -807,7 +815,7 @@
                         <div class="row g-3">
                             <div class="col-md-6"><label class="filter-label"><i class="material-icons">person</i>Passageiro</label><input type="text" class="form-control" list="passageirosListConsulta" id="nomePassageiro" placeholder="Digite ou selecione..."><datalist id="passageirosListConsulta"></datalist></div>
                             <div class="col-md-6"><label class="filter-label"><i class="material-icons">badge</i>CPF</label><input type="text" class="form-control" id="cpfPassageiro" placeholder="Digite o CPF..."></div>
-                            <div class="col-md-6"><label class="filter-label"><i class="material-icons">calendar_today</i>Ano</label><select class="form-select" id="anoConsulta"></select></div>
+                            <div class="col-md-6"><label class="filter-label"><i class="material-icons">calendar_today</i>Ano</label><select class="form-select" id="anoConsulta" onchange="atualizarFiltrosPorAno('consulta')"></select></div>
                             <div class="col-md-6"><label class="filter-label"><i class="material-icons">business</i>Órgão</label><input type="text" class="form-control" list="orgaosListConsulta" id="orgaoConsulta" placeholder="Digite o órgão..."><datalist id="orgaosListConsulta"></datalist></div>
                         </div>
                         <div class="row mt-3">
@@ -822,7 +830,15 @@
                         <div class="export-buttons">
                             <button class="btn-export" id="exportCSVDashboard3"><i class="material-icons me-2">description</i>CSV</button>
                             <button class="btn-print" id="printDashboard3"><i class="material-icons me-2">print</i>PDF</button>
-                            <div class="share-wrapper"><button class="btn-share" onclick="toggleShareOptions(event, 'dashboard3')"><i class="material-icons me-2">share</i>Compartilhar</button><div class="share-options" id="shareOptions-dashboard3">[mesmos links]</div></div>
+                            <div class="share-wrapper"><button class="btn-share" onclick="toggleShareOptions(event, 'dashboard3')"><i class="material-icons me-2">share</i>Compartilhar</button>
+                                <div class="share-options" id="shareOptions-dashboard3">
+                                    <a href="#" onclick="copiarLink(); return false;"><i class="fas fa-link"></i> Copiar Link</a>
+                                    <a href="#" onclick="compartilharFacebook(event);"><i class="fab fa-facebook-f"></i> Facebook</a>
+                                    <a href="#" onclick="compartilharTwitter(event);"><i class="fab fa-twitter"></i> Twitter</a>
+                                    <a href="#" onclick="compartilharLinkedIn(event);"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+                                    <a href="#" onclick="compartilharWhatsApp(event);"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                                </div>
+                            </div>
                         </div>
                         <div class="right-aligned-container">
                             <div class="items-per-page-container">
@@ -858,23 +874,40 @@
 
                     <div class="table-container">
                         <div class="table-header"><h3 class="table-title">Informações sobre os Dados</h3></div>
-
-                        <div class="col-md-6 mb-3">
-                            <div class="card-stats p-4 bg-white rounded shadow-sm h-100">
-                                <h4 class="fw-bold text-start mb-3"><i class="material-icons me-2">open_in_new</i> Portal de Dados Abertos</h4>
-                                <p class="text-muted text-justify" style="font-size: 13px; text-align: justify;">
-                                    Acesse o conjunto de dados de Voos, documentado conforme especificações Frictionless Data (dados sem fricção) e possibilitam a validação automática dos dados.
-                                </p>
-                                <div class="mt-4 text-end">
-                                    <a href="https://dados.mg.gov.br/dataset" 
-                                       target="_blank" 
-                                       class="btn-export text-decoration-none fw-bold d-inline-block px-4 py-2"
-                                       style="color: var(--primary-dark); background-color: white; border: 1px solid var(--primary-dark); border-radius: 4px; transition: all 0.3s ease;">
-                                        <i class="material-icons me-2" style="font-size: 16px; vertical-align: middle;">launch</i>Acessar Portal de Dados MG
-                                    </a>
+                        <div class="p-4">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="card-stats p-4 bg-white rounded shadow-sm h-100">
+                                        <h4 class="fw-bold text-start mb-3"><i class="material-icons me-2">open_in_new</i> Portal de Dados Abertos</h4>
+                                        <p class="text-muted text-justify" style="font-size: 13px; text-align: justify;">
+                                            Acesse o conjunto de dados de Voos, documentado conforme especificações Frictionless Data (dados sem fricção) e possibilitam a validação automática dos dados.
+                                        </p>
+                                        <div class="mt-4 text-end">
+                                            <a href="https://dados.mg.gov.br/dataset" 
+                                               target="_blank" 
+                                               class="btn-export text-decoration-none fw-bold d-inline-block px-4 py-2"
+                                               style="color: var(--primary-dark); background-color: white; border: 1px solid var(--primary-dark); border-radius: 4px; transition: all 0.3s ease;">
+                                                <i class="material-icons me-2" style="font-size: 16px; vertical-align: middle;">launch</i>Acessar Portal de Dados MG
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card-stats p-4 bg-white rounded shadow-sm h-100">
+                                        <h4 class="fw-bold text-start mb-3"><i class="material-icons me-2">cloud_download</i> Dados Completos</h4>
+                                        <p class="text-muted text-justify" style="font-size: 13px; text-align: justify;">
+                                            Arquivo CSV completo com todos os registros dos voos oficiais do Governador de Minas Gerais.
+                                        </p>
+                                        <div class="mt-4 text-end">
+                                            <button onclick="downloadFullCSV()" 
+                                                    class="btn-export text-decoration-none fw-bold d-inline-block px-4 py-2"
+                                                    style="color: var(--primary-dark); background-color: white; border: 1px solid var(--primary-dark); border-radius: 4px; transition: all 0.3s ease;">
+                                                <i class="material-icons me-2" style="font-size: 16px; vertical-align: middle;">download</i>Baixar CSV
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                             <div class="metadata-card mt-4">
                                 <h6 class="fw-bold mb-3"><i class="material-icons me-2">info</i> Metadados - Estrutura dos Dados</h6>
                                 <div class="metadata-item"><strong>historico:</strong> Descrição/histórico do voo</div>
@@ -1218,6 +1251,99 @@
             });
         };
 
+        // ==================== FUNÇÃO PARA ATUALIZAR FILTROS POR ANO ====================
+        window.atualizarFiltrosPorAno = function(dashboard) {
+            const anoSelect = document.getElementById(`ano${dashboard === 'consulta' ? 'Consulta' : dashboard}`);
+            const anoSelecionado = anoSelect ? anoSelect.value : '';
+            
+            // Filtrar dados apenas do ano selecionado
+            let dadosDoAno = voosData;
+            if (anoSelecionado && anoSelecionado !== '') {
+                dadosDoAno = voosData.filter(v => v.ano === anoSelecionado);
+            }
+            
+            // Atualizar aeronaves
+            const aeronavesUnicas = [...new Set(dadosDoAno.map(v => v.aeronave))].sort();
+            ['Dashboard1', 'Dashboard2'].forEach(suffix => {
+                const datalistId = `aeronavesList${suffix}`;
+                const datalist = document.getElementById(datalistId);
+                if (datalist) {
+                    datalist.innerHTML = '';
+                    aeronavesUnicas.forEach(aeronave => {
+                        if (aeronave) {
+                            const option = document.createElement('option');
+                            option.value = aeronave;
+                            datalist.appendChild(option);
+                        }
+                    });
+                }
+            });
+            
+            // Atualizar origens
+            const origensUnicas = [...new Set(dadosDoAno.map(v => v.origem))].sort();
+            ['Dashboard1', 'Dashboard2'].forEach(suffix => {
+                const datalistId = `origensList${suffix}`;
+                const datalist = document.getElementById(datalistId);
+                if (datalist) {
+                    datalist.innerHTML = '';
+                    origensUnicas.forEach(origem => {
+                        if (origem) {
+                            const option = document.createElement('option');
+                            option.value = origem;
+                            datalist.appendChild(option);
+                        }
+                    });
+                }
+            });
+            
+            // Atualizar destinos
+            const destinosUnicos = [...new Set(dadosDoAno.map(v => v.destino))].sort();
+            ['Dashboard1', 'Dashboard2'].forEach(suffix => {
+                const datalistId = `destinosList${suffix}`;
+                const datalist = document.getElementById(datalistId);
+                if (datalist) {
+                    datalist.innerHTML = '';
+                    destinosUnicos.forEach(destino => {
+                        if (destino) {
+                            const option = document.createElement('option');
+                            option.value = destino;
+                            datalist.appendChild(option);
+                        }
+                    });
+                }
+            });
+            
+            // Atualizar órgãos para consulta
+            if (dashboard === 'consulta' || dashboard === 'Dashboard3') {
+                const orgaosUnicos = [...new Set(dadosDoAno.map(v => v.orgao_passageiro))].sort();
+                const orgaosDatalist = document.getElementById('orgaosListConsulta');
+                if (orgaosDatalist) {
+                    orgaosDatalist.innerHTML = '';
+                    orgaosUnicos.forEach(orgao => {
+                        if (orgao) {
+                            const option = document.createElement('option');
+                            option.value = orgao;
+                            orgaosDatalist.appendChild(option);
+                        }
+                    });
+                }
+                
+                // Atualizar passageiros
+                const passageirosUnicos = [...new Set(dadosDoAno.map(v => v.passageiro))].sort();
+                const passageirosDatalist = document.getElementById('passageirosListConsulta');
+                if (passageirosDatalist) {
+                    passageirosDatalist.innerHTML = '';
+                    passageirosUnicos.forEach(passageiro => {
+                        if (passageiro && passageiro.trim() !== '') {
+                            const option = document.createElement('option');
+                            option.value = passageiro;
+                            passageirosDatalist.appendChild(option);
+                        }
+                    });
+                }
+            }
+        };
+
         // ==================== CONFIGURAR EVENT LISTENERS ====================
         function setupEventListeners() {
             // Fechar compartilhamento ao clicar fora
@@ -1543,88 +1669,10 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
                 }
             });
             
-            const aeronavesUnicas = [...new Set(voosData.map(v => v.aeronave))].sort();
-            ['Dashboard1', 'Dashboard2'].forEach(suffix => {
-                const datalistId = `aeronavesList${suffix}`;
-                const datalist = document.getElementById(datalistId);
-                if (datalist) {
-                    datalist.innerHTML = '';
-                    aeronavesUnicas.forEach(aeronave => {
-                        if (aeronave) {
-                            const option = document.createElement('option');
-                            option.value = aeronave;
-                            datalist.appendChild(option);
-                        }
-                    });
-                }
-            });
-            
-            const origensUnicas = [...new Set(voosData.map(v => v.origem))].sort();
-            ['Dashboard1', 'Dashboard2'].forEach(suffix => {
-                const datalistId = `origensList${suffix}`;
-                const datalist = document.getElementById(datalistId);
-                if (datalist) {
-                    datalist.innerHTML = '';
-                    origensUnicas.forEach(origem => {
-                        if (origem) {
-                            const option = document.createElement('option');
-                            option.value = origem;
-                            datalist.appendChild(option);
-                        }
-                    });
-                }
-            });
-            
-            const destinosUnicos = [...new Set(voosData.map(v => v.destino))].sort();
-            const destinosDatalist1 = document.getElementById('destinosListDashboard1');
-            if (destinosDatalist1) {
-                destinosDatalist1.innerHTML = '';
-                destinosUnicos.forEach(destino => {
-                    if (destino) {
-                        const option = document.createElement('option');
-                        option.value = destino;
-                        destinosDatalist1.appendChild(option);
-                    }
-                });
-            }
-            
-            const destinosDatalist2 = document.getElementById('destinosListDashboard2');
-            if (destinosDatalist2) {
-                destinosDatalist2.innerHTML = '';
-                destinosUnicos.forEach(destino => {
-                    if (destino) {
-                        const option = document.createElement('option');
-                        option.value = destino;
-                        destinosDatalist2.appendChild(option);
-                    }
-                });
-            }
-            
-            const orgaosUnicos = [...new Set(voosData.map(v => v.orgao_passageiro))].sort();
-            const orgaosDatalist = document.getElementById('orgaosListConsulta');
-            if (orgaosDatalist) {
-                orgaosDatalist.innerHTML = '';
-                orgaosUnicos.forEach(orgao => {
-                    if (orgao) {
-                        const option = document.createElement('option');
-                        option.value = orgao;
-                        orgaosDatalist.appendChild(option);
-                    }
-                });
-            }
-            
-            const passageirosUnicos = [...new Set(voosData.map(v => v.passageiro))].sort();
-            const passageirosDatalist = document.getElementById('passageirosListConsulta');
-            if (passageirosDatalist) {
-                passageirosDatalist.innerHTML = '';
-                passageirosUnicos.forEach(passageiro => {
-                    if (passageiro && passageiro.trim() !== '') {
-                        const option = document.createElement('option');
-                        option.value = passageiro;
-                        passageirosDatalist.appendChild(option);
-                    }
-                });
-            }
+            // Inicializar filtros com ano selecionado (2026)
+            atualizarFiltrosPorAno('Dashboard1');
+            atualizarFiltrosPorAno('Dashboard2');
+            atualizarFiltrosPorAno('consulta');
         }
 
         function applyFilters(dashboard) {
@@ -1795,6 +1843,9 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             filteredData = [...voosData];
             currentPageDashboard1 = 1;
             
+            // Atualizar filtros para todos os dados
+            atualizarFiltrosPorAno('Dashboard1');
+            
             updateDashboard1();
             iframeUpdateHeight();
         }
@@ -1812,6 +1863,9 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             currentYear = '';
             filteredData = [...voosData];
             currentPageDashboard2 = 1;
+            
+            // Atualizar filtros para todos os dados
+            atualizarFiltrosPorAno('Dashboard2');
             
             updateDashboard2();
             iframeUpdateHeight();
@@ -2881,6 +2935,9 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             document.getElementById('anoConsulta').value = '';
             document.getElementById('orgaoConsulta').value = '';
             document.getElementById('searchPassageiros').value = '';
+            
+            // Atualizar filtros para todos os dados
+            atualizarFiltrosPorAno('consulta');
             
             if (consultaPorDataAtiva) {
                 limparConsultaPorData();
