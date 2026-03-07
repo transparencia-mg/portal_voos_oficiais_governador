@@ -1,18 +1,18 @@
 {
   "name": "voos_oficiais_governador",
-  "owner_org": "",
+  "owner_org": "controladoria-geral-do-estado-cge",
   "profile": "data-package",
   "resources": [
     {
-      "description": "Insira a descrição/explicação detalhada deste recurso.",
+      "description": "Voos Oficiais do Governador",
       "dialect": {
         "delimiter": ";"
       },
       "encoding": "utf-8-sig",
       "format": "csv",
       "hashing": "md5",
-      "name": "voos_2025",
-      "path": "data/voos_2025.csv",
+      "name": "voos_2026",
+      "path": "data/voos_2026.csv",
       "profile": "tabular-data-resource",
       "schema": {
         "fields": [
@@ -25,7 +25,7 @@
             "type": "time"
           },
           {
-            "name": "aernova",
+            "name": "aeronave",
             "type": "string"
           },
           {
@@ -63,8 +63,194 @@
         ]
       },
       "scheme": "file",
-      "title": "Insira um título humanamente legível para este recurso."
+      "title": "Voos 2026"
+    },
+    {
+      "description": "Voos Oficiais do Governador",
+      "dialect": {
+        "delimiter": ";"
+      },
+      "encoding": "utf-8-sig",
+      "format": "csv",
+      "hashing": "md5",
+      "name": "voos_2025",
+      "path": "data/voos_2025.csv",
+      "profile": "tabular-data-resource",
+      "schema": {
+        "fields": [
+          {
+            "name": "historico",
+            "type": "string"
+          },
+          {
+            "name": "horas_voadas",
+            "type": "time"
+          },
+          {
+            "name": "aeronave",
+            "type": "string"
+          },
+          {
+            "name": "numero_db",
+            "type": "string"
+          },
+          {
+            "name": "base",
+            "type": "string"
+          },
+          {
+            "name": "data_voo",
+            "type": "date"
+          },
+          {
+            "name": "origem",
+            "type": "string"
+          },
+          {
+            "name": "destino",
+            "type": "string"
+          },
+          {
+            "name": "passageiro",
+            "type": "string"
+          },
+          {
+            "name": "cargo_passageiro",
+            "type": "string"
+          },
+          {
+            "name": "orgao_passageiro",
+            "type": "string"
+          }
+        ]
+      },
+      "scheme": "file",
+      "title": "Voos 2025"
+    },
+    {
+      "description": "Voos Oficiais do Governador",
+      "dialect": {
+        "delimiter": ";"
+      },
+      "encoding": "utf-8-sig",
+      "format": "csv",
+      "hashing": "md5",
+      "name": "voos_2024",
+      "path": "data/voos_2024.csv",
+      "profile": "tabular-data-resource",
+      "schema": {
+        "fields": [
+          {
+            "name": "historico",
+            "type": "string"
+          },
+          {
+            "name": "horas_voadas",
+            "type": "time"
+          },
+          {
+            "name": "aeronave",
+            "type": "string"
+          },
+          {
+            "name": "numero_db",
+            "type": "string"
+          },
+          {
+            "name": "base",
+            "type": "string"
+          },
+          {
+            "name": "data_voo",
+            "type": "date"
+          },
+          {
+            "name": "origem",
+            "type": "string"
+          },
+          {
+            "name": "destino",
+            "type": "string"
+          },
+          {
+            "name": "passageiro",
+            "type": "string"
+          },
+          {
+            "name": "cargo_passageiro",
+            "type": "string"
+          },
+          {
+            "name": "orgao_passageiro",
+            "type": "string"
+          }
+        ]
+      },
+      "scheme": "file",
+      "title": "Voos 2024"
+    },
+    {
+      "description": "Voos Oficiais do Governador",
+      "dialect": {
+        "delimiter": ";"
+      },
+      "encoding": "utf-8-sig",
+      "format": "csv",
+      "hashing": "md5",
+      "name": "voos_2023",
+      "path": "data/voos_2023.csv",
+      "profile": "tabular-data-resource",
+      "schema": {
+        "fields": [
+          {
+            "name": "historico",
+            "type": "string"
+          },
+          {
+            "name": "horas_voadas",
+            "type": "time"
+          },
+          {
+            "name": "aeronave",
+            "type": "string"
+          },
+          {
+            "name": "numero_db",
+            "type": "string"
+          },
+          {
+            "name": "base",
+            "type": "string"
+          },
+          {
+            "name": "data_voo",
+            "type": "date"
+          },
+          {
+            "name": "origem",
+            "type": "string"
+          },
+          {
+            "name": "destino",
+            "type": "string"
+          },
+          {
+            "name": "passageiro",
+            "type": "string"
+          },
+          {
+            "name": "cargo_passageiro",
+            "type": "string"
+          },
+          {
+            "name": "orgao_passageiro",
+            "type": "string"
+          }
+        ]
+      },
+      "scheme": "file",
+      "title": "Voos 2023"
     }
   ],
-  "title": "Voos_oficiais_governador"
+  "title": "Voos Oficiais do Governador"
 }
