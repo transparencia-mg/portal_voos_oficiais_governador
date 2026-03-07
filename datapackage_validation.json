@@ -1,19 +1,19 @@
 {
   "version": "4.16.6",
-  "time": 0.085,
+  "time": 0.248,
   "errors": [],
   "tasks": [
     {
       "resource": {
-        "description": "Insira a descrição/explicação detalhada deste recurso.",
+        "description": "Voos Oficiais do Governador",
         "dialect": {
           "delimiter": ";"
         },
         "encoding": "utf-8-sig",
         "format": "csv",
         "hashing": "md5",
-        "name": "voos_2025",
-        "path": "data/voos_2025.csv",
+        "name": "voos_2026",
+        "path": "data/voos_2026.csv",
         "profile": "tabular-data-resource",
         "schema": {
           "fields": [
@@ -26,7 +26,7 @@
               "type": "time"
             },
             {
-              "name": "aernova",
+              "name": "aeronave",
               "type": "string"
             },
             {
@@ -64,15 +64,15 @@
           ]
         },
         "scheme": "file",
-        "title": "Insira um título humanamente legível para este recurso.",
+        "title": "Voos 2026",
         "stats": {
-          "hash": "6abc0f76927400f76974c41b00b04878",
-          "bytes": 303493,
+          "hash": "b67e3369910f016d3542dfe4628d3ea9",
+          "bytes": 15470,
           "fields": 11,
-          "rows": 1098
+          "rows": 50
         }
       },
-      "time": 0.072,
+      "time": 0.019,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -94,49 +94,307 @@
         "unique-error"
       ],
       "partial": false,
-      "errors": [
-        {
-          "label": "aeronave",
-          "fieldName": "aernova",
-          "fieldNumber": 3,
-          "fieldPosition": 3,
-          "labels": [
-            "historico",
-            "horas_voadas",
-            "aeronave",
-            "numero_db",
-            "base",
-            "data_voo",
-            "origem",
-            "destino",
-            "passageiro",
-            "cargo_passageiro",
-            "orgao_passageiro"
-          ],
-          "rowPositions": [
-            1
-          ],
-          "code": "incorrect-label",
-          "name": "Incorrect Label",
-          "tags": [
-            "#table",
-            "#header",
-            "#label"
-          ],
-          "note": "",
-          "message": "Label \"aeronave\" in field aernova at position \"3\" does not match the field name in the schema",
-          "description": "One of the data source header does not match the field name defined in the schema."
-        }
-      ],
+      "errors": [],
       "stats": {
-        "errors": 1
+        "errors": 0
       },
-      "valid": false
+      "valid": true
+    },
+    {
+      "resource": {
+        "description": "Voos Oficiais do Governador",
+        "dialect": {
+          "delimiter": ";"
+        },
+        "encoding": "utf-8-sig",
+        "format": "csv",
+        "hashing": "md5",
+        "name": "voos_2025",
+        "path": "data/voos_2025.csv",
+        "profile": "tabular-data-resource",
+        "schema": {
+          "fields": [
+            {
+              "name": "historico",
+              "type": "string"
+            },
+            {
+              "name": "horas_voadas",
+              "type": "time"
+            },
+            {
+              "name": "aeronave",
+              "type": "string"
+            },
+            {
+              "name": "numero_db",
+              "type": "string"
+            },
+            {
+              "name": "base",
+              "type": "string"
+            },
+            {
+              "name": "data_voo",
+              "type": "date"
+            },
+            {
+              "name": "origem",
+              "type": "string"
+            },
+            {
+              "name": "destino",
+              "type": "string"
+            },
+            {
+              "name": "passageiro",
+              "type": "string"
+            },
+            {
+              "name": "cargo_passageiro",
+              "type": "string"
+            },
+            {
+              "name": "orgao_passageiro",
+              "type": "string"
+            }
+          ]
+        },
+        "scheme": "file",
+        "title": "Voos 2025",
+        "stats": {
+          "hash": "6abc0f76927400f76974c41b00b04878",
+          "bytes": 303493,
+          "fields": 11,
+          "rows": 1098
+        }
+      },
+      "time": 0.073,
+      "scope": [
+        "hash-count-error",
+        "byte-count-error",
+        "field-count-error",
+        "row-count-error",
+        "blank-header",
+        "extra-label",
+        "missing-label",
+        "blank-label",
+        "duplicate-label",
+        "incorrect-label",
+        "blank-row",
+        "primary-key-error",
+        "foreign-key-error",
+        "extra-cell",
+        "missing-cell",
+        "type-error",
+        "constraint-error",
+        "unique-error"
+      ],
+      "partial": false,
+      "errors": [],
+      "stats": {
+        "errors": 0
+      },
+      "valid": true
+    },
+    {
+      "resource": {
+        "description": "Voos Oficiais do Governador",
+        "dialect": {
+          "delimiter": ";"
+        },
+        "encoding": "utf-8-sig",
+        "format": "csv",
+        "hashing": "md5",
+        "name": "voos_2024",
+        "path": "data/voos_2024.csv",
+        "profile": "tabular-data-resource",
+        "schema": {
+          "fields": [
+            {
+              "name": "historico",
+              "type": "string"
+            },
+            {
+              "name": "horas_voadas",
+              "type": "time"
+            },
+            {
+              "name": "aeronave",
+              "type": "string"
+            },
+            {
+              "name": "numero_db",
+              "type": "string"
+            },
+            {
+              "name": "base",
+              "type": "string"
+            },
+            {
+              "name": "data_voo",
+              "type": "date"
+            },
+            {
+              "name": "origem",
+              "type": "string"
+            },
+            {
+              "name": "destino",
+              "type": "string"
+            },
+            {
+              "name": "passageiro",
+              "type": "string"
+            },
+            {
+              "name": "cargo_passageiro",
+              "type": "string"
+            },
+            {
+              "name": "orgao_passageiro",
+              "type": "string"
+            }
+          ]
+        },
+        "scheme": "file",
+        "title": "Voos 2024",
+        "stats": {
+          "hash": "21861189ac01d81084008f0cfcc60a85",
+          "bytes": 276064,
+          "fields": 11,
+          "rows": 966
+        }
+      },
+      "time": 0.073,
+      "scope": [
+        "hash-count-error",
+        "byte-count-error",
+        "field-count-error",
+        "row-count-error",
+        "blank-header",
+        "extra-label",
+        "missing-label",
+        "blank-label",
+        "duplicate-label",
+        "incorrect-label",
+        "blank-row",
+        "primary-key-error",
+        "foreign-key-error",
+        "extra-cell",
+        "missing-cell",
+        "type-error",
+        "constraint-error",
+        "unique-error"
+      ],
+      "partial": false,
+      "errors": [],
+      "stats": {
+        "errors": 0
+      },
+      "valid": true
+    },
+    {
+      "resource": {
+        "description": "Voos Oficiais do Governador",
+        "dialect": {
+          "delimiter": ";"
+        },
+        "encoding": "utf-8-sig",
+        "format": "csv",
+        "hashing": "md5",
+        "name": "voos_2023",
+        "path": "data/voos_2023.csv",
+        "profile": "tabular-data-resource",
+        "schema": {
+          "fields": [
+            {
+              "name": "historico",
+              "type": "string"
+            },
+            {
+              "name": "horas_voadas",
+              "type": "time"
+            },
+            {
+              "name": "aeronave",
+              "type": "string"
+            },
+            {
+              "name": "numero_db",
+              "type": "string"
+            },
+            {
+              "name": "base",
+              "type": "string"
+            },
+            {
+              "name": "data_voo",
+              "type": "date"
+            },
+            {
+              "name": "origem",
+              "type": "string"
+            },
+            {
+              "name": "destino",
+              "type": "string"
+            },
+            {
+              "name": "passageiro",
+              "type": "string"
+            },
+            {
+              "name": "cargo_passageiro",
+              "type": "string"
+            },
+            {
+              "name": "orgao_passageiro",
+              "type": "string"
+            }
+          ]
+        },
+        "scheme": "file",
+        "title": "Voos 2023",
+        "stats": {
+          "hash": "4b97fd474b6d6d8d5c2ffdbc28c21d90",
+          "bytes": 119505,
+          "fields": 11,
+          "rows": 447
+        }
+      },
+      "time": 0.039,
+      "scope": [
+        "hash-count-error",
+        "byte-count-error",
+        "field-count-error",
+        "row-count-error",
+        "blank-header",
+        "extra-label",
+        "missing-label",
+        "blank-label",
+        "duplicate-label",
+        "incorrect-label",
+        "blank-row",
+        "primary-key-error",
+        "foreign-key-error",
+        "extra-cell",
+        "missing-cell",
+        "type-error",
+        "constraint-error",
+        "unique-error"
+      ],
+      "partial": false,
+      "errors": [],
+      "stats": {
+        "errors": 0
+      },
+      "valid": true
     }
   ],
   "stats": {
-    "errors": 1,
-    "tasks": 1
+    "errors": 0,
+    "tasks": 4
   },
-  "valid": false
+  "valid": true
 }
