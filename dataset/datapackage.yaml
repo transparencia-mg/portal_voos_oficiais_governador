@@ -72,7 +72,7 @@ resources:
           type: string
     scheme: file
     title: Voos 2025
-- description: Voos Oficiais do Governador
+  - description: Voos Oficiais do Governador
     dialect:
       delimiter: ;
     encoding: utf-8-sig
