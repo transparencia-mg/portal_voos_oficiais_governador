@@ -17,7 +17,7 @@ resources:
           type: string
         - name: horas_voadas
           type: time
-        - name: aernova
+        - name: aeronave
           type: string
         - name: numero_db
           type: string
@@ -52,7 +52,7 @@ resources:
           type: string
         - name: horas_voadas
           type: time
-        - name: aernova
+        - name: aeronave
           type: string
         - name: numero_db
           type: string
@@ -87,7 +87,7 @@ resources:
           type: string
         - name: horas_voadas
           type: time
-        - name: aernova
+        - name: aeronave
           type: string
         - name: numero_db
           type: string
@@ -122,7 +122,7 @@ resources:
           type: string
         - name: horas_voadas
           type: time
-        - name: aernova
+        - name: aeronave
           type: string
         - name: numero_db
           type: string
