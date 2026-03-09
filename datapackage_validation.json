@@ -1,6 +1,6 @@
 {
   "version": "4.16.6",
-  "time": 0.26,
+  "time": 0.259,
   "errors": [],
   "tasks": [
     {
@@ -169,7 +169,7 @@
           "rows": 1098
         }
       },
-      "time": 0.072,
+      "time": 0.073,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -266,7 +266,7 @@
           "rows": 966
         }
       },
-      "time": 0.083,
+      "time": 0.074,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -357,13 +357,13 @@
         "scheme": "file",
         "title": "Voos 2023",
         "stats": {
-          "hash": "4b97fd474b6d6d8d5c2ffdbc28c21d90",
-          "bytes": 119505,
+          "hash": "f92eaecef95e0b54ffab095bb095d445",
+          "bytes": 173690,
           "fields": 11,
-          "rows": 447
+          "rows": 644
         }
       },
-      "time": 0.039,
+      "time": 0.048,
       "scope": [
         "hash-count-error",
         "byte-count-error",
