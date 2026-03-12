@@ -1685,30 +1685,47 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             });
         }
 
-        // ==================== FUNÇÕES DE FILTRO ====================
-        function updateFilterOptions() {
-            const anosUnicos = [...new Set(voosData.map(v => v.ano))].sort((a, b) => b - a);
-            
-            ['Dashboard1', 'Dashboard2', 'Download', 'Consulta'].forEach(suffix => {
-                const selectId = `ano${suffix}`;
-                const select = document.getElementById(selectId);
-                if (select) {
-                    select.innerHTML = '<option value="">Todos os Anos</option>';
-                    anosUnicos.forEach(ano => {
-                        const option = document.createElement('option');
-                        option.value = ano;
-                        option.textContent = ano;
-                        if (ano === '2026') option.selected = true;
-                        select.appendChild(option);
-                    });
-                }
+// ==================== CORREÇÃO: ATUALIZAR FILTRO DE MÊS NO DASHBOARD 2 ====================
+function updateFilterOptions() {
+    const anosUnicos = [...new Set(voosData.map(v => v.ano))].sort((a, b) => b - a);
+    
+    ['Dashboard1', 'Dashboard2', 'Download', 'Consulta'].forEach(suffix => {
+        const selectId = `ano${suffix}`;
+        const select = document.getElementById(selectId);
+        if (select) {
+            select.innerHTML = '<option value="">Todos os Anos</option>';
+            anosUnicos.forEach(ano => {
+                const option = document.createElement('option');
+                option.value = ano;
+                option.textContent = ano;
+                if (ano === '2026') option.selected = true;
+                select.appendChild(option);
             });
-            
-            // Inicializar filtros com ano selecionado (2026)
-            atualizarFiltrosPorAno('Dashboard1');
-            atualizarFiltrosPorAno('Dashboard2');
-            atualizarFiltrosPorAno('consulta');
         }
+    });
+    
+    // CORREÇÃO: Preencher o filtro de mês no Dashboard 2 com todos os meses
+    const mesSelect = document.getElementById('mesDashboard2');
+    if (mesSelect) {
+        mesSelect.innerHTML = '<option value="">Todos os Meses</option>';
+        
+        // Adicionar todos os meses do ano
+        for (let i = 1; i <= 12; i++) {
+            const mesNumero = i.toString().padStart(2, '0');
+            const mesNome = mesesMap[mesNumero];
+            const option = document.createElement('option');
+            option.value = mesNumero;
+            option.textContent = mesNome;
+            mesSelect.appendChild(option);
+        }
+    }
+    
+    // Inicializar filtros com ano selecionado (2026)
+    atualizarFiltrosPorAno('Dashboard1');
+    atualizarFiltrosPorAno('Dashboard2');
+    atualizarFiltrosPorAno('consulta');
+}
+
 
         function applyFilters(dashboard) {
             showLoading(true);
@@ -2107,32 +2124,285 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
             updateSortIconsDashboard1();
         }
 
-        function consultarPorMes(mesNumero) {
-            console.log(`Consultando por mês: ${mesNumero} (${mesesMap[mesNumero]})`);
+// ==================== FUNÇÃO CONSULTAR POR MÊS (CORRIGIDA) ====================
+window.consultarPorMes = function(mesNumero) {
+    console.log(`Consultando por mês: ${mesNumero} (${mesesMap[mesNumero]})`);
+    
+    // Mudar para a aba de destino
+    const tab = document.getElementById('dashboard2-tab');
+    if (tab) tab.click();
+    
+    // Limpar filtros anteriores
+    document.getElementById('mesDashboard2').value = mesNumero;
+    document.getElementById('origemDashboard2').value = '';
+    document.getElementById('destinoDashboard2').value = '';
+    document.getElementById('dataInicio').value = '';
+    document.getElementById('dataFim').value = '';
+    document.getElementById('aeronaveDashboard2').value = '';
+    
+    // Pegar o ano selecionado no Dashboard 1
+    const anoSelecionado = document.getElementById('anoDashboard1').value;
+    document.getElementById('anoDashboard2').value = anoSelecionado;
+    
+    // Filtrar APENAS os voos do mês selecionado
+    let dadosFiltrados = voosData.filter(voo => voo.mes === mesNumero);
+    
+    // Se tiver ano selecionado, filtrar também pelo ano
+    if (anoSelecionado && anoSelecionado !== '') {
+        dadosFiltrados = dadosFiltrados.filter(voo => voo.ano === anoSelecionado);
+    }
+    
+    // Atualizar filteredData com os dados do mês selecionado
+    filteredData = dadosFiltrados;
+    
+    // Atualizar o Dashboard 2 com os dados filtrados
+    currentPageDashboard2 = 1;
+    updateDashboard2();
+    
+    // Atualizar os datalists do Dashboard 2 com base nos dados filtrados
+    atualizarFiltrosPorMes(mesNumero, anoSelecionado);
+    
+    setTimeout(() => {
+        const dashboard2 = document.getElementById('dashboard2');
+        if (dashboard2) dashboard2.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+}
+
+// ==================== NOVA FUNÇÃO PARA ATUALIZAR FILTROS POR MÊS ====================
+function atualizarFiltrosPorMes(mesNumero, anoSelecionado) {
+    // Filtrar dados do mês específico
+    let dadosDoMes = voosData.filter(v => v.mes === mesNumero);
+    
+    if (anoSelecionado && anoSelecionado !== '') {
+        dadosDoMes = dadosDoMes.filter(v => v.ano === anoSelecionado);
+    }
+    
+    // Atualizar origens para o mês específico
+    const origensUnicas = [...new Set(dadosDoMes.map(v => v.origem))].sort();
+    const origensDatalist = document.getElementById('origensListDashboard2');
+    if (origensDatalist) {
+        origensDatalist.innerHTML = '';
+        origensUnicas.forEach(origem => {
+            if (origem) {
+                const option = document.createElement('option');
+                option.value = origem;
+                origensDatalist.appendChild(option);
+            }
+        });
+    }
+    
+    // Atualizar destinos para o mês específico
+    const destinosUnicos = [...new Set(dadosDoMes.map(v => v.destino))].sort();
+    const destinosDatalist = document.getElementById('destinosListDashboard2');
+    if (destinosDatalist) {
+        destinosDatalist.innerHTML = '';
+        destinosUnicos.forEach(destino => {
+            if (destino) {
+                const option = document.createElement('option');
+                option.value = destino;
+                destinosDatalist.appendChild(option);
+            }
+        });
+    }
+    
+    // Atualizar aeronaves para o mês específico
+    const aeronavesUnicas = [...new Set(dadosDoMes.map(v => v.aeronave))].sort();
+    const aeronavesDatalist = document.getElementById('aeronavesListDashboard2');
+    if (aeronavesDatalist) {
+        aeronavesDatalist.innerHTML = '';
+        aeronavesUnicas.forEach(aeronave => {
+            if (aeronave) {
+                const option = document.createElement('option');
+                option.value = aeronave;
+                aeronavesDatalist.appendChild(option);
+            }
+        });
+    }
+}
+
+// ==================== FUNÇÃO REALIZAR CONSULTA INDIVIDUAL (CORRIGIDA) ====================
+function realizarConsultaIndividual() {
+    const nomePassageiro = document.getElementById('nomePassageiro').value.trim();
+    
+    if (!nomePassageiro) {
+        // Se não digitou nada, voltar para a visualização normal
+        if (consultaPorDataAtiva) {
+            limparConsultaPorData();
+        } else {
+            atualizarTabelaPassageiros();
+        }
+        return;
+    }
+    
+    // Verificar se é uma consulta por data ativa
+    if (consultaPorDataAtiva) {
+        // Filtrar os dados da consulta por data pelo nome do passageiro
+        const dadosFiltrados = dadosConsultaPorData.filter(voo => 
+            voo.passageiro && voo.passageiro.toLowerCase().includes(nomePassageiro.toLowerCase())
+        );
+        
+        if (dadosFiltrados.length === 0) {
+            alert(`Nenhum voo encontrado para "${nomePassageiro}" neste voo específico.`);
+            return;
+        }
+        
+        // Atualizar a tabela com os resultados filtrados
+        const passageirosMap = {};
+        dadosFiltrados.forEach(voo => {
+            const passageiro = voo.passageiro;
+            const cargo = voo.cargo_passageiro;
+            const orgao = voo.orgao_passageiro;
             
-            const tab = document.getElementById('dashboard2-tab');
-            if (tab) tab.click();
+            if (!passageiro) return;
             
-            document.getElementById('mesDashboard2').value = mesNumero;
-            
-            const anoSelecionado = document.getElementById('anoDashboard1').value;
-            if (anoSelecionado !== '') {
-                document.getElementById('anoDashboard2').value = anoSelecionado;
+            if (!passageirosMap[passageiro]) {
+                passageirosMap[passageiro] = {
+                    nome: passageiro,
+                    cargo: cargo,
+                    orgao: orgao,
+                    totalVoos: 0,
+                    totalHoras: 0,
+                    registros: []
+                };
             }
             
-            document.getElementById('origemDashboard2').value = '';
-            document.getElementById('destinoDashboard2').value = '';
-            document.getElementById('dataInicio').value = '';
-            document.getElementById('dataFim').value = '';
-            document.getElementById('aeronaveDashboard2').value = '';
-            
-            applyFilters('dashboard2');
-            
-            setTimeout(() => {
-                const dashboard2 = document.getElementById('dashboard2');
-                if (dashboard2) dashboard2.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
+            passageirosMap[passageiro].totalVoos++;
+            passageirosMap[passageiro].totalHoras += voo.horas_decimais;
+            passageirosMap[passageiro].registros.push(voo);
+        });
+        
+        passageirosList = Object.values(passageirosMap);
+        currentPageDashboard3 = 1;
+        atualizarTabelaConsultaPorData();
+        
+        return;
+    }
+    
+    // Consulta normal (não é por data)
+    const anoSelecionado = document.getElementById('anoConsulta').value;
+    const orgaoSelecionado = document.getElementById('orgaoConsulta').value;
+    
+    // Construir os dados filtrados
+    let dadosFiltrados = voosData;
+    
+    if (anoSelecionado && anoSelecionado !== '') {
+        dadosFiltrados = dadosFiltrados.filter(voo => voo.ano === anoSelecionado);
+    }
+    
+    if (orgaoSelecionado && orgaoSelecionado !== '' && orgaoSelecionado.trim() !== '') {
+        dadosFiltrados = dadosFiltrados.filter(voo => 
+            voo.orgao_passageiro && voo.orgao_passageiro.toLowerCase().includes(orgaoSelecionado.toLowerCase())
+        );
+    }
+    
+    // Filtrar pelo nome do passageiro
+    dadosFiltrados = dadosFiltrados.filter(voo => 
+        voo.passageiro && voo.passageiro.toLowerCase().includes(nomePassageiro.toLowerCase())
+    );
+    
+    if (dadosFiltrados.length === 0) {
+        alert(`Nenhum voo encontrado para o passageiro "${nomePassageiro}".`);
+        return;
+    }
+    
+    // Agrupar por passageiro para mostrar na tabela
+    const passageirosMap = {};
+    dadosFiltrados.forEach(voo => {
+        const passageiro = voo.passageiro;
+        const cargo = voo.cargo_passageiro;
+        const orgao = voo.orgao_passageiro;
+        
+        if (!passageiro) return;
+        
+        if (!passageirosMap[passageiro]) {
+            passageirosMap[passageiro] = {
+                nome: passageiro,
+                cargo: cargo,
+                orgao: orgao,
+                totalVoos: 0,
+                totalHoras: 0,
+                registros: []
+            };
         }
+        
+        passageirosMap[passageiro].totalVoos++;
+        passageirosMap[passageiro].totalHoras += voo.horas_decimais;
+        passageirosMap[passageiro].registros.push(voo);
+    });
+    
+    // Atualizar a lista de passageiros com os resultados da busca
+    passageirosList = Object.values(passageirosMap);
+    
+    // Ordenar
+    passageirosList.sort((a, b) => {
+        const order = currentSortPassageiros.order === 'asc' ? 1 : -1;
+        
+        if (currentSortPassageiros.column === 'nome') {
+            return order * a.nome.localeCompare(b.nome);
+        } else if (currentSortPassageiros.column === 'cargo') {
+            return order * (a.cargo || '').localeCompare(b.cargo || '');
+        } else if (currentSortPassageiros.column === 'orgao') {
+            return order * (a.orgao || '').localeCompare(b.orgao || '');
+        } else if (currentSortPassageiros.column === 'totalVoos') {
+            return order * (a.totalVoos - b.totalVoos);
+        } else if (currentSortPassageiros.column === 'totalHoras') {
+            return order * (a.totalHoras - b.totalHoras);
+        }
+        return 0;
+    });
+    
+    // Resetar para primeira página
+    currentPageDashboard3 = 1;
+    
+    // Atualizar a tabela
+    atualizarTabelaPassageiros();
+}
+
+// ==================== NOVA FUNÇÃO PARA FILTRAR TABELA POR PASSAGEIRO ====================
+function filtrarTabelaPorPassageiro(nomePassageiro) {
+    // Filtrar os dados para mostrar apenas o passageiro selecionado
+    const passageiroFiltrado = passageirosList.filter(p => p.nome === nomePassageiro);
+    
+    if (passageiroFiltrado.length === 0) return;
+    
+    // Atualizar a tabela para mostrar apenas este passageiro
+    const tbody = document.getElementById('passageirosTableBody');
+    const countElement = document.getElementById('totalPassageirosCount');
+    const paginationInfo = document.getElementById('paginationInfoDashboard3');
+    
+    const rowsHTML = passageiroFiltrado.map(passageiro => {
+        return `
+            <tr>
+                <td><strong>${passageiro.nome}</strong></td>
+                <td>${passageiro.cargo || '-'}</td>
+                <td>${passageiro.orgao || '-'}</td>
+                <td class="text-center">${passageiro.totalVoos}</td>
+                <td class="text-center">${formatarHoras(passageiro.totalHoras)}</td>
+                <td class="text-center">
+                    <button class="btn-action" onclick="abrirModalViagens('${passageiro.nome}')" title="Visualizar viagens">
+                        <i class="material-icons" style="font-size: 16px;">visibility</i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+    
+    tbody.innerHTML = rowsHTML;
+    
+    if (countElement) {
+        countElement.textContent = `${passageiroFiltrado.length} passageiro`;
+    }
+    
+    if (paginationInfo) {
+        paginationInfo.textContent = `Mostrando 1-1 de 1 passageiro`;
+    }
+    
+    // Esconder a paginação
+    const pagination = document.getElementById('paginationDashboard3');
+    if (pagination) {
+        pagination.innerHTML = '';
+    }
+}
 
         function updateSortIconsDashboard1() {
             const headers = document.querySelectorAll('#visaoGeralTable thead th');
@@ -2503,247 +2773,284 @@ Traslado do Exmo. Governador de Minas e Comitiva até as cidades de Goiânia/GO 
         }
 
         // ==================== FUNÇÕES DE CONSULTA POR DATA ====================
-        window.consultarPorData = function(dataVoo, origem, destino) {
-            console.log(`Consultando por data: ${dataVoo}, origem: ${origem}, destino: ${destino}`);
-            
-            consultaPorDataAtiva = true;
-            filtrosConsultaPorData = {
-                dataVoo: dataVoo,
-                origem: origem,
-                destino: destino
+
+window.consultarPorData = function(dataVoo, origem, destino) {
+    console.log(`Consultando por data: ${dataVoo}, origem: ${origem}, destino: ${destino}`);
+    
+    consultaPorDataAtiva = true;
+    filtrosConsultaPorData = {
+        dataVoo: dataVoo,
+        origem: origem,
+        destino: destino
+    };
+    
+    dadosConsultaPorData = voosData.filter(voo => {
+        return voo.data_voo === dataVoo && 
+               voo.origem === origem && 
+               voo.destino === destino;
+    });
+    
+    if (dadosConsultaPorData.length === 0) {
+        alert(`Nenhum passageiro encontrado para a data ${formatarDataParaBR(dataVoo)}.`);
+        consultaPorDataAtiva = false;
+        return;
+    }
+    
+    const tab = document.getElementById('dashboard3-tab');
+    if (tab) tab.click();
+    
+    // Limpar campos de busca
+    document.getElementById('nomePassageiro').value = '';
+    document.getElementById('cpfPassageiro').value = '';
+    document.getElementById('anoConsulta').value = '';
+    document.getElementById('orgaoConsulta').value = '';
+    document.getElementById('searchPassageiros').value = '';
+    
+    // CORREÇÃO: Mostrar os passageiros na tabela, não abrir modal
+    atualizarTabelaConsultaPorData();
+    
+    // Adicionar indicador visual de consulta ativa
+    const filterContainer = document.querySelector('#dashboard3 .filter-container');
+    if (filterContainer) {
+        // Remover indicador existente se houver
+        const existingInfo = filterContainer.querySelector('.consulta-ativa-info');
+        if (existingInfo) existingInfo.remove();
+        
+        // Criar novo indicador
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'consulta-ativa-info alert alert-info mt-3';
+        infoDiv.innerHTML = `
+            <i class="material-icons me-2" style="vertical-align: middle;">info</i>
+            <strong>Consulta ativa:</strong> Voo do dia ${formatarDataParaBR(dataVoo)} - 
+            ${origem} → ${destino} 
+            <button class="btn btn-sm btn-outline-danger ms-3" onclick="limparConsultaPorData()">
+                <i class="material-icons me-1" style="font-size: 16px;">close</i>Limpar consulta
+            </button>
+        `;
+        filterContainer.appendChild(infoDiv);
+    }
+};
+// ==================== CORREÇÃO: FUNÇÃO ATUALIZAR TABELA CONSULTA POR DATA ====================
+function atualizarTabelaConsultaPorData() {
+    const tbody = document.getElementById('passageirosTableBody');
+    const countElement = document.getElementById('totalPassageirosCount');
+    const paginationInfo = document.getElementById('paginationInfoDashboard3');
+    
+    if (dadosConsultaPorData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Nenhum passageiro encontrado.</td></tr>';
+        if (countElement) countElement.textContent = '0 passageiros';
+        if (paginationInfo) paginationInfo.textContent = 'Mostrando 0-0 de 0 registros';
+        return;
+    }
+    
+    const passageirosMap = {};
+    
+    dadosConsultaPorData.forEach(voo => {
+        const passageiro = voo.passageiro;
+        const cargo = voo.cargo_passageiro;
+        const orgao = voo.orgao_passageiro;
+        
+        if (!passageiro) return;
+        
+        if (!passageirosMap[passageiro]) {
+            passageirosMap[passageiro] = {
+                nome: passageiro,
+                cargo: cargo,
+                orgao: orgao,
+                totalVoos: 0,
+                totalHoras: 0,
+                registros: []
             };
-            
-            dadosConsultaPorData = voosData.filter(voo => {
-                return voo.data_voo === dataVoo && 
-                       voo.origem === origem && 
-                       voo.destino === destino;
-            });
-            
-            if (dadosConsultaPorData.length === 0) {
-                alert(`Nenhum passageiro encontrado para a data ${formatarDataParaBR(dataVoo)}.`);
-                consultaPorDataAtiva = false;
-                return;
-            }
-            
-            const tab = document.getElementById('dashboard3-tab');
-            if (tab) tab.click();
-            
-            document.getElementById('nomePassageiro').value = '';
-            document.getElementById('cpfPassageiro').value = '';
-            document.getElementById('anoConsulta').value = '';
-            document.getElementById('orgaoConsulta').value = '';
-            document.getElementById('searchPassageiros').value = '';
-            
-            atualizarTabelaConsultaPorData();
-        };
-
-        function atualizarTabelaConsultaPorData() {
-            const tbody = document.getElementById('passageirosTableBody');
-            const countElement = document.getElementById('totalPassageirosCount');
-            const paginationInfo = document.getElementById('paginationInfoDashboard3');
-            
-            if (dadosConsultaPorData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Nenhum passageiro encontrado.</td></tr>';
-                if (countElement) countElement.textContent = '0 passageiros';
-                if (paginationInfo) paginationInfo.textContent = 'Mostrando 0-0 de 0 registros';
-                return;
-            }
-            
-            const passageirosMap = {};
-            let totalHorasVoo = 0;
-            
-            dadosConsultaPorData.forEach(voo => {
-                const passageiro = voo.passageiro;
-                const cargo = voo.cargo_passageiro;
-                const orgao = voo.orgao_passageiro;
-                
-                if (!passageiro) return;
-                
-                if (!passageirosMap[passageiro]) {
-                    passageirosMap[passageiro] = {
-                        nome: passageiro,
-                        cargo: cargo,
-                        orgao: orgao,
-                        totalVoos: 0,
-                        totalHoras: 0,
-                        registros: []
-                    };
-                }
-                
-                passageirosMap[passageiro].totalVoos++;
-                passageirosMap[passageiro].totalHoras += voo.horas_decimais;
-                passageirosMap[passageiro].registros.push(voo);
-                
-                totalHorasVoo += voo.horas_decimais;
-            });
-            
-            const passageirosDataArray = Object.values(passageirosMap);
-            passageirosDataArray.sort((a, b) => a.nome.localeCompare(b.nome));
-            passageirosList = passageirosDataArray;
-            
-            const totalPages = Math.ceil(passageirosList.length / itemsPerPageDashboard3);
-            
-            const startIndex = (currentPageDashboard3 - 1) * itemsPerPageDashboard3;
-            const endIndex = Math.min(startIndex + itemsPerPageDashboard3, passageirosList.length);
-            const currentData = passageirosList.slice(startIndex, endIndex);
-            
-            const rowsHTML = currentData.map(passageiro => {
-                return `
-                    <tr>
-                        <td><strong>${passageiro.nome}</strong></td>
-                        <td>${passageiro.cargo || '-'}</td>
-                        <td>${passageiro.orgao || '-'}</td>
-                        <td class="text-center">${passageiro.totalVoos}</td>
-                        <td class="text-center">${formatarHoras(passageiro.totalHoras)}</td>
-                        <td class="text-center">
-                            <button class="btn-action" onclick="abrirModalViagens('${passageiro.nome}')" title="Visualizar viagens">
-                                <i class="material-icons" style="font-size: 16px;">visibility</i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-            
-            tbody.innerHTML = rowsHTML;
-            if (countElement) countElement.textContent = `${passageirosList.length} passageiros`;
-            if (paginationInfo) paginationInfo.textContent = `Mostrando ${startIndex + 1}-${endIndex} de ${passageirosList.length} passageiros`;
-            
-            const dataFormatada = formatarDataParaBR(filtrosConsultaPorData.dataVoo);
-            const vooInfo = dadosConsultaPorData[0];
-            
-            const filterContainer = document.querySelector('#dashboard3 .filter-container');
-            if (filterContainer) {
-                const existingInfo = filterContainer.querySelector('.consulta-ativa-info');
-                if (existingInfo) existingInfo.remove();
-            }
-            
-            updateSortIconsPassageiros();
-            updatePaginationDashboard3();
-            iframeUpdateHeight();
         }
+        
+        passageirosMap[passageiro].totalVoos++;
+        passageirosMap[passageiro].totalHoras += voo.horas_decimais;
+        passageirosMap[passageiro].registros.push(voo);
+    });
+    
+    const passageirosDataArray = Object.values(passageirosMap);
+    passageirosDataArray.sort((a, b) => a.nome.localeCompare(b.nome));
+    passageirosList = passageirosDataArray;
+    
+    const totalPages = Math.ceil(passageirosList.length / itemsPerPageDashboard3);
+    
+    const startIndex = (currentPageDashboard3 - 1) * itemsPerPageDashboard3;
+    const endIndex = Math.min(startIndex + itemsPerPageDashboard3, passageirosList.length);
+    const currentData = passageirosList.slice(startIndex, endIndex);
+    
+    // CORREÇÃO: Remover o link do nome do passageiro - agora é apenas texto
+    const rowsHTML = currentData.map(passageiro => {
+        return `
+            <tr>
+                <td><strong>${passageiro.nome}</strong></td> <!-- Removido o link, agora é só texto -->
+                <td>${passageiro.cargo || '-'}</td>
+                <td>${passageiro.orgao || '-'}</td>
+                <td class="text-center">${passageiro.totalVoos}</td>
+                <td class="text-center">${formatarHoras(passageiro.totalHoras)}</td>
+                <td class="text-center">
+                    <button class="btn-action" onclick="abrirModalViagens('${passageiro.nome}')" title="Visualizar viagens">
+                        <i class="material-icons" style="font-size: 16px;">visibility</i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+    
+    tbody.innerHTML = rowsHTML;
+    
+    if (countElement) {
+        countElement.textContent = `${passageirosList.length} passageiro${passageirosList.length !== 1 ? 's' : ''}`;
+    }
+    
+    if (paginationInfo) {
+        paginationInfo.textContent = `Mostrando ${startIndex + 1}-${endIndex} de ${passageirosList.length} passageiro${passageirosList.length !== 1 ? 's' : ''}`;
+    }
+    
+    updateSortIconsPassageiros();
+    updatePaginationDashboard3();
+    iframeUpdateHeight();
+}
 
-        window.limparConsultaPorData = function() {
-            consultaPorDataAtiva = false;
-            dadosConsultaPorData = [];
-            filtrosConsultaPorData = {};
-            
-            const filterContainer = document.querySelector('#dashboard3 .filter-container');
-            if (filterContainer) {
-                const existingInfo = filterContainer.querySelector('.consulta-ativa-info');
-                if (existingInfo) existingInfo.remove();
-            }
-            
-            atualizarTabelaPassageiros();
-        };
+// ==================== FUNÇÃO LIMPAR CONSULTA POR DATA (CORRIGIDA) ====================
+window.limparConsultaPorData = function() {
+    consultaPorDataAtiva = false;
+    dadosConsultaPorData = [];
+    filtrosConsultaPorData = {};
+    
+    // Remover indicador visual
+    const filterContainer = document.querySelector('#dashboard3 .filter-container');
+    if (filterContainer) {
+        const existingInfo = filterContainer.querySelector('.consulta-ativa-info');
+        if (existingInfo) existingInfo.remove();
+    }
+    
+    // Limpar campos de busca
+    document.getElementById('nomePassageiro').value = '';
+    document.getElementById('cpfPassageiro').value = '';
+    document.getElementById('anoConsulta').value = '';
+    document.getElementById('orgaoConsulta').value = '';
+    document.getElementById('searchPassageiros').value = '';
+    
+    // Voltar para a visualização normal
+    atualizarTabelaPassageiros();
+};
 
-        // ==================== DASHBOARD 3: CONSULTA INDIVIDUAL ====================
-        function atualizarTabelaPassageiros() {
-            if (consultaPorDataAtiva) {
-                atualizarTabelaConsultaPorData();
-                return;
-            }
-            
-            const tbody = document.getElementById('passageirosTableBody');
-            const countElement = document.getElementById('totalPassageirosCount');
-            const paginationInfo = document.getElementById('paginationInfoDashboard3');
-            
-            if (voosData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Nenhum passageiro encontrado.</td></tr>';
-                if (countElement) countElement.textContent = '0 passageiros';
-                if (paginationInfo) paginationInfo.textContent = 'Mostrando 0-0 de 0 registros';
-                return;
-            }
-            
-            const passageirosMap = {};
-            
-            const anoConsulta = document.getElementById('anoConsulta').value;
-            const orgaoConsulta = document.getElementById('orgaoConsulta').value;
-            
-            let dadosFiltrados = voosData;
-            
-            if (anoConsulta !== '') {
-                dadosFiltrados = dadosFiltrados.filter(voo => voo.ano === anoConsulta);
-            }
-            
-            if (orgaoConsulta && orgaoConsulta !== '' && orgaoConsulta.trim() !== '') {
-                dadosFiltrados = dadosFiltrados.filter(voo => 
-                    voo.orgao_passageiro && voo.orgao_passageiro.toLowerCase().includes(orgaoConsulta.toLowerCase())
-                );
-            }
-            
-            dadosFiltrados.forEach(voo => {
-                const passageiro = voo.passageiro;
-                const cargo = voo.cargo_passageiro;
-                const orgao = voo.orgao_passageiro;
-                
-                if (!passageiro) return;
-                
-                if (!passageirosMap[passageiro]) {
-                    passageirosMap[passageiro] = {
-                        nome: passageiro,
-                        cargo: cargo,
-                        orgao: orgao,
-                        totalVoos: 0,
-                        totalHoras: 0,
-                        registros: []
-                    };
-                }
-                
-                passageirosMap[passageiro].totalVoos++;
-                passageirosMap[passageiro].totalHoras += voo.horas_decimais;
-                passageirosMap[passageiro].registros.push(voo);
-            });
-            
-            passageirosList = Object.values(passageirosMap);
-            
-            passageirosList.sort((a, b) => {
-                const order = currentSortPassageiros.order === 'asc' ? 1 : -1;
-                
-                if (currentSortPassageiros.column === 'nome') {
-                    return order * a.nome.localeCompare(b.nome);
-                } else if (currentSortPassageiros.column === 'cargo') {
-                    return order * (a.cargo || '').localeCompare(b.cargo || '');
-                } else if (currentSortPassageiros.column === 'orgao') {
-                    return order * (a.orgao || '').localeCompare(b.orgao || '');
-                } else if (currentSortPassageiros.column === 'totalVoos') {
-                    return order * (a.totalVoos - b.totalVoos);
-                } else if (currentSortPassageiros.column === 'totalHoras') {
-                    return order * (a.totalHoras - b.totalHoras);
-                }
-                return 0;
-            });
-            
-            const totalPages = Math.ceil(passageirosList.length / itemsPerPageDashboard3);
-            
-            const startIndex = (currentPageDashboard3 - 1) * itemsPerPageDashboard3;
-            const endIndex = Math.min(startIndex + itemsPerPageDashboard3, passageirosList.length);
-            const currentData = passageirosList.slice(startIndex, endIndex);
-            
-            const rowsHTML = currentData.map(passageiro => {
-                return `
-                    <tr>
-                        <td><strong>${passageiro.nome}</strong></td>
-                        <td>${passageiro.cargo || '-'}</td>
-                        <td>${passageiro.orgao || '-'}</td>
-                        <td class="text-center">${passageiro.totalVoos}</td>
-                        <td class="text-center">${formatarHoras(passageiro.totalHoras)}</td>
-                        <td class="text-center">
-                            <button class="btn-action" onclick="abrirModalViagens('${passageiro.nome}')" title="Visualizar viagens">
-                                <i class="material-icons" style="font-size: 16px;">visibility</i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-            
-            tbody.innerHTML = rowsHTML;
-            if (countElement) countElement.textContent = `${passageirosList.length} passageiros`;
-            if (paginationInfo) paginationInfo.textContent = `Mostrando ${startIndex + 1}-${endIndex} de ${passageirosList.length} passageiros`;
-            
-            updateSortIconsPassageiros();
-            updatePaginationDashboard3();
-            iframeUpdateHeight();
+// ==================== FUNÇÃO ATUALIZAR TABELA PASSAGEIROS (CORRIGIDA) ====================
+function atualizarTabelaPassageiros() {
+    if (consultaPorDataAtiva) {
+        atualizarTabelaConsultaPorData();
+        return;
+    }
+    
+    const tbody = document.getElementById('passageirosTableBody');
+    const countElement = document.getElementById('totalPassageirosCount');
+    const paginationInfo = document.getElementById('paginationInfoDashboard3');
+    
+    if (voosData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Nenhum passageiro encontrado.</td></tr>';
+        if (countElement) countElement.textContent = '0 passageiros';
+        if (paginationInfo) paginationInfo.textContent = 'Mostrando 0-0 de 0 registros';
+        return;
+    }
+    
+    const passageirosMap = {};
+    
+    const anoConsulta = document.getElementById('anoConsulta').value;
+    const orgaoConsulta = document.getElementById('orgaoConsulta').value;
+    
+    let dadosFiltrados = voosData;
+    
+    if (anoConsulta !== '') {
+        dadosFiltrados = dadosFiltrados.filter(voo => voo.ano === anoConsulta);
+    }
+    
+    if (orgaoConsulta && orgaoConsulta !== '' && orgaoConsulta.trim() !== '') {
+        dadosFiltrados = dadosFiltrados.filter(voo => 
+            voo.orgao_passageiro && voo.orgao_passageiro.toLowerCase().includes(orgaoConsulta.toLowerCase())
+        );
+    }
+    
+    dadosFiltrados.forEach(voo => {
+        const passageiro = voo.passageiro;
+        const cargo = voo.cargo_passageiro;
+        const orgao = voo.orgao_passageiro;
+        
+        if (!passageiro) return;
+        
+        if (!passageirosMap[passageiro]) {
+            passageirosMap[passageiro] = {
+                nome: passageiro,
+                cargo: cargo,
+                orgao: orgao,
+                totalVoos: 0,
+                totalHoras: 0,
+                registros: []
+            };
         }
+        
+        passageirosMap[passageiro].totalVoos++;
+        passageirosMap[passageiro].totalHoras += voo.horas_decimais;
+        passageirosMap[passageiro].registros.push(voo);
+    });
+    
+    passageirosList = Object.values(passageirosMap);
+    
+    passageirosList.sort((a, b) => {
+        const order = currentSortPassageiros.order === 'asc' ? 1 : -1;
+        
+        if (currentSortPassageiros.column === 'nome') {
+            return order * a.nome.localeCompare(b.nome);
+        } else if (currentSortPassageiros.column === 'cargo') {
+            return order * (a.cargo || '').localeCompare(b.cargo || '');
+        } else if (currentSortPassageiros.column === 'orgao') {
+            return order * (a.orgao || '').localeCompare(b.orgao || '');
+        } else if (currentSortPassageiros.column === 'totalVoos') {
+            return order * (a.totalVoos - b.totalVoos);
+        } else if (currentSortPassageiros.column === 'totalHoras') {
+            return order * (a.totalHoras - b.totalHoras);
+        }
+        return 0;
+    });
+    
+    const totalPages = Math.ceil(passageirosList.length / itemsPerPageDashboard3);
+    
+    const startIndex = (currentPageDashboard3 - 1) * itemsPerPageDashboard3;
+    const endIndex = Math.min(startIndex + itemsPerPageDashboard3, passageirosList.length);
+    const currentData = passageirosList.slice(startIndex, endIndex);
+    
+    // CORREÇÃO: Nome do passageiro é APENAS TEXTO, sem link ou onclick
+    const rowsHTML = currentData.map(passageiro => {
+        return `
+            <tr>
+                <td>${passageiro.nome}</td> <!-- APENAS TEXTO, SEM LINK -->
+                <td>${passageiro.cargo || '-'}</td>
+                <td>${passageiro.orgao || '-'}</td>
+                <td class="text-center">${passageiro.totalVoos}</td>
+                <td class="text-center">${formatarHoras(passageiro.totalHoras)}</td>
+                <td class="text-center">
+                    <button class="btn-action" onclick="abrirModalViagens('${passageiro.nome.replace(/'/g, "\\'")}')" title="Visualizar viagens">
+                        <i class="material-icons" style="font-size: 16px;">visibility</i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+    
+    tbody.innerHTML = rowsHTML;
+    
+    if (countElement) {
+        countElement.textContent = `${passageirosList.length} passageiros`;
+    }
+    
+    if (paginationInfo) {
+        paginationInfo.textContent = `Mostrando ${startIndex + 1}-${endIndex} de ${passageirosList.length} passageiros`;
+    }
+    
+    updateSortIconsPassageiros();
+    updatePaginationDashboard3();
+    iframeUpdateHeight();
+}
+
 
         function updateSortIconsPassageiros() {
             const headers = document.querySelectorAll('#passageirosTable thead th');
