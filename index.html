@@ -813,9 +813,8 @@
                 <div class="tab-pane fade" id="dashboard3" role="tabpanel">
                     <div class="filter-container">
                         <div class="row g-3">
-                            <div class="col-md-6"><label class="filter-label"><i class="material-icons">person</i>Passageiro</label><input type="text" class="form-control" list="passageirosListConsulta" id="nomePassageiro" placeholder="Digite ou selecione..."><datalist id="passageirosListConsulta"></datalist></div>
-                            <div class="col-md-6"><label class="filter-label"><i class="material-icons">badge</i>CPF</label><input type="text" class="form-control" id="cpfPassageiro" placeholder="Digite o CPF..."></div>
                             <div class="col-md-6"><label class="filter-label"><i class="material-icons">calendar_today</i>Ano</label><select class="form-select" id="anoConsulta" onchange="atualizarFiltrosPorAno('consulta')"></select></div>
+			    <div class="col-md-6"><label class="filter-label"><i class="material-icons">person</i>Passageiro</label><input type="text" class="form-control" list="passageirosListConsulta" id="nomePassageiro" placeholder="Digite ou selecione..."><datalist id="passageirosListConsulta"></datalist></div>
                             <div class="col-md-6"><label class="filter-label"><i class="material-icons">business</i>Órgão</label><input type="text" class="form-control" list="orgaosListConsulta" id="orgaoConsulta" placeholder="Digite o órgão..."><datalist id="orgaosListConsulta"></datalist></div>
                         </div>
                         <div class="row mt-3">
@@ -1471,6 +1470,18 @@
                 exportViagensModal();
             });
             
+
+// Adicione isto no setupEventListeners()
+document.getElementById('nomePassageiro').addEventListener('input', function(e) {
+    // Quando o usuário digita ou seleciona do datalist
+    console.log('Input changed:', e.target.value);
+});
+
+// Ou force a pesquisa quando selecionar (menos comum)
+document.getElementById('nomePassageiro').addEventListener('change', function(e) {
+    console.log('Value changed:', e.target.value);
+});
+
             // Event listeners para mudança de aba
             const tabs = document.querySelectorAll('[data-bs-toggle="tab"]');
             tabs.forEach(tab => {
@@ -1491,6 +1502,7 @@
                 });
             });
         }
+
 
         async function loadInitialData() {
             showLoading(true);
@@ -2220,142 +2232,119 @@ function atualizarFiltrosPorMes(mesNumero, anoSelecionado) {
     }
 }
 
-// ==================== FUNÇÃO REALIZAR CONSULTA INDIVIDUAL (CORRIGIDA) ====================
+// ==================== FUNÇÃO REALIZAR CONSULTA INDIVIDUAL (VERSÃO SIMPLIFICADA) ====================
 function realizarConsultaIndividual() {
+    console.log('=== CONSULTA INDIVIDUAL ===');
+    
+    // PEGAR O VALOR DO INPUT
     const nomePassageiro = document.getElementById('nomePassageiro').value.trim();
+    console.log('Nome digitado:', nomePassageiro);
     
     if (!nomePassageiro) {
-        // Se não digitou nada, voltar para a visualização normal
-        if (consultaPorDataAtiva) {
-            limparConsultaPorData();
-        } else {
-            atualizarTabelaPassageiros();
-        }
+        console.log('Campo vazio - recarregando tabela');
+        atualizarTabelaPassageiros();
         return;
     }
     
-    // Verificar se é uma consulta por data ativa
-    if (consultaPorDataAtiva) {
-        // Filtrar os dados da consulta por data pelo nome do passageiro
-        const dadosFiltrados = dadosConsultaPorData.filter(voo => 
-            voo.passageiro && voo.passageiro.toLowerCase().includes(nomePassageiro.toLowerCase())
-        );
-        
-        if (dadosFiltrados.length === 0) {
-            alert(`Nenhum voo encontrado para "${nomePassageiro}" neste voo específico.`);
-            return;
-        }
-        
-        // Atualizar a tabela com os resultados filtrados
-        const passageirosMap = {};
-        dadosFiltrados.forEach(voo => {
-            const passageiro = voo.passageiro;
-            const cargo = voo.cargo_passageiro;
-            const orgao = voo.orgao_passageiro;
-            
-            if (!passageiro) return;
-            
-            if (!passageirosMap[passageiro]) {
-                passageirosMap[passageiro] = {
-                    nome: passageiro,
-                    cargo: cargo,
-                    orgao: orgao,
-                    totalVoos: 0,
-                    totalHoras: 0,
-                    registros: []
-                };
-            }
-            
-            passageirosMap[passageiro].totalVoos++;
-            passageirosMap[passageiro].totalHoras += voo.horas_decimais;
-            passageirosMap[passageiro].registros.push(voo);
-        });
-        
-        passageirosList = Object.values(passageirosMap);
-        currentPageDashboard3 = 1;
-        atualizarTabelaConsultaPorData();
-        
-        return;
-    }
-    
-    // Consulta normal (não é por data)
+    // IGNORAR consultaPorDataAtiva por enquanto - vamos simplificar
     const anoSelecionado = document.getElementById('anoConsulta').value;
     const orgaoSelecionado = document.getElementById('orgaoConsulta').value;
     
-    // Construir os dados filtrados
-    let dadosFiltrados = voosData;
+    console.log('Filtros - Ano:', anoSelecionado, 'Órgão:', orgaoSelecionado);
     
-    if (anoSelecionado && anoSelecionado !== '') {
-        dadosFiltrados = dadosFiltrados.filter(voo => voo.ano === anoSelecionado);
-    }
+    // Filtrar dados diretamente
+    let dadosFiltrados = voosData.filter(voo => {
+        // Filtro por nome (case insensitive)
+        if (!voo.passageiro) return false;
+        if (!voo.passageiro.toLowerCase().includes(nomePassageiro.toLowerCase())) return false;
+        
+        // Filtro por ano
+        if (anoSelecionado && anoSelecionado !== '' && voo.ano !== anoSelecionado) return false;
+        
+        // Filtro por órgão
+        if (orgaoSelecionado && orgaoSelecionado !== '' && orgaoSelecionado.trim() !== '') {
+            if (!voo.orgao_passageiro || !voo.orgao_passageiro.toLowerCase().includes(orgaoSelecionado.toLowerCase())) {
+                return false;
+            }
+        }
+        
+        return true;
+    });
     
-    if (orgaoSelecionado && orgaoSelecionado !== '' && orgaoSelecionado.trim() !== '') {
-        dadosFiltrados = dadosFiltrados.filter(voo => 
-            voo.orgao_passageiro && voo.orgao_passageiro.toLowerCase().includes(orgaoSelecionado.toLowerCase())
-        );
-    }
-    
-    // Filtrar pelo nome do passageiro
-    dadosFiltrados = dadosFiltrados.filter(voo => 
-        voo.passageiro && voo.passageiro.toLowerCase().includes(nomePassageiro.toLowerCase())
-    );
+    console.log('Total de voos encontrados:', dadosFiltrados.length);
     
     if (dadosFiltrados.length === 0) {
-        alert(`Nenhum voo encontrado para o passageiro "${nomePassageiro}".`);
+        alert(`Nenhum voo encontrado para "${nomePassageiro}".`);
         return;
     }
     
-    // Agrupar por passageiro para mostrar na tabela
+    // Agrupar por passageiro
     const passageirosMap = {};
     dadosFiltrados.forEach(voo => {
         const passageiro = voo.passageiro;
-        const cargo = voo.cargo_passageiro;
-        const orgao = voo.orgao_passageiro;
-        
-        if (!passageiro) return;
-        
         if (!passageirosMap[passageiro]) {
             passageirosMap[passageiro] = {
                 nome: passageiro,
-                cargo: cargo,
-                orgao: orgao,
+                cargo: voo.cargo_passageiro || '-',
+                orgao: voo.orgao_passageiro || '-',
                 totalVoos: 0,
                 totalHoras: 0,
                 registros: []
             };
         }
-        
         passageirosMap[passageiro].totalVoos++;
-        passageirosMap[passageiro].totalHoras += voo.horas_decimais;
+        passageirosMap[passageiro].totalHoras += voo.horas_decimais || 0;
         passageirosMap[passageiro].registros.push(voo);
     });
     
-    // Atualizar a lista de passageiros com os resultados da busca
+    // Atualizar a lista global
     passageirosList = Object.values(passageirosMap);
+    console.log('Passageiros encontrados:', passageirosList.length);
     
-    // Ordenar
-    passageirosList.sort((a, b) => {
-        const order = currentSortPassageiros.order === 'asc' ? 1 : -1;
-        
-        if (currentSortPassageiros.column === 'nome') {
-            return order * a.nome.localeCompare(b.nome);
-        } else if (currentSortPassageiros.column === 'cargo') {
-            return order * (a.cargo || '').localeCompare(b.cargo || '');
-        } else if (currentSortPassageiros.column === 'orgao') {
-            return order * (a.orgao || '').localeCompare(b.orgao || '');
-        } else if (currentSortPassageiros.column === 'totalVoos') {
-            return order * (a.totalVoos - b.totalVoos);
-        } else if (currentSortPassageiros.column === 'totalHoras') {
-            return order * (a.totalHoras - b.totalHoras);
-        }
-        return 0;
-    });
-    
-    // Resetar para primeira página
+    // Resetar paginação
     currentPageDashboard3 = 1;
     
-    // Atualizar a tabela
-    atualizarTabelaPassageiros();
+    // FORÇAR atualização da tabela
+    console.log('Atualizando tabela...');
+    const tbody = document.getElementById('passageirosTableBody');
+    const countElement = document.getElementById('totalPassageirosCount');
+    const paginationInfo = document.getElementById('paginationInfoDashboard3');
+    
+    // Montar HTML diretamente
+    const rowsHTML = passageirosList.map(passageiro => {
+        return `
+            <tr>
+                <td>${passageiro.nome}</td>
+                <td>${passageiro.cargo}</td>
+                <td>${passageiro.orgao}</td>
+                <td class="text-center">${passageiro.totalVoos}</td>
+                <td class="text-center">${formatarHoras(passageiro.totalHoras)}</td>
+                <td class="text-center">
+                    <button class="btn-action" onclick="abrirModalViagens('${passageiro.nome.replace(/'/g, "\\'")}')">
+                        <i class="material-icons" style="font-size: 16px;">visibility</i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+    
+    tbody.innerHTML = rowsHTML || '<tr><td colspan="6" class="text-center">Nenhum passageiro encontrado</td></tr>';
+    
+    if (countElement) {
+        countElement.textContent = `${passageirosList.length} passageiro${passageirosList.length !== 1 ? 's' : ''}`;
+    }
+    
+    if (paginationInfo) {
+        paginationInfo.textContent = `Mostrando 1-${passageirosList.length} de ${passageirosList.length} passageiros`;
+    }
+    
+    // Esconder paginação temporariamente
+    const pagination = document.getElementById('paginationDashboard3');
+    if (pagination) {
+        pagination.innerHTML = '';
+    }
+    
+    console.log('Tabela atualizada!');
 }
 
 // ==================== NOVA FUNÇÃO PARA FILTRAR TABELA POR PASSAGEIRO ====================
@@ -3253,23 +3242,6 @@ function atualizarTabelaPassageiros() {
             document.body.removeChild(link);
         }
 
-        function realizarConsultaIndividual() {
-            const nomePassageiro = document.getElementById('nomePassageiro').value.trim();
-            
-            if (!nomePassageiro) {
-                atualizarTabelaPassageiros();
-                return;
-            }
-            
-            const passageiroEncontrado = passageirosList.find(p => 
-                p.nome.toLowerCase().includes(nomePassageiro.toLowerCase()));
-            
-            if (passageiroEncontrado) {
-                abrirModalViagens(passageiroEncontrado.nome);
-            } else {
-                alert(`Passageiro "${nomePassageiro}" não encontrado.`);
-            }
-        }
 
         function limparConsultaIndividual() {
             document.getElementById('nomePassageiro').value = '';
