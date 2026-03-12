@@ -1,11 +1,10 @@
 {
   "version": "4.16.6",
-  "time": 0.264,
+  "time": 0.221,
   "errors": [],
   "tasks": [
     {
       "resource": {
-        "description": "Voos Oficiais do Governador",
         "dialect": {
           "delimiter": ";"
         },
@@ -72,7 +71,7 @@
           "rows": 155
         }
       },
-      "time": 0.028,
+      "time": 0.023,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -102,7 +101,6 @@
     },
     {
       "resource": {
-        "description": "Voos Oficiais do Governador",
         "dialect": {
           "delimiter": ";"
         },
@@ -169,7 +167,7 @@
           "rows": 1098
         }
       },
-      "time": 0.072,
+      "time": 0.062,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -199,7 +197,6 @@
     },
     {
       "resource": {
-        "description": "Voos Oficiais do Governador",
         "dialect": {
           "delimiter": ";"
         },
@@ -266,7 +263,7 @@
           "rows": 966
         }
       },
-      "time": 0.066,
+      "time": 0.056,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -296,7 +293,6 @@
     },
     {
       "resource": {
-        "description": "Voos Oficiais do Governador",
         "dialect": {
           "delimiter": ";"
         },
@@ -363,7 +359,7 @@
           "rows": 644
         }
       },
-      "time": 0.051,
+      "time": 0.042,
       "scope": [
         "hash-count-error",
         "byte-count-error",
