@@ -892,36 +892,71 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card-stats p-4 bg-white rounded shadow-sm h-100">
-                                        <h4 class="fw-bold text-start mb-3"><i class="material-icons me-2">cloud_download</i> Dados Completos</h4>
-                                        <p class="text-muted text-justify" style="font-size: 13px; text-align: justify;">
-                                            Arquivo CSV completo com todos os registros dos voos oficiais do Governador de Minas Gerais.
-                                        </p>
-                                        <div class="mt-4 text-end">
-                                            <button onclick="downloadFullCSV()" 
-                                                    class="btn-export text-decoration-none fw-bold d-inline-block px-4 py-2"
-                                                    style="color: var(--primary-dark); background-color: white; border: 1px solid var(--primary-dark); border-radius: 4px; transition: all 0.3s ease;">
-                                                <i class="material-icons me-2" style="font-size: 16px; vertical-align: middle;">download</i>Baixar CSV
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
-                            <div class="metadata-card mt-4">
-                                <h6 class="fw-bold mb-3"><i class="material-icons me-2">info</i> Metadados - Estrutura dos Dados</h6>
-                                <div class="metadata-item"><strong>historico:</strong> Descrição/histórico do voo</div>
-                                <div class="metadata-item"><strong>horas_voadas:</strong> Duração do voo em horas (HH:MM:SS)</div>
-                                <div class="metadata-item"><strong>aeronave:</strong> Identificação da aeronave</div>
-                                <div class="metadata-item"><strong>numero_db:</strong> Número do documento/base</div>
-                                <div class="metadata-item"><strong>data_voo:</strong> Data do voo</div>
-                                <div class="metadata-item"><strong>origem:</strong> Aeroporto de origem</div>
-                                <div class="metadata-item"><strong>destino:</strong> Aeroporto de destino</div>
-                                <div class="metadata-item"><strong>passageiro:</strong> Nome do passageiro</div>
-                                <div class="metadata-item"><strong>cargo_passageiro:</strong> Cargo/função do passageiro</div>
-                                <div class="metadata-item"><strong>orgao_passageiro:</strong> Órgão do passageiro</div>
-                            </div>
-                            <div class="alert alert-info mt-3" style="background: rgba(23,162,184,0.1); border-left:4px solid var(--info-blue);"><i class="material-icons me-2 align-middle">info</i> <strong>Fonte dos Dados:</strong> Os dados são carregados automaticamente do repositório GitHub</div>
+<div class="metadata-card mt-4">
+    <h6 class="fw-bold mb-3"><i class="material-icons me-2">info</i> Metadados - Estrutura dos Dados</h6>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th><strong>CAMPO</strong></th>
+                <th><strong>DESCRIÇÃO</strong></th>
+                <th><strong>TIPO</strong></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>historico</td>
+                <td>Descrição/histórico do voo</td>
+                <td>Texto</td>
+            </tr>
+            <tr>
+                <td>horas_voadas</td>
+                <td>Duração do voo em horas (HH:MM:SS)</td>
+                <td>Texto/Tempo</td>
+            </tr>
+            <tr>
+                <td>aeronave</td>
+                <td>Identificação da aeronave</td>
+                <td>Texto</td>
+            </tr>
+            <tr>
+                <td>numero_db</td>
+                <td>Número do documento/base</td>
+                <td>Texto/Número</td>
+            </tr>
+            <tr>
+                <td>data_voo</td>
+                <td>Data do voo</td>
+                <td>Data</td>
+            </tr>
+            <tr>
+                <td>origem</td>
+                <td>Aeroporto de origem</td>
+                <td>Texto</td>
+            </tr>
+            <tr>
+                <td>destino</td>
+                <td>Aeroporto de destino</td>
+                <td>Texto</td>
+            </tr>
+            <tr>
+                <td>passageiro</td>
+                <td>Nome do passageiro</td>
+                <td>Texto</td>
+            </tr>
+            <tr>
+                <td>cargo_passageiro</td>
+                <td>Cargo/função do passageiro</td>
+                <td>Texto</td>
+            </tr>
+            <tr>
+                <td>orgao_passageiro</td>
+                <td>Órgão do passageiro</td>
+                <td>Texto</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
                         </div>
                     </div>
                 </div>
