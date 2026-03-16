@@ -79,47 +79,27 @@ jobs:
           python - <<'EOF'
           import json
           import subprocess
-          import os
-          import requests
 
           with open("dataset/datapackage.json") as f:
               dp = json.load(f)
 
-          host = os.environ["CKAN_HOST"]
-          key = os.environ["CKAN_KEY"]
-
-          dataset = dp["name"]
-
-          headers = {"Authorization": key}
-
-          url = f"{host}/api/3/action/package_show?id={dataset}"
-          resp = requests.get(url, headers=headers)
-
-          if resp.status_code != 200:
-              print("Erro ao consultar CKAN:", resp.status_code)
-              print(resp.text)
-              exit(0)
-          
-          data = resp.json()
-
-          existing = [r["name"] for r in data["result"]["resources"]]
-
           for r in dp["resources"]:
               name = r["name"]
-
-              if name in existing:
-                 print(f"Resource {name} already exists, skipping")
-                 continue  
-               
-              subprocess.run([
+        
+              result = subprocess.run([
                  "dpckan",
                  "--datastore",
                  "--datapackage", "dataset/datapackage.json",
                  "--ckan-host", host,
                  "--ckan-key", key,
                  "resource", name, "create"
-              ], check=True)
-                
-              print(f"Created resource {name}")
+              ], capture_output=True, text=True)
 
+              if "already exists" in result.stderr.lower():
+                  print(f"Resource {name} already exists, skipping")
+              elif result.returncode != 0:
+                  print(f"Error creating {name}")
+                  print(result.stderr)
+              else:               
+                  print(f"Created resource {name}")
           EOF
