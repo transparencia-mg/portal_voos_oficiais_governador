@@ -14,119 +14,78 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'    
+
       - name: Install packages
         run: |
           python -m pip install --upgrade pip
           pip uninstall numpy -y
           pip install numpy==1.23.5 --no-cache-dir
+          pip install "urllib3<2"  # Resolve conflitos de versão nos logs
           pip install -r requirements.txt
+
       - name: Convert CSV
         run: task csv
+
       - name: Commit CSV
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Converte Excel para CSV via script.
+
       - name: Create datapackage.yaml
         env:
           DATASET_NAME: ${{ github.event.repository.name }}
           OWNER_ORG: ${{ secrets.OWNER_ORG }}
         run: task yaml
+
       - name: Commit new datapackage.yaml
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Cria datapackage.yaml caso não exista via script.
+
       - name: Create datapackage.json
         run: task json
+
       - name: Commit new datapackage.json
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Cria datapackage.json via script.
-      # - name: Create dynamic documentation
-      #   run: task documentation
-      # - name: Commit markdown files
-      #   uses: stefanzweifel/git-auto-commit-action@v4
-      #   with:
-      #     commit_message: Cria arquivos markdown via script.
+
       - name: Local dataset validation
         run: task validate
+
       - name: Commit new datapackage_validation.json
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Cria datapackage_validation.json via script.
+
       - name: Create Report
         continue-on-error: true
         run: task report
+
       - name: Commit new index.html report file.
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Cria arquivo index.html de validação.
-        # - name: Frictionless validation
-        #   continue-on-error: true
-        #   uses: frictionlessdata/repository@v2
+
       - id: string
         uses: ASzc/change-string-case-action@v1
         with:
           string: ${{ github.actor }}
-      - name: Sync resources with CKAN
+
+      - name: Sync with CKAN
         env:
           CKAN_HOST: ${{ secrets.CKAN_HOST }}
           CKAN_KEY: ${{ secrets[format('CKAN_KEY_{0}', steps.string.outputs.uppercase)] }}
         run: |
-            python - <<'EOF'
-            import json
-            import subprocess
-            import os
-            
-            host = os.environ["CKAN_HOST"]
-            key = os.environ["CKAN_KEY"]
-
-            with open("dataset/datapackage.json") as f:
-                dp = json.load(f)
-
-            dataset = dp["name"]
-
-            # lista resources existentes no CKAN
-            result = subprocess.run([
-                "dpckan",
-                "--ckan-host", host,
-                "--ckan-key", key,
-                "dataset", dataset, "show"
-            ], capture_output=True, text=True)
-
-            existing = []
-            if result.returncode == 0:
-                try:
-                    data = json.loads(result.stdout)
-                    existing = [r["name"] for r in data["resources"]]
-                except:
-                    pass
-                    
-            for r in dp["resources"]:
-                name = r["name"]
-
-                if name in existing:
-                    print(f"Updating {name}")
-                    subprocess.run([
-                        "dpckan",
-                        "--datastore",
-                        "--datapackage", "dataset/datapackage.json",
-                        "--ckan-host", host,
-                        "--ckan-key", key,
-                        "resource", name, "update"
-                    ])
-                else:
-                    print(f"Creating {name}")
-                    subprocess.run([
-                        "dpckan",
-                        "--datastore",
-                        "--datapackage", "dataset/datapackage.json",
-                        "--ckan-host", host,
-                        "--ckan-key", key,
-                        "resource", name, "create"
-                    ])
-
-            EOF
+          # O comando 'dataset update' do dpckan sincroniza todo o conjunto de dados.
+          # Ele identifica recursos novos e atualiza os existentes automaticamente,
+          # evitando a criação de duplicatas que ocorria no script manual.
+          dpckan --datastore dataset update \
+            --datapackage dataset/datapackage.json \
+            --ckan-host $CKAN_HOST \
+            --ckan-key $CKAN_KEY
