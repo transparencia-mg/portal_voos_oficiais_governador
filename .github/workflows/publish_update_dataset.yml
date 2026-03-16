@@ -92,9 +92,14 @@ jobs:
 
           headers = {"Authorization": key}
 
-          # obter recursos existentes no CKAN
           url = f"{host}/api/3/action/package_show?id={dataset}"
           resp = requests.get(url, headers=headers)
+
+          if resp.status_code != 200:
+              print("Erro ao consultar CKAN:", resp.status_code)
+              print(resp.text)
+              exit(0)
+          
           data = resp.json()
 
           existing = [r["name"] for r in data["result"]["resources"]]
