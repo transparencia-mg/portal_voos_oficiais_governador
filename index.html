@@ -987,16 +987,17 @@
         let passageirosList = [];
         let currentModalPassageiro = null;
         
-        // Variáveis para controle de consulta por data
-        let consultaPorDataAtiva = false;
-        let dadosConsultaPorData = [];
-        let filtrosConsultaPorData = {
+        // Variáveis para controle de consulta por mês/data
+        let consultaAtiva = false;
+        let filtrosConsultaAtiva = {
+            tipo: '', // 'mes' ou 'data'
             ano: '',
             mes: '',
             dataVoo: '',
             origem: '',
             destino: ''
         };
+        let dadosConsultaAtiva = [];
         
         // Variáveis de paginação
         let currentPageDashboard1 = 1;
@@ -2108,7 +2109,7 @@ Reunião em São Paulo;01:45:00;PP-LCE - PÉGASUS 24;0125-2026;DTA;22/06/2026;BE
                 return `
                     <tr>
                         <td>
-                            <a href="${linkConsulta}" class="link-mes" title="Clique para consultar voos deste mês">
+                            <a href="${linkConsulta}" class="link-mes" title="Clique para consultar passageiros deste mês">
                                 ${item.mes}
                             </a>
                         </td>
@@ -2135,38 +2136,69 @@ Reunião em São Paulo;01:45:00;PP-LCE - PÉGASUS 24;0125-2026;DTA;22/06/2026;BE
             // Obter o ano selecionado no Dashboard 1
             const anoSelecionado = document.getElementById('anoDashboard1').value;
             
+            // Filtrar os dados do mês e ano selecionados
+            const dadosDoMes = voosData.filter(voo => {
+                return voo.ano === anoSelecionado && voo.mes === mesNumero;
+            });
+            
+            if (dadosDoMes.length === 0) {
+                alert(`Nenhum passageiro encontrado para ${mesesMap[mesNumero]} de ${anoSelecionado}.`);
+                return;
+            }
+            
+            // Agrupar por passageiro para a tabela
+            const passageirosMap = {};
+            dadosDoMes.forEach(voo => {
+                const passageiro = voo.passageiro;
+                if (!passageiro) return;
+                
+                if (!passageirosMap[passageiro]) {
+                    passageirosMap[passageiro] = {
+                        nome: passageiro,
+                        cargo: voo.cargo_passageiro || '-',
+                        orgao: voo.orgao_passageiro || '-',
+                        totalVoos: 0,
+                        totalHoras: 0,
+                        registros: []
+                    };
+                }
+                passageirosMap[passageiro].totalVoos++;
+                passageirosMap[passageiro].totalHoras += voo.horas_decimais || 0;
+                passageirosMap[passageiro].registros.push(voo);
+            });
+            
             // Configurar a consulta ativa
-            consultaPorDataAtiva = true;
-            filtrosConsultaPorData = {
+            consultaAtiva = true;
+            filtrosConsultaAtiva = {
+                tipo: 'mes',
                 ano: anoSelecionado,
-                mes: mesNumero,
-                dataVoo: '',
-                origem: '',
-                destino: ''
+                mes: mesNumero
             };
             
-            // Filtrar os dados do mês e ano selecionados
-            dadosConsultaPorData = voosData.filter(voo => {
-                if (voo.ano !== anoSelecionado) return false;
-                if (voo.mes !== mesNumero) return false;
-                return true;
-            });
+            // Guardar os dados do mês (para a tabela)
+            dadosConsultaAtiva = Object.values(passageirosMap);
+            
+            // Atualizar a lista global de passageiros para a tabela
+            passageirosList = dadosConsultaAtiva;
             
             // Mudar para a aba de consulta individual
             const tab = document.getElementById('dashboard3-tab');
             if (tab) tab.click();
             
-            // Atualizar os filtros do Dashboard 3 com o ano selecionado
+            // Atualizar os filtros do Dashboard 3
             document.getElementById('anoConsulta').value = anoSelecionado;
             document.getElementById('nomePassageiro').value = '';
             document.getElementById('orgaoConsulta').value = '';
             
-            // Atualizar a tabela com os dados filtrados
-            atualizarTabelaConsultaPorData();
+            // Resetar paginação
+            currentPageDashboard3 = 1;
+            
+            // Atualizar a tabela com os dados do mês
+            atualizarTabelaConsultaAtiva();
             
             // Mostrar indicador de consulta ativa
             mostrarIndicadorConsultaAtiva();
-        }
+        };
 
         // ==================== FUNÇÃO CONSULTAR POR DATA (CORRIGIDA) ====================
         window.consultarPorData = function(dataVoo, origem, destino) {
@@ -2190,9 +2222,43 @@ Reunião em São Paulo;01:45:00;PP-LCE - PÉGASUS 24;0125-2026;DTA;22/06/2026;BE
                 }
             }
             
+            // Filtrar os dados do voo específico
+            const dadosDoVoo = voosData.filter(voo => {
+                return voo.data_voo === dataVoo && 
+                       voo.origem === origem && 
+                       voo.destino === destino;
+            });
+            
+            if (dadosDoVoo.length === 0) {
+                alert(`Nenhum passageiro encontrado para a data ${formatarDataParaBR(dataVoo)}.`);
+                return;
+            }
+            
+            // Agrupar por passageiro para a tabela
+            const passageirosMap = {};
+            dadosDoVoo.forEach(voo => {
+                const passageiro = voo.passageiro;
+                if (!passageiro) return;
+                
+                if (!passageirosMap[passageiro]) {
+                    passageirosMap[passageiro] = {
+                        nome: passageiro,
+                        cargo: voo.cargo_passageiro || '-',
+                        orgao: voo.orgao_passageiro || '-',
+                        totalVoos: 0,
+                        totalHoras: 0,
+                        registros: []
+                    };
+                }
+                passageirosMap[passageiro].totalVoos++;
+                passageirosMap[passageiro].totalHoras += voo.horas_decimais || 0;
+                passageirosMap[passageiro].registros.push(voo);
+            });
+            
             // Configurar a consulta ativa
-            consultaPorDataAtiva = true;
-            filtrosConsultaPorData = {
+            consultaAtiva = true;
+            filtrosConsultaAtiva = {
+                tipo: 'data',
                 ano: ano,
                 mes: mes,
                 dataVoo: dataVoo,
@@ -2200,18 +2266,11 @@ Reunião em São Paulo;01:45:00;PP-LCE - PÉGASUS 24;0125-2026;DTA;22/06/2026;BE
                 destino: destino
             };
             
-            // Filtrar os dados do voo específico
-            dadosConsultaPorData = voosData.filter(voo => {
-                return voo.data_voo === dataVoo && 
-                       voo.origem === origem && 
-                       voo.destino === destino;
-            });
+            // Guardar os dados do voo (para a tabela)
+            dadosConsultaAtiva = Object.values(passageirosMap);
             
-            if (dadosConsultaPorData.length === 0) {
-                alert(`Nenhum passageiro encontrado para a data ${formatarDataParaBR(dataVoo)}.`);
-                consultaPorDataAtiva = false;
-                return;
-            }
+            // Atualizar a lista global de passageiros para a tabela
+            passageirosList = dadosConsultaAtiva;
             
             // Mudar para a aba de consulta individual
             const tab = document.getElementById('dashboard3-tab');
@@ -2222,120 +2281,52 @@ Reunião em São Paulo;01:45:00;PP-LCE - PÉGASUS 24;0125-2026;DTA;22/06/2026;BE
             document.getElementById('nomePassageiro').value = '';
             document.getElementById('orgaoConsulta').value = '';
             
-            // Atualizar a tabela com os dados filtrados
-            atualizarTabelaConsultaPorData();
+            // Resetar paginação
+            currentPageDashboard3 = 1;
+            
+            // Atualizar a tabela com os dados do voo
+            atualizarTabelaConsultaAtiva();
             
             // Mostrar indicador de consulta ativa
             mostrarIndicadorConsultaAtiva();
         };
 
-        // ==================== FUNÇÃO MOSTRAR INDICADOR CONSULTA ATIVA ====================
-        function mostrarIndicadorConsultaAtiva() {
-            const infoContainer = document.getElementById('consultaAtivaInfo');
-            if (!infoContainer) return;
-            
-            let mensagem = '';
-            
-            if (filtrosConsultaPorData.dataVoo) {
-                // Consulta por data específica
-                mensagem = `
-                    <strong>Consulta ativa:</strong> Voo do dia ${formatarDataParaBR(filtrosConsultaPorData.dataVoo)} - 
-                    ${filtrosConsultaPorData.origem} → ${filtrosConsultaPorData.destino}
-                `;
-            } else if (filtrosConsultaPorData.mes) {
-                // Consulta por mês
-                mensagem = `
-                    <strong>Consulta ativa:</strong> ${mesesMap[filtrosConsultaPorData.mes]} de ${filtrosConsultaPorData.ano}
-                `;
-            }
-            
-            infoContainer.innerHTML = `
-                <div class="consulta-ativa-info">
-                    <span><i class="material-icons me-2" style="vertical-align: middle;">info</i> ${mensagem}</span>
-                    <button class="btn btn-sm btn-outline-danger" onclick="limparConsultaPorData()">
-                        <i class="material-icons me-1" style="font-size: 16px;">close</i>Limpar consulta
-                    </button>
-                </div>
-            `;
-            infoContainer.style.display = 'block';
-        }
-
-        // ==================== FUNÇÃO LIMPAR CONSULTA POR DATA (CORRIGIDA) ====================
-        window.limparConsultaPorData = function() {
-            consultaPorDataAtiva = false;
-            dadosConsultaPorData = [];
-            filtrosConsultaPorData = {
-                ano: '',
-                mes: '',
-                dataVoo: '',
-                origem: '',
-                destino: ''
-            };
-            
-            // Esconder indicador visual
-            const infoContainer = document.getElementById('consultaAtivaInfo');
-            if (infoContainer) {
-                infoContainer.style.display = 'none';
-                infoContainer.innerHTML = '';
-            }
-            
-            // Limpar campos de busca
-            document.getElementById('nomePassageiro').value = '';
-            document.getElementById('anoConsulta').value = document.getElementById('anoDashboard1').value;
-            document.getElementById('orgaoConsulta').value = '';
-            document.getElementById('searchPassageiros').value = '';
-            
-            // Voltar para a visualização normal
-            atualizarTabelaPassageiros();
-        };
-
-        // ==================== FUNÇÃO ATUALIZAR TABELA CONSULTA POR DATA ====================
-        function atualizarTabelaConsultaPorData() {
+        // ==================== FUNÇÃO ATUALIZAR TABELA CONSULTA ATIVA ====================
+        function atualizarTabelaConsultaAtiva() {
             const tbody = document.getElementById('passageirosTableBody');
             const countElement = document.getElementById('totalPassageirosCount');
             const paginationInfo = document.getElementById('paginationInfoDashboard3');
             
-            if (dadosConsultaPorData.length === 0) {
+            if (dadosConsultaAtiva.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Nenhum passageiro encontrado.</td></tr>';
                 if (countElement) countElement.textContent = '0 passageiros';
                 if (paginationInfo) paginationInfo.textContent = 'Mostrando 0-0 de 0 registros';
                 return;
             }
             
-            const passageirosMap = {};
-            
-            dadosConsultaPorData.forEach(voo => {
-                const passageiro = voo.passageiro;
-                const cargo = voo.cargo_passageiro;
-                const orgao = voo.orgao_passageiro;
+            // Aplicar ordenação
+            const dadosOrdenados = [...dadosConsultaAtiva].sort((a, b) => {
+                const order = currentSortPassageiros.order === 'asc' ? 1 : -1;
                 
-                if (!passageiro) return;
-                
-                if (!passageirosMap[passageiro]) {
-                    passageirosMap[passageiro] = {
-                        nome: passageiro,
-                        cargo: cargo || '-',
-                        orgao: orgao || '-',
-                        totalVoos: 0,
-                        totalHoras: 0,
-                        registros: []
-                    };
+                if (currentSortPassageiros.column === 'nome') {
+                    return order * a.nome.localeCompare(b.nome);
+                } else if (currentSortPassageiros.column === 'cargo') {
+                    return order * (a.cargo || '').localeCompare(b.cargo || '');
+                } else if (currentSortPassageiros.column === 'orgao') {
+                    return order * (a.orgao || '').localeCompare(b.orgao || '');
+                } else if (currentSortPassageiros.column === 'totalVoos') {
+                    return order * (a.totalVoos - b.totalVoos);
+                } else if (currentSortPassageiros.column === 'totalHoras') {
+                    return order * (a.totalHoras - b.totalHoras);
                 }
-                
-                passageirosMap[passageiro].totalVoos++;
-                passageirosMap[passageiro].totalHoras += voo.horas_decimais;
-                passageirosMap[passageiro].registros.push(voo);
+                return 0;
             });
             
-            const passageirosDataArray = Object.values(passageirosMap);
-            passageirosDataArray.sort((a, b) => a.nome.localeCompare(b.nome));
-            passageirosList = passageirosDataArray;
-            
-            const totalPages = Math.ceil(passageirosList.length / itemsPerPageDashboard3);
+            const totalPages = Math.ceil(dadosOrdenados.length / itemsPerPageDashboard3);
             
             const startIndex = (currentPageDashboard3 - 1) * itemsPerPageDashboard3;
-            const endIndex = Math.min(startIndex + itemsPerPageDashboard3, passageirosList.length);
-            const currentData = passageirosList.slice(startIndex, endIndex);
+            const endIndex = Math.min(startIndex + itemsPerPageDashboard3, dadosOrdenados.length);
+            const currentData = dadosOrdenados.slice(startIndex, endIndex);
             
             const rowsHTML = currentData.map(passageiro => {
                 return `
@@ -2357,11 +2348,11 @@ Reunião em São Paulo;01:45:00;PP-LCE - PÉGASUS 24;0125-2026;DTA;22/06/2026;BE
             tbody.innerHTML = rowsHTML;
             
             if (countElement) {
-                countElement.textContent = `${passageirosList.length} passageiro${passageirosList.length !== 1 ? 's' : ''}`;
+                countElement.textContent = `${dadosOrdenados.length} passageiro${dadosOrdenados.length !== 1 ? 's' : ''}`;
             }
             
             if (paginationInfo) {
-                paginationInfo.textContent = `Mostrando ${startIndex + 1}-${endIndex} de ${passageirosList.length} passageiro${passageirosList.length !== 1 ? 's' : ''}`;
+                paginationInfo.textContent = `Mostrando ${startIndex + 1}-${endIndex} de ${dadosOrdenados.length} passageiro${dadosOrdenados.length !== 1 ? 's' : ''}`;
             }
             
             updateSortIconsPassageiros();
@@ -2369,10 +2360,72 @@ Reunião em São Paulo;01:45:00;PP-LCE - PÉGASUS 24;0125-2026;DTA;22/06/2026;BE
             iframeUpdateHeight();
         }
 
+        // ==================== FUNÇÃO MOSTRAR INDICADOR CONSULTA ATIVA ====================
+        function mostrarIndicadorConsultaAtiva() {
+            const infoContainer = document.getElementById('consultaAtivaInfo');
+            if (!infoContainer) return;
+            
+            let mensagem = '';
+            
+            if (filtrosConsultaAtiva.tipo === 'data') {
+                // Consulta por data específica
+                mensagem = `
+                    <strong>Consulta ativa:</strong> Voo do dia ${formatarDataParaBR(filtrosConsultaAtiva.dataVoo)} - 
+                    ${filtrosConsultaAtiva.origem} → ${filtrosConsultaAtiva.destino}
+                `;
+            } else if (filtrosConsultaAtiva.tipo === 'mes') {
+                // Consulta por mês
+                mensagem = `
+                    <strong>Consulta ativa:</strong> ${mesesMap[filtrosConsultaAtiva.mes]} de ${filtrosConsultaAtiva.ano}
+                `;
+            }
+            
+            infoContainer.innerHTML = `
+                <div class="consulta-ativa-info">
+                    <span><i class="material-icons me-2" style="vertical-align: middle;">info</i> ${mensagem}</span>
+                    <button class="btn btn-sm btn-outline-danger" onclick="limparConsultaAtiva()">
+                        <i class="material-icons me-1" style="font-size: 16px;">close</i>Limpar consulta
+                    </button>
+                </div>
+            `;
+            infoContainer.style.display = 'block';
+        }
+
+        // ==================== FUNÇÃO LIMPAR CONSULTA ATIVA ====================
+        window.limparConsultaAtiva = function() {
+            consultaAtiva = false;
+            filtrosConsultaAtiva = {
+                tipo: '',
+                ano: '',
+                mes: '',
+                dataVoo: '',
+                origem: '',
+                destino: ''
+            };
+            dadosConsultaAtiva = [];
+            
+            // Esconder indicador visual
+            const infoContainer = document.getElementById('consultaAtivaInfo');
+            if (infoContainer) {
+                infoContainer.style.display = 'none';
+                infoContainer.innerHTML = '';
+            }
+            
+            // Limpar campos de busca
+            document.getElementById('nomePassageiro').value = '';
+            document.getElementById('anoConsulta').value = document.getElementById('anoDashboard1').value;
+            document.getElementById('orgaoConsulta').value = '';
+            document.getElementById('searchPassageiros').value = '';
+            
+            // Voltar para a visualização normal
+            currentPageDashboard3 = 1;
+            atualizarTabelaPassageiros();
+        };
+
         // ==================== FUNÇÃO ATUALIZAR TABELA PASSAGEIROS ====================
         function atualizarTabelaPassageiros() {
-            if (consultaPorDataAtiva) {
-                atualizarTabelaConsultaPorData();
+            if (consultaAtiva) {
+                atualizarTabelaConsultaAtiva();
                 return;
             }
             
@@ -2490,9 +2543,10 @@ Reunião em São Paulo;01:45:00;PP-LCE - PÉGASUS 24;0125-2026;DTA;22/06/2026;BE
         function realizarConsultaIndividual() {
             console.log('=== CONSULTA INDIVIDUAL ===');
             
-            // Limpar consulta por data se estiver ativa
-            if (consultaPorDataAtiva) {
-                limparConsultaPorData();
+            // Limpar consulta ativa se estiver ativa
+            if (consultaAtiva) {
+                limparConsultaAtiva();
+                return;
             }
             
             const nomePassageiro = document.getElementById('nomePassageiro').value.trim();
@@ -2963,8 +3017,8 @@ Reunião em São Paulo;01:45:00;PP-LCE - PÉGASUS 24;0125-2026;DTA;22/06/2026;BE
                 currentSortPassageiros.order = 'asc';
             }
             
-            if (consultaPorDataAtiva) {
-                atualizarTabelaConsultaPorData();
+            if (consultaAtiva) {
+                atualizarTabelaConsultaAtiva();
             } else {
                 atualizarTabelaPassageiros();
             }
@@ -3011,8 +3065,8 @@ Reunião em São Paulo;01:45:00;PP-LCE - PÉGASUS 24;0125-2026;DTA;22/06/2026;BE
             if (page < 1 || page > totalPages) return;
             currentPageDashboard3 = page;
             
-            if (consultaPorDataAtiva) {
-                atualizarTabelaConsultaPorData();
+            if (consultaAtiva) {
+                atualizarTabelaConsultaAtiva();
             } else {
                 atualizarTabelaPassageiros();
             }
@@ -3021,50 +3075,15 @@ Reunião em São Paulo;01:45:00;PP-LCE - PÉGASUS 24;0125-2026;DTA;22/06/2026;BE
         window.abrirModalViagens = function(nomePassageiro) {
             currentModalPassageiro = nomePassageiro;
             
-            let viagensPassageiro;
-            
-            if (consultaPorDataAtiva) {
-                // Se há uma consulta ativa por mês ou data, mostrar apenas as viagens desse período
-                if (filtrosConsultaPorData.dataVoo) {
-                    // Consulta por data específica
-                    viagensPassageiro = dadosConsultaPorData.filter(voo => 
-                        voo.passageiro === nomePassageiro
-                    );
-                } else if (filtrosConsultaPorData.mes) {
-                    // Consulta por mês - mostrar todas as viagens do passageiro no mês selecionado
-                    viagensPassageiro = voosData.filter(voo => {
-                        if (voo.passageiro !== nomePassageiro) return false;
-                        if (voo.ano !== filtrosConsultaPorData.ano) return false;
-                        if (voo.mes !== filtrosConsultaPorData.mes) return false;
-                        return true;
-                    });
-                } else {
-                    viagensPassageiro = dadosConsultaPorData.filter(voo => voo.passageiro === nomePassageiro);
-                }
-            } else {
-                // Consulta normal - aplicar os filtros atuais
-                const anoSelecionado = document.getElementById('anoConsulta').value;
-                const orgaoSelecionado = document.getElementById('orgaoConsulta').value;
-                
-                viagensPassageiro = voosData.filter(voo => {
-                    if (voo.passageiro !== nomePassageiro) return false;
-                    
-                    if (anoSelecionado !== '' && voo.ano !== anoSelecionado) return false;
-                    
-                    if (orgaoSelecionado && orgaoSelecionado !== '' && orgaoSelecionado.trim() !== '') {
-                        if (!voo.orgao_passageiro || !voo.orgao_passageiro.toLowerCase().includes(orgaoSelecionado.toLowerCase())) {
-                            return false;
-                        }
-                    }
-                    
-                    return true;
-                });
-            }
+            // Buscar TODAS as viagens do passageiro (independente de filtros)
+            let viagensPassageiro = voosData.filter(voo => 
+                voo.passageiro === nomePassageiro
+            );
             
             viagensPassageiro.sort((a, b) => {
                 const dataA = converterDataParaComparacao(a.data_voo);
                 const dataB = converterDataParaComparacao(b.data_voo);
-                return dataB - dataA;
+                return dataB - dataA; // Mais recentes primeiro
             });
             
             document.getElementById('modalPassageiroNome').textContent = nomePassageiro;
@@ -3095,39 +3114,10 @@ Reunião em São Paulo;01:45:00;PP-LCE - PÉGASUS 24;0125-2026;DTA;22/06/2026;BE
         function exportViagensModal() {
             if (!currentModalPassageiro) return;
             
-            let viagensPassageiro;
-            
-            if (consultaPorDataAtiva) {
-                if (filtrosConsultaPorData.dataVoo) {
-                    viagensPassageiro = dadosConsultaPorData.filter(voo => voo.passageiro === currentModalPassageiro);
-                } else if (filtrosConsultaPorData.mes) {
-                    viagensPassageiro = voosData.filter(voo => {
-                        if (voo.passageiro !== currentModalPassageiro) return false;
-                        if (voo.ano !== filtrosConsultaPorData.ano) return false;
-                        if (voo.mes !== filtrosConsultaPorData.mes) return false;
-                        return true;
-                    });
-                } else {
-                    viagensPassageiro = dadosConsultaPorData.filter(voo => voo.passageiro === currentModalPassageiro);
-                }
-            } else {
-                const anoSelecionado = document.getElementById('anoConsulta').value;
-                const orgaoSelecionado = document.getElementById('orgaoConsulta').value;
-                
-                viagensPassageiro = voosData.filter(voo => {
-                    if (voo.passageiro !== currentModalPassageiro) return false;
-                    
-                    if (anoSelecionado !== '' && voo.ano !== anoSelecionado) return false;
-                    
-                    if (orgaoSelecionado && orgaoSelecionado !== '' && orgaoSelecionado.trim() !== '') {
-                        if (!voo.orgao_passageiro || !voo.orgao_passageiro.toLowerCase().includes(orgaoSelecionado.toLowerCase())) {
-                            return false;
-                        }
-                    }
-                    
-                    return true;
-                });
-            }
+            // Buscar TODAS as viagens do passageiro (independente de filtros)
+            let viagensPassageiro = voosData.filter(voo => 
+                voo.passageiro === currentModalPassageiro
+            );
             
             if (viagensPassageiro.length === 0) {
                 alert('Nenhuma viagem para exportar.');
@@ -3170,9 +3160,9 @@ Reunião em São Paulo;01:45:00;PP-LCE - PÉGASUS 24;0125-2026;DTA;22/06/2026;BE
             document.getElementById('orgaoConsulta').value = '';
             document.getElementById('searchPassageiros').value = '';
             
-            // Limpar consulta por data se estiver ativa
-            if (consultaPorDataAtiva) {
-                limparConsultaPorData();
+            // Limpar consulta ativa se estiver ativa
+            if (consultaAtiva) {
+                limparConsultaAtiva();
             } else {
                 const tbody = document.getElementById('passageirosTableBody');
                 const rows = tbody.querySelectorAll('tr');
