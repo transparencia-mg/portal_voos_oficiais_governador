@@ -102,4 +102,4 @@ jobs:
           except subprocess.CalledProcessError:
               print(f"Resource {name} already exists or failed, skipping")
 
-      EOF
+        EOF
