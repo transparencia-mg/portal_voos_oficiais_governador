@@ -171,5 +171,5 @@ resources:
         - name: orgao_passageiro
           type: string
     scheme: file
-    title: Voos 2022 
+    title: Voos 2022
 title: Voos Oficiais do Governador
