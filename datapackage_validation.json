@@ -1,6 +1,6 @@
 {
   "version": "4.16.6",
-  "time": 0.25,
+  "time": 0.307,
   "errors": [],
   "tasks": [
     {
@@ -167,7 +167,7 @@
           "rows": 1098
         }
       },
-      "time": 0.07,
+      "time": 0.072,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -263,7 +263,7 @@
           "rows": 966
         }
       },
-      "time": 0.063,
+      "time": 0.065,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -359,7 +359,103 @@
           "rows": 644
         }
       },
-      "time": 0.047,
+      "time": 0.048,
+      "scope": [
+        "hash-count-error",
+        "byte-count-error",
+        "field-count-error",
+        "row-count-error",
+        "blank-header",
+        "extra-label",
+        "missing-label",
+        "blank-label",
+        "duplicate-label",
+        "incorrect-label",
+        "blank-row",
+        "primary-key-error",
+        "foreign-key-error",
+        "extra-cell",
+        "missing-cell",
+        "type-error",
+        "constraint-error",
+        "unique-error"
+      ],
+      "partial": false,
+      "errors": [],
+      "stats": {
+        "errors": 0
+      },
+      "valid": true
+    },
+    {
+      "resource": {
+        "dialect": {
+          "delimiter": ";"
+        },
+        "encoding": "utf-8-sig",
+        "format": "csv",
+        "hashing": "md5",
+        "name": "voos_2022",
+        "path": "data/voos_2022.csv",
+        "profile": "tabular-data-resource",
+        "schema": {
+          "fields": [
+            {
+              "name": "historico",
+              "type": "string"
+            },
+            {
+              "name": "horas_voadas",
+              "type": "time"
+            },
+            {
+              "name": "aeronave",
+              "type": "string"
+            },
+            {
+              "name": "numero_db",
+              "type": "string"
+            },
+            {
+              "name": "base",
+              "type": "string"
+            },
+            {
+              "name": "data_voo",
+              "type": "date"
+            },
+            {
+              "name": "origem",
+              "type": "string"
+            },
+            {
+              "name": "destino",
+              "type": "string"
+            },
+            {
+              "name": "passageiro",
+              "type": "string"
+            },
+            {
+              "name": "cargo_passageiro",
+              "type": "string"
+            },
+            {
+              "name": "orgao_passageiro",
+              "type": "string"
+            }
+          ]
+        },
+        "scheme": "file",
+        "title": "Voos 2022",
+        "stats": {
+          "hash": "81cf4157ae4103ece0e2b5e7e96876a4",
+          "bytes": 48030,
+          "fields": 11,
+          "rows": 190
+        }
+      },
+      "time": 0.026,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -390,7 +486,7 @@
   ],
   "stats": {
     "errors": 0,
-    "tasks": 4
+    "tasks": 5
   },
   "valid": true
 }
