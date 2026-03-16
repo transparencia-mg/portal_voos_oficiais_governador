@@ -246,6 +246,67 @@
       },
       "scheme": "file",
       "title": "Voos 2023"
+    },
+    {
+      "dialect": {
+        "delimiter": ";"
+      },
+      "encoding": "utf-8-sig",
+      "format": "csv",
+      "hashing": "md5",
+      "name": "voos_2022",
+      "path": "data/voos_2022.csv",
+      "profile": "tabular-data-resource",
+      "schema": {
+        "fields": [
+          {
+            "name": "historico",
+            "type": "string"
+          },
+          {
+            "name": "horas_voadas",
+            "type": "time"
+          },
+          {
+            "name": "aeronave",
+            "type": "string"
+          },
+          {
+            "name": "numero_db",
+            "type": "string"
+          },
+          {
+            "name": "base",
+            "type": "string"
+          },
+          {
+            "name": "data_voo",
+            "type": "date"
+          },
+          {
+            "name": "origem",
+            "type": "string"
+          },
+          {
+            "name": "destino",
+            "type": "string"
+          },
+          {
+            "name": "passageiro",
+            "type": "string"
+          },
+          {
+            "name": "cargo_passageiro",
+            "type": "string"
+          },
+          {
+            "name": "orgao_passageiro",
+            "type": "string"
+          }
+        ]
+      },
+      "scheme": "file",
+      "title": "Voos 2022"
     }
   ],
   "title": "Voos Oficiais do Governador"
