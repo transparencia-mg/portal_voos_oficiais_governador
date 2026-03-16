@@ -18,7 +18,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'    
+          python-version: '3.10'
 
       - name: Install packages
         run: |
@@ -68,7 +68,7 @@ jobs:
         continue-on-error: true
         run: task report
 
-      - name: Commit new index.html report file.
+      - name: Commit new index.html report file
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Cria arquivo index.html de validação.
@@ -88,6 +88,7 @@ jobs:
           import subprocess
           import os
           import sys
+          import requests
           
           host = os.environ["CKAN_HOST"]
           key = os.environ["CKAN_KEY"]
@@ -100,97 +101,75 @@ jobs:
           print(f"Checking dataset: {dataset}")
           print(f"Using CKAN host: {host}")
           
-          # Get existing resources from CKAN
-          try:
-              result = subprocess.run([
-                  "dpckan",
-                  "--ckan-host", host,
-                  "--ckan-key", key,
-                  "dataset", dataset, "show"
-              ], capture_output=True, text=True)
-              
-              print(f"Return code: {result.returncode}")
-              print(f"Stdout: {result.stdout[:500]}...")  # Print first 500 chars
-              print(f"Stderr: {result.stderr}")
-              
-              if result.returncode != 0:
-                  print(f"Command failed with return code {result.returncode}")
-                  print("Attempting to list all datasets to debug...")
-                  
-                  # Try to list datasets to see if authentication works
-                  list_result = subprocess.run([
-                      "dpckan",
-                      "--ckan-host", host,
-                      "--ckan-key", key,
-                      "dataset", "list"
-                  ], capture_output=True, text=True)
-                  
-                  print(f"Dataset list stdout: {list_result.stdout}")
-                  print(f"Dataset list stderr: {list_result.stderr}")
-                  
-                  # Check if we can access the dataset via CKAN API directly
-                  import requests
-                  headers = {"Authorization": key}
-                  response = requests.get(f"{host.rstrip('/')}/api/3/action/package_show", 
-                                        params={"id": dataset},
-                                        headers=headers)
-                  
-                  print(f"Direct API call status: {response.status_code}")
-                  if response.status_code == 200:
-                      print("Dataset exists! Direct API call succeeded.")
-                      data = response.json()
-                      if data["success"]:
-                          existing_resources = {r["name"]: r for r in data["result"]["resources"]}
-                          print(f"Found {len(existing_resources)} existing resources via direct API")
-                      else:
-                          existing_resources = {}
-                  else:
-                      print(f"Direct API call failed: {response.text}")
-                      existing_resources = {}
-                      
-              else:
-                  # Try to parse only the JSON part of the output
-                  output_lines = result.stdout.strip().split('\n')
-                  json_str = ''
-                  for line in output_lines:
-                      if line.strip().startswith('{'):
-                          json_str = line
-                          break
-                  
-                  if json_str:
-                      data = json.loads(json_str)
-                      existing_resources = {r["name"]: r for r in data.get("resources", [])}
-                      print(f"Found {len(existing_resources)} existing resources via dpckan")
-                  else:
-                      print("No JSON found in dpckan output")
-                      existing_resources = {}
-                      
-          except Exception as e:
-              print(f"Unexpected error: {e}")
-              existing_resources = {}
+          # Get existing resources from CKAN via direct API
+          headers = {"Authorization": key}
+          response = requests.get(
+              f"{host.rstrip('/')}/api/3/action/package_show", 
+              params={"id": dataset},
+              headers=headers
+          )
           
-          print(f"\nExisting resources in CKAN: {list(existing_resources.keys())}")
+          existing_resources_by_id = {}
+          existing_resources_by_name = {}
+          
+          if response.status_code == 200:
+              data = response.json()
+              if data["success"]:
+                  for r in data["result"]["resources"]:
+                      existing_resources_by_id[r["id"]] = r
+                      existing_resources_by_name[r["name"]] = r
+                  print(f"Found {len(existing_resources_by_id)} existing resources via direct API")
+              else:
+                  print("API call succeeded but success=False")
+          else:
+              print(f"API call failed with status {response.status_code}: {response.text}")
+          
+          print(f"\nExisting resources in CKAN (by name): {list(existing_resources_by_name.keys())}")
+          print(f"Existing resources in CKAN (by ID): {list(existing_resources_by_id.keys())}")
           print(f"Resources in datapackage.json: {[r['name'] for r in dp['resources']]}")
           
           # Sync each resource
           for r in dp["resources"]:
               name = r["name"]
               
-              if name in existing_resources:
-                  print(f"\n🔄 Resource '{name}' exists. Updating...")
+              # Check if resource exists by name
+              if name in existing_resources_by_name:
+                  resource_id = existing_resources_by_name[name]["id"]
+                  print(f"\n🔄 Resource '{name}' exists with ID: {resource_id}. Updating...")
+                  
                   update_result = subprocess.run([
                       "dpckan",
                       "--datastore",
                       "--datapackage", "dataset/datapackage.json",
                       "--ckan-host", host,
                       "--ckan-key", key,
-                      "resource", name, "update"
+                      "resource", resource_id, "update"
                   ], capture_output=True, text=True)
                   
                   if update_result.returncode == 0:
-                      print(f"  ✓ Successfully updated '{name}'")
+                      print(f"  ✓ Successfully updated '{name}' (ID: {resource_id})")
                   else:
                       print(f"  ✗ Failed to update '{name}': {update_result.stderr}")
+              
+              # Check if resource exists by ID (in case name changed)
+              elif "id" in r and r["id"] in existing_resources_by_id:
+                  resource_id = r["id"]
+                  print(f"\n🔄 Resource '{name}' matches existing ID: {resource_id}. Updating...")
+                  
+                  update_result = subprocess.run([
+                      "dpckan",
+                      "--datastore",
+                      "--datapackage", "dataset/datapackage.json",
+                      "--ckan-host", host,
+                      "--ckan-key", key,
+                      "resource", resource_id, "update"
+                  ], capture_output=True, text=True)
+                  
+                  if update_result.returncode == 0:
+                      print(f"  ✓ Successfully updated '{name}' (ID: {resource_id})")
+                  else:
+                      print(f"  ✗ Failed to update '{name}': {update_result.stderr}")
+              
               else:
                   print(f"\n🆕 Resource '{name}' does not exist. Creating...")
                   create_result = subprocess.run([
@@ -204,8 +183,36 @@ jobs:
                   
                   if create_result.returncode == 0:
                       print(f"  ✓ Successfully created '{name}'")
+                      
+                      # Capture the ID of the newly created resource
+                      try:
+                          response = requests.get(
+                              f"{host.rstrip('/')}/api/3/action/package_show", 
+                              params={"id": dataset},
+                              headers=headers
+                          )
+                          if response.status_code == 200:
+                              data = response.json()
+                              if data["success"]:
+                                  for new_r in data["result"]["resources"]:
+                                      if new_r["name"] == name:
+                                          r["id"] = new_r["id"]
+                                          print(f"  ✓ Captured ID for '{name}': {new_r['id']}")
+                                          
+                                          # Save the ID to datapackage.json
+                                          with open("dataset/datapackage.json", "w") as f:
+                                              json.dump(dp, f, indent=2)
+                                          print(f"  ✓ Saved ID to datapackage.json")
+                                          break
+                      except Exception as e:
+                          print(f"  ⚠ Could not capture ID: {e}")
                   else:
                       print(f"  ✗ Failed to create '{name}': {create_result.stderr}")
           
           print("\n✅ Sync completed!")
           EOF
+
+      - name: Commit updated datapackage.json with resource IDs
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Atualiza datapackage.json com IDs dos recursos CKAN
