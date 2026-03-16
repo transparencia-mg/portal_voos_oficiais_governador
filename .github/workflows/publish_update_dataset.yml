@@ -76,9 +76,48 @@ jobs:
           CKAN_HOST: ${{ secrets.CKAN_HOST }}
           CKAN_KEY: ${{ secrets[format('CKAN_KEY_{0}', steps.string.outputs.uppercase)] }}
         run: |
-            dpckan \
-                --datastore \
-                --datapackage dataset/datapackage.json \
-                --ckan-host "$CKAN_HOST" \
-                --ckan-key "$CKAN_KEY" \
-                dataset update
+            python - <<'EOF'
+            import json
+            import subprocess
+            import os
+            
+            host = os.environ["CKAN_HOST"]
+            key = os.environ["CKAN_KEY"]
+
+            with open("dataset/datapackage.json") as f:
+                dp = json.load(f)
+
+            for r in dp["resources"]:
+                name = r["name"]
+
+                # tenta atualizar primeiro
+                update = subprocess.run([
+                    "dpckan",
+                    "--datastore",
+                    "--datapackage", "dataset/datapackage.json",
+                    "--ckan-host", host,
+                    "--ckan-key", key,
+                    "resource", name, "update"
+                ], capture_output=True, text=True)
+
+                if update.returncode == 0:
+                    print(f"Updated resource {name}")
+                    continue
+
+                # se falhou, tenta criar
+                create = subprocess.run([
+                    "dpckan",
+                    "--datastore",
+                    "--datapackage", "dataset/datapackage.json",
+                    "--ckan-host", host,
+                    "--ckan-key", key,
+                    "resource", name, "create"
+                ], capture_output=True, text=True)
+
+                if create.returncode == 0:
+                    print(f"Created resource {name}")
+                else:
+                    print(f"Error processing {name}")
+                    print(create.stderr)
+
+            EOF
