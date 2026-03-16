@@ -76,7 +76,7 @@ jobs:
           CKAN_HOST: ${{ secrets.CKAN_HOST }}
           CKAN_KEY: ${{ secrets[format('CKAN_KEY_{0}', steps.string.outputs.uppercase)] }}
         run: |
-          python <<EOF
+          python - <<'EOF'
           import json
           import subprocess
           import os
@@ -85,15 +85,15 @@ jobs:
           with open("dataset/datapackage.json") as f:
             dp = json.load(f)
 
-          ckan_host = os.environ["CKAN_HOST"]
-          ckan_key = os.environ["CKAN_KEY"]
+          host = os.environ["CKAN_HOST"]
+          key = os.environ["CKAN_KEY"]
 
           dataset = dp["name"]
 
           headers = {"Authorization": key}
 
-          # pega recursos existentes
-          url = f"{host}/api/3/action/package_show?id={dataset}"
+          # obter recursos existentes no CKAN
+           url = f"{host}/api/3/action/package_show?id={dataset}"
           resp = requests.get(url, headers=headers)
           data = resp.json()
 
@@ -110,8 +110,8 @@ jobs:
                     "dpckan",
                     "--datastore",
                     "--datapackage", "dataset/datapackage.json",
-                    "--ckan-host", ckan_host,
-                    "--ckan-key", ckan_key,
+                    "--ckan-host", host,
+                    "--ckan-key", key,
                     "resource", name, "create"
                 ], check=True)
                 
