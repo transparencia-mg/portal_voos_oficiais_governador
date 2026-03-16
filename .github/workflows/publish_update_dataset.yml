@@ -83,6 +83,9 @@ jobs:
           with open("dataset/datapackage.json") as f:
               dp = json.load(f)
 
+          host = os.environ["CKAN_HOST"]
+          key = os.environ["CKAN_KEY"]
+
           for r in dp["resources"]:
               name = r["name"]
         
