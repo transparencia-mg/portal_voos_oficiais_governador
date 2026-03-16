@@ -83,7 +83,7 @@ jobs:
           import requests
 
           with open("dataset/datapackage.json") as f:
-            dp = json.load(f)
+              dp = json.load(f)
 
           host = os.environ["CKAN_HOST"]
           key = os.environ["CKAN_KEY"]
@@ -93,28 +93,28 @@ jobs:
           headers = {"Authorization": key}
 
           # obter recursos existentes no CKAN
-           url = f"{host}/api/3/action/package_show?id={dataset}"
+          url = f"{host}/api/3/action/package_show?id={dataset}"
           resp = requests.get(url, headers=headers)
           data = resp.json()
 
           existing = [r["name"] for r in data["result"]["resources"]]
 
           for r in dp["resources"]:
-            name = r["name"]
+              name = r["name"]
 
-            if name in existing:
-               print(f"Resource {name} already exists, skipping")
-               continue  
+              if name in existing:
+                 print(f"Resource {name} already exists, skipping")
+                 continue  
                
-               subprocess.run([
-                    "dpckan",
-                    "--datastore",
-                    "--datapackage", "dataset/datapackage.json",
-                    "--ckan-host", host,
-                    "--ckan-key", key,
-                    "resource", name, "create"
-                ], check=True)
+              subprocess.run([
+                 "dpckan",
+                 "--datastore",
+                 "--datapackage", "dataset/datapackage.json",
+                 "--ckan-host", host,
+                 "--ckan-key", key,
+                 "resource", name, "create"
+              ], check=True)
                 
-                print(f"Created resource {name}")
+              print(f"Created resource {name}")
 
           EOF
