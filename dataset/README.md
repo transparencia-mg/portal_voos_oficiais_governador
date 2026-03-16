@@ -2,7 +2,7 @@ Conjunto de dados que reúne informações sobre os voos realizados pelo Governa
 
 Os dados são organizados em arquivos anuais e seguem um padrão estruturado, facilitando o uso por cidadãos, pesquisadores, órgãos de controle e desenvolvedores
 
-Periodicidade de Atualização do Conjunto de Dados: Mensal.
+Periodicidade de Atualização: Mensal
 
 ## Como participar
 
