@@ -80,6 +80,7 @@ jobs:
           import json
           import subprocess
           import os
+          import requests
 
           with open("dataset/datapackage.json") as f:
             dp = json.load(f)
@@ -87,10 +88,25 @@ jobs:
           ckan_host = os.environ["CKAN_HOST"]
           ckan_key = os.environ["CKAN_KEY"]
 
+          dataset = dp["name"]
+
+          headers = {"Authorization": key}
+
+          # pega recursos existentes
+          url = f"{host}/api/3/action/package_show?id={dataset}"
+          resp = requests.get(url, headers=headers)
+          data = resp.json()
+
+          existing = [r["name"] for r in data["result"]["resources"]]
+
           for r in dp["resources"]:
             name = r["name"]
-            try:
-                subprocess.run([
+
+            if name in existing:
+               print(f"Resource {name} already exists, skipping")
+               continue  
+               
+               subprocess.run([
                     "dpckan",
                     "--datastore",
                     "--datapackage", "dataset/datapackage.json",
@@ -98,8 +114,7 @@ jobs:
                     "--ckan-key", ckan_key,
                     "resource", name, "create"
                 ], check=True)
+                
                 print(f"Created resource {name}")
-            except subprocess.CalledProcessError:
-                print(f"Resource {name} already exists or failed, skipping")
 
           EOF
