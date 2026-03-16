@@ -87,37 +87,46 @@ jobs:
             with open("dataset/datapackage.json") as f:
                 dp = json.load(f)
 
+            dataset = dp["name"]
+
+            # lista resources existentes no CKAN
+            result = subprocess.run([
+                "dpckan",
+                "--ckan-host", host,
+                "--ckan-key", key,
+                "dataset", dataset, "show"
+            ], capture_output=True, text=True)
+
+            existing = []
+            if result.returncode == 0:
+                try:
+                    data = json.loads(result.stdout)
+                    existing = [r["name"] for r in data["resources"]]
+                except:
+                    pass
+                    
             for r in dp["resources"]:
                 name = r["name"]
 
-                # tenta atualizar primeiro
-                update = subprocess.run([
-                    "dpckan",
-                    "--datastore",
-                    "--datapackage", "dataset/datapackage.json",
-                    "--ckan-host", host,
-                    "--ckan-key", key,
-                    "resource", name, "update"
-                ], capture_output=True, text=True)
-
-                if update.returncode == 0:
-                    print(f"Updated resource {name}")
-                    continue
-
-                # se falhou, tenta criar
-                create = subprocess.run([
-                    "dpckan",
-                    "--datastore",
-                    "--datapackage", "dataset/datapackage.json",
-                    "--ckan-host", host,
-                    "--ckan-key", key,
-                    "resource", name, "create"
-                ], capture_output=True, text=True)
-
-                if create.returncode == 0:
-                    print(f"Created resource {name}")
+                if name in existing:
+                    print(f"Updating {name}")
+                    subprocess.run([
+                        "dpckan",
+                        "--datastore",
+                        "--datapackage", "dataset/datapackage.json",
+                        "--ckan-host", host,
+                        "--ckan-key", key,
+                        "resource", name, "update"
+                    ])
                 else:
-                    print(f"Error processing {name}")
-                    print(create.stderr)
+                    print(f"Creating {name}")
+                    subprocess.run([
+                        "dpckan",
+                        "--datastore",
+                        "--datapackage", "dataset/datapackage.json",
+                        "--ckan-host", host,
+                        "--ckan-key", key,
+                        "resource", name, "create"
+                    ])
 
             EOF
