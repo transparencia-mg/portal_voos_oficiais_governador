@@ -79,6 +79,7 @@ jobs:
           python - <<'EOF'
           import json
           import subprocess
+          import os
 
           with open("dataset/datapackage.json") as f:
               dp = json.load(f)
