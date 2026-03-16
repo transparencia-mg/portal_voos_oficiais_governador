@@ -25,7 +25,7 @@ jobs:
           python -m pip install --upgrade pip
           pip uninstall numpy -y
           pip install numpy==1.23.5 --no-cache-dir
-          pip install "urllib3<2"  # Resolve conflitos de versão nos logs
+          pip install "urllib3<2" "charset-normalizer<4"
           pip install -r requirements.txt
 
       - name: Convert CSV
@@ -82,10 +82,8 @@ jobs:
           CKAN_HOST: ${{ secrets.CKAN_HOST }}
           CKAN_KEY: ${{ secrets[format('CKAN_KEY_{0}', steps.string.outputs.uppercase)] }}
         run: |
-          # O comando 'dataset update' do dpckan sincroniza todo o conjunto de dados.
-          # Ele identifica recursos novos e atualiza os existentes automaticamente,
-          # evitando a criação de duplicatas que ocorria no script manual.
-          dpckan --datastore dataset update \
-            --datapackage dataset/datapackage.json \
-            --ckan-host $CKAN_HOST \
-            --ckan-key $CKAN_KEY
+            # O dpckan espera o caminho do datapackage como argumento final, sem a flag --datapackage
+            dpckan --datastore dataset update \
+                --ckan-host $CKAN_HOST \
+                --ckan-key $CKAN_KEY \
+                dataset/datapackage.json
