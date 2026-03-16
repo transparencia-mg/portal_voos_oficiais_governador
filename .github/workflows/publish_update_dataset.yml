@@ -71,14 +71,35 @@ jobs:
         uses: ASzc/change-string-case-action@v1
         with:
           string: ${{ github.actor }}
-      - name: Sync dataset in CKAN
-        env:
-          CKAN_HOST: ${{ secrets.CKAN_HOST }}
-          CKAN_KEY: ${{ secrets[format('CKAN_KEY_{0}', steps.string.outputs.uppercase)] }}
-        run: |
-            dpckan \
-              --datastore \
-              --datapackage dataset/datapackage.json \
-              --ckan-host "$CKAN_HOST" \
-              --ckan-key "$CKAN_KEY" \
-              dataset create --force
+- name: Create missing resources in CKAN
+  env:
+    CKAN_HOST: ${{ secrets.CKAN_HOST }}
+    CKAN_KEY: ${{ secrets[format('CKAN_KEY_{0}', steps.string.outputs.uppercase)] }}
+  run: |
+    python <<EOF
+import json
+import subprocess
+import os
+
+with open("dataset/datapackage.json") as f:
+    dp = json.load(f)
+
+ckan_host = os.environ["CKAN_HOST"]
+ckan_key = os.environ["CKAN_KEY"]
+
+for r in dp["resources"]:
+    name = r["name"]
+    try:
+        subprocess.run([
+            "dpckan",
+            "--datastore",
+            "--datapackage", "dataset/datapackage.json",
+            "--ckan-host", ckan_host,
+            "--ckan-key", ckan_key,
+            "resource", name, "create"
+        ], check=True)
+        print(f"Created resource {name}")
+    except subprocess.CalledProcessError:
+        print(f"Resource {name} already exists or failed, skipping")
+
+EOF
