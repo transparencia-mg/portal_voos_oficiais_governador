@@ -647,6 +647,13 @@
     let sortConfigDestino = { coluna: 'data_voo', direcao: 'asc' };
     let sortConfigPassageiro = { coluna: 'nome', direcao: 'asc' };
     
+    // Estado dos filtros de passageiro
+    let _filtroPassageiroAno = '';
+    let _filtroPassageiroMes = '';
+    let _filtroPassageiroNome = '';
+    let _filtroPassageiroOrgao = '';
+    let _filtroPassageiroCargo = '';
+    
     let chartMensal = null;
     let chartDestinos = null;
     
@@ -794,6 +801,15 @@
             dadosFiltradosDestino = [...dadosCompletos];
             dadosFiltradosPassageiros = [...dadosCompletos];
             
+            // Default: filtrar pelo ano mais recente em VG e Passageiros
+            const anosDisponiveis = [...new Set(dadosCompletos.map(d => d.ano))].sort((a,b)=>b-a);
+            const anoMaisRecente = anosDisponiveis[0] || '';
+            if (anoMaisRecente) {
+                dadosFiltradosVG = dadosCompletos.filter(v => v.ano === anoMaisRecente);
+                dadosFiltradosPassageiros = dadosCompletos.filter(v => v.ano === anoMaisRecente);
+                _filtroPassageiroAno = anoMaisRecente;
+            }
+            
             atualizarPassageirosUnicos();
             
             renderizarVisaoGeral();
@@ -848,6 +864,13 @@
         const dadosPagina = dadosOrdenados.slice(inicio, inicio + itensPorPaginaVG);
         
         const metricas = calcularMetricasVG();
+        const anosDisp = [...new Set(dadosCompletos.map(d => d.ano))].sort((a,b)=>b-a);
+        const anoAtualVG = document.getElementById('filtroAnoVG')?.value || anosDisp[0] || '';
+        const mesAtualVG = document.getElementById('filtroMesVG')?.value || '';
+        const origemAtualVG = document.getElementById('filtroOrigemVG')?.value || '';
+        const destinoAtualVG = document.getElementById('filtroDestinoVG')?.value || '';
+        const origensDisp = [...new Set(dadosCompletos.map(d => d.origem).filter(Boolean))].sort();
+        const destinosDisp = [...new Set(dadosCompletos.map(d => d.destino).filter(Boolean))].sort();
         
         let html = `
             <div class="filter-container">
@@ -855,24 +878,25 @@
                     <div class="filter-group">
                         <label class="filter-label"><i class="material-icons"></i>ANO</label>
                         <select class="form-select modern-select" id="filtroAnoVG">
-                            <option value="">Todos</option>
-                            ${[...new Set(dadosCompletos.map(d => d.ano))].sort((a,b)=>b-a).map(a => `<option value="${a}">${a}</option>`).join('')}
+                            ${anosDisp.map(a => `<option value="${a}" ${a === anoAtualVG ? 'selected' : ''}>${a}</option>`).join('')}
                         </select>
                     </div>
                     <div class="filter-group">
                         <label class="filter-label"><i class="material-icons"></i>MÊS</label>
                         <select class="form-select modern-select" id="filtroMesVG">
-                            <option value="">Todos</option>
-                            ${Object.entries(mesesMap).map(([k,v]) => `<option value="${k}">${v}</option>`).join('')}
+                            <option value="" ${mesAtualVG===''?'selected':''}>Todos os meses</option>
+                            ${Object.entries(mesesMap).map(([k,v]) => `<option value="${k}" ${k===mesAtualVG?'selected':''}>${v}</option>`).join('')}
                         </select>
                     </div>
                     <div class="filter-group">
                         <label class="filter-label"><i class="material-icons"></i>ORIGEM</label>
-                        <input type="text" class="form-control" id="filtroOrigemVG" placeholder="Digite a origem...">
+                        <input class="form-control" id="filtroOrigemVG" list="listaOrigensVG" placeholder="Selecione ou digite..." value="${origemAtualVG}" autocomplete="off">
+                        <datalist id="listaOrigensVG">${origensDisp.map(o=>`<option value="${o}">`).join('')}</datalist>
                     </div>
                     <div class="filter-group">
                         <label class="filter-label"><i class="material-icons"></i>DESTINO</label>
-                        <input type="text" class="form-control" id="filtroDestinoVG" placeholder="Digite o destino...">
+                        <input class="form-control" id="filtroDestinoVG" list="listaDestinosVG" placeholder="Selecione ou digite..." value="${destinoAtualVG}" autocomplete="off">
+                        <datalist id="listaDestinosVG">${destinosDisp.map(d=>`<option value="${d}">`).join('')}</datalist>
                     </div>
                 </div>
                 <div class="botoes-abaixo">
@@ -1126,8 +1150,8 @@
     window.aplicarFiltrosVG = function() {
         const ano = document.getElementById('filtroAnoVG')?.value;
         const mes = document.getElementById('filtroMesVG')?.value;
-        const origem = document.getElementById('filtroOrigemVG')?.value.toLowerCase();
-        const destino = document.getElementById('filtroDestinoVG')?.value.toLowerCase();
+        const origem = (document.getElementById('filtroOrigemVG')?.value || '').toLowerCase().trim();
+        const destino = (document.getElementById('filtroDestinoVG')?.value || '').toLowerCase().trim();
         
         dadosFiltradosVG = dadosCompletos.filter(v => {
             if (ano && v.ano !== ano) return false;
@@ -1142,18 +1166,14 @@
     };
     
     window.limparFiltrosVG = function() {
-        const selectAno = document.getElementById('filtroAnoVG');
-        const selectMes = document.getElementById('filtroMesVG');
-        const inputOrigem = document.getElementById('filtroOrigemVG');
-        const inputDestino = document.getElementById('filtroDestinoVG');
+        const anosDisp = [...new Set(dadosCompletos.map(d => d.ano))].sort((a,b)=>b-a);
+        const anoMaisRecente = anosDisp[0] || '';
         
-        if (selectAno) selectAno.value = '';
-        if (selectMes) selectMes.value = '';
-        if (inputOrigem) inputOrigem.value = '';
-        if (inputDestino) inputDestino.value = '';
-        
-        dadosFiltradosVG = [...dadosCompletos];
+        // Temporariamente remove filtros para pegar todos os dados, depois filtra pelo ano mais recente
+        dadosFiltradosVG = dadosCompletos.filter(v => !anoMaisRecente || v.ano === anoMaisRecente);
         paginaAtualVG = 1;
+        
+        // Re-renderiza, depois os selects serão restaurados pelo renderizar
         renderizarVisaoGeral();
     };
     
@@ -1245,40 +1265,44 @@
         filtrarTabelaVG('');
     };
     
-// ==================== FUNÇÃO CORRIGIDA PARA FILTRAR POR MÊS ====================
+// ==================== FILTRAR POR MÊS → IR PARA CONSULTA POR PASSAGEIRO ====================
 window.filtrarPorMes = function(mesNumero) {
-    // Pega o ano selecionado no filtro (se houver)
+    // Pega o ano selecionado no filtro VG
     const selectAno = document.getElementById('filtroAnoVG');
-    const anoSelecionado = selectAno ? selectAno.value : '';
+    const anosDisp = [...new Set(dadosCompletos.map(d => d.ano))].sort((a,b)=>b-a);
+    const ano = (selectAno ? selectAno.value : '') || anosDisp[0] || '';
     
-    // Se não houver ano selecionado, usa o ano atual ou o primeiro disponível
-    let ano = anoSelecionado;
-    if (!ano) {
-        const anos = [...new Set(dadosCompletos.map(d => d.ano))].sort((a, b) => b - a);
-        ano = anos[0] || '2026';
-    }
+    // Navega para a aba de passageiros
+    document.getElementById('passageiros-tab')?.click();
     
-    // Aplica o filtro de ano e mês
-    dadosFiltradosVG = dadosCompletos.filter(v => {
-        if (ano && v.ano !== ano) return false;
-        if (mesNumero && v.mes !== mesNumero) return false;
-        return true;
-    });
-    
-    // Atualiza os selects para refletir o filtro aplicado
-    if (selectAno) selectAno.value = ano;
-    const selectMes = document.getElementById('filtroMesVG');
-    if (selectMes) selectMes.value = mesNumero;
-    
-    // Reseta a página e renderiza
-    paginaAtualVG = 1;
-    renderizarVisaoGeral();
-    
-    // Opcional: rolar suavemente para o topo da tabela
     setTimeout(() => {
-        const tabela = document.querySelector('#visao-geral .table-fixed-header-container');
-        if (tabela) tabela.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
+        // Filtra os dados para esse mês/ano
+        dadosFiltradosPassageiros = dadosCompletos.filter(v => {
+            if (ano && v.ano !== ano) return false;
+            if (mesNumero && v.mes !== mesNumero) return false;
+            return true;
+        });
+        
+        // Guarda o filtro ativo para mostrar nos selects
+        _filtroPassageiroAno = ano;
+        _filtroPassageiroMes = mesNumero;
+        _filtroPassageiroNome = '';
+        _filtroPassageiroOrgao = '';
+        _filtroPassageiroCargo = '';
+        
+        atualizarPassageirosUnicos();
+        paginaAtualPassageiro = 1;
+        renderizarConsultaPassageiro();
+        
+        // Rola para o topo
+        setTimeout(() => {
+            if (window.parent && window.parent !== window) {
+                window.parent.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }, 100);
+    }, 150);
 };
 
 
@@ -1311,15 +1335,18 @@ window.filtrarPorMes = function(mesNumero) {
                     </div>
                     <div class="consulta-filter-group">
                         <label class="filter-label"><i class="material-icons"></i>ORIGEM</label>
-                        <select class="form-select" id="filtroOrigemDestino"><option value="">Todas</option>${origens.map(o=>`<option value="${o}">${o}</option>`).join('')}</select>
+                        <input class="form-select" id="filtroOrigemDestino" list="listaOrigensDestino" placeholder="Selecione ou digite..." autocomplete="off">
+                        <datalist id="listaOrigensDestino"><option value="">Todas</option>${origens.map(o=>`<option value="${o}">`).join('')}</datalist>
                     </div>
                     <div class="consulta-filter-group">
                         <label class="filter-label"><i class="material-icons"></i>DESTINO</label>
-                        <select class="form-select" id="filtroDestinoDestino"><option value="">Todos</option>${destinos.map(d=>`<option value="${d}">${d}</option>`).join('')}</select>
+                        <input class="form-select" id="filtroDestinoDestino" list="listaDestinosDestino" placeholder="Selecione ou digite..." autocomplete="off">
+                        <datalist id="listaDestinosDestino"><option value="">Todos</option>${destinos.map(d=>`<option value="${d}">`).join('')}</datalist>
                     </div>
                     <div class="consulta-filter-group">
                         <label class="filter-label"><i class="material-icons"></i>AERONAVE</label>
-                        <select class="form-select" id="filtroAeronaveDestino"><option value="">Todas</option>${aeronaves.map(a=>`<option value="${a}">${a}</option>`).join('')}</select>
+                        <input class="form-select" id="filtroAeronaveDestino" list="listaAeronavesDestino" placeholder="Selecione ou digite..." autocomplete="off">
+                        <datalist id="listaAeronavesDestino"><option value="">Todas</option>${aeronaves.map(a=>`<option value="${a}">`).join('')}</datalist>
                     </div>
                 </div>
                 <div class="consulta-buttons-row">
@@ -1400,18 +1427,18 @@ window.filtrarPorMes = function(mesNumero) {
     }
     
     window.aplicarFiltrosDestino = function() {
-        const ano = document.getElementById('filtroAnoDestino')?.value;
-        const mes = document.getElementById('filtroMesDestino')?.value;
-        const origem = document.getElementById('filtroOrigemDestino')?.value;
-        const destino = document.getElementById('filtroDestinoDestino')?.value;
-        const aeronave = document.getElementById('filtroAeronaveDestino')?.value;
+        const ano = document.getElementById('filtroAnoDestino')?.value || '';
+        const mes = document.getElementById('filtroMesDestino')?.value || '';
+        const origem = (document.getElementById('filtroOrigemDestino')?.value || '').trim();
+        const destino = (document.getElementById('filtroDestinoDestino')?.value || '').trim();
+        const aeronave = (document.getElementById('filtroAeronaveDestino')?.value || '').trim();
         
         dadosFiltradosDestino = dadosCompletos.filter(v => {
             if (ano && v.ano !== ano) return false;
             if (mes && v.mes !== mes) return false;
-            if (origem && v.origem !== origem) return false;
-            if (destino && v.destino !== destino) return false;
-            if (aeronave && v.aeronave !== aeronave) return false;
+            if (origem && !v.origem.toLowerCase().includes(origem.toLowerCase())) return false;
+            if (destino && !v.destino.toLowerCase().includes(destino.toLowerCase())) return false;
+            if (aeronave && !v.aeronave.toLowerCase().includes(aeronave.toLowerCase())) return false;
             return true;
         });
         
@@ -1420,11 +1447,8 @@ window.filtrarPorMes = function(mesNumero) {
     };
     
     window.limparFiltrosDestino = function() {
-        document.getElementById('filtroAnoDestino').value = '';
-        document.getElementById('filtroMesDestino').value = '';
-        document.getElementById('filtroOrigemDestino').value = '';
-        document.getElementById('filtroDestinoDestino').value = '';
-        document.getElementById('filtroAeronaveDestino').value = '';
+        const ids = ['filtroAnoDestino','filtroMesDestino','filtroOrigemDestino','filtroDestinoDestino','filtroAeronaveDestino'];
+        ids.forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
         
         dadosFiltradosDestino = [...dadosCompletos];
         paginaAtualDestino = 1;
@@ -1525,20 +1549,42 @@ window.filtrarPorMes = function(mesNumero) {
         const inicio = (paginaAtualPassageiro - 1) * itensPorPaginaPassageiro;
         const dadosPagina = dadosOrdenados.slice(inicio, inicio + itensPorPaginaPassageiro);
         
+        const anosDisp = [...new Set(dadosCompletos.map(d => d.ano))].sort((a,b)=>b-a);
+        const nomesDisp = [...new Set(dadosCompletos.map(d => d.passageiro).filter(Boolean))].sort();
+        const orgaosDisp = [...new Set(dadosCompletos.map(d => d.orgao_passageiro).filter(Boolean))].sort();
+        const cargosDisp = [...new Set(dadosCompletos.map(d => d.cargo_passageiro).filter(Boolean))].sort();
+        
         let html = `
             <div class="filter-container">
                 <div class="consulta-filters-row">
                     <div class="consulta-filter-group">
+                        <label class="filter-label"><i class="material-icons"></i>ANO</label>
+                        <select class="form-select" id="filtroAnoPassageiro">
+                            <option value="" ${_filtroPassageiroAno===''?'selected':''}>Todos os anos</option>
+                            ${anosDisp.map(a=>`<option value="${a}" ${a===_filtroPassageiroAno?'selected':''}>${a}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="consulta-filter-group">
+                        <label class="filter-label"><i class="material-icons"></i>MÊS</label>
+                        <select class="form-select" id="filtroMesPassageiro">
+                            <option value="" ${_filtroPassageiroMes===''?'selected':''}>Todos os meses</option>
+                            ${Object.entries(mesesMap).map(([k,v])=>`<option value="${k}" ${k===_filtroPassageiroMes?'selected':''}>${v}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="consulta-filter-group">
                         <label class="filter-label"><i class="material-icons"></i>PASSAGEIRO</label>
-                        <input type="text" class="form-control" id="filtroNomePassageiro" placeholder="Digite o nome...">
+                        <input class="form-control" id="filtroNomePassageiro" list="listaNomesPassageiro" placeholder="Selecione ou digite..." value="${_filtroPassageiroNome}" autocomplete="off">
+                        <datalist id="listaNomesPassageiro">${nomesDisp.map(n=>`<option value="${n}">`).join('')}</datalist>
                     </div>
                     <div class="consulta-filter-group">
                         <label class="filter-label"><i class="material-icons"></i>ÓRGÃO</label>
-                        <input type="text" class="form-control" id="filtroOrgaoPassageiro" placeholder="Digite o órgão...">
+                        <input class="form-control" id="filtroOrgaoPassageiro" list="listaOrgaosPassageiro" placeholder="Selecione ou digite..." value="${_filtroPassageiroOrgao}" autocomplete="off">
+                        <datalist id="listaOrgaosPassageiro">${orgaosDisp.map(o=>`<option value="${o}">`).join('')}</datalist>
                     </div>
                     <div class="consulta-filter-group">
                         <label class="filter-label"><i class="material-icons"></i>CARGO</label>
-                        <input type="text" class="form-control" id="filtroCargoPassageiro" placeholder="Digite o cargo...">
+                        <input class="form-control" id="filtroCargoPassageiro" list="listaCargosPassageiro" placeholder="Selecione ou digite..." value="${_filtroPassageiroCargo}" autocomplete="off">
+                        <datalist id="listaCargosPassageiro">${cargosDisp.map(c=>`<option value="${c}">`).join('')}</datalist>
                     </div>
                 </div>
                 <div class="consulta-buttons-row">
@@ -1620,45 +1666,42 @@ window.filtrarPorMes = function(mesNumero) {
     }
     
     window.aplicarFiltrosPassageiro = function() {
-        const nome = document.getElementById('filtroNomePassageiro')?.value.toLowerCase() || '';
-        const orgao = document.getElementById('filtroOrgaoPassageiro')?.value.toLowerCase() || '';
-        const cargo = document.getElementById('filtroCargoPassageiro')?.value.toLowerCase() || '';
+        const ano = document.getElementById('filtroAnoPassageiro')?.value || '';
+        const mes = document.getElementById('filtroMesPassageiro')?.value || '';
+        const nome = (document.getElementById('filtroNomePassageiro')?.value || '').toLowerCase().trim();
+        const orgao = (document.getElementById('filtroOrgaoPassageiro')?.value || '').toLowerCase().trim();
+        const cargo = (document.getElementById('filtroCargoPassageiro')?.value || '').toLowerCase().trim();
         
-        const dadosFiltrados = dadosCompletos.filter(v => {
-            if (nome && !v.passageiro.toLowerCase().includes(nome)) return false;
-            if (orgao && !v.orgao_passageiro.toLowerCase().includes(orgao)) return false;
-            if (cargo && !v.cargo_passageiro.toLowerCase().includes(cargo)) return false;
+        // Salva estado
+        _filtroPassageiroAno = ano;
+        _filtroPassageiroMes = mes;
+        _filtroPassageiroNome = document.getElementById('filtroNomePassageiro')?.value || '';
+        _filtroPassageiroOrgao = document.getElementById('filtroOrgaoPassageiro')?.value || '';
+        _filtroPassageiroCargo = document.getElementById('filtroCargoPassageiro')?.value || '';
+        
+        dadosFiltradosPassageiros = dadosCompletos.filter(v => {
+            if (ano && v.ano !== ano) return false;
+            if (mes && v.mes !== mes) return false;
+            if (nome && !(v.passageiro||'').toLowerCase().includes(nome)) return false;
+            if (orgao && !(v.orgao_passageiro||'').toLowerCase().includes(orgao)) return false;
+            if (cargo && !(v.cargo_passageiro||'').toLowerCase().includes(cargo)) return false;
             return true;
         });
         
-        const mapa = new Map();
-        dadosFiltrados.forEach(v => {
-            if (v.passageiro && !mapa.has(v.passageiro)) {
-                mapa.set(v.passageiro, {
-                    nome: v.passageiro,
-                    orgao: v.orgao_passageiro || '-',
-                    cargo: v.cargo_passageiro || '-',
-                    voos: 0,
-                    horas: 0
-                });
-            }
-            if (v.passageiro && mapa.has(v.passageiro)) {
-                const p = mapa.get(v.passageiro);
-                p.voos++;
-                p.horas += v.horas_decimais;
-            }
-        });
-        
-        passageirosUnicos = Array.from(mapa.values()).sort((a, b) => a.nome.localeCompare(b.nome));
+        atualizarPassageirosUnicos();
         paginaAtualPassageiro = 1;
         renderizarConsultaPassageiro();
     };
     
     window.limparFiltrosPassageiro = function() {
-        document.getElementById('filtroNomePassageiro').value = '';
-        document.getElementById('filtroOrgaoPassageiro').value = '';
-        document.getElementById('filtroCargoPassageiro').value = '';
+        const anosDisp = [...new Set(dadosCompletos.map(d => d.ano))].sort((a,b)=>b-a);
+        _filtroPassageiroAno = anosDisp[0] || '';
+        _filtroPassageiroMes = '';
+        _filtroPassageiroNome = '';
+        _filtroPassageiroOrgao = '';
+        _filtroPassageiroCargo = '';
         
+        dadosFiltradosPassageiros = dadosCompletos.filter(v => !_filtroPassageiroAno || v.ano === _filtroPassageiroAno);
         atualizarPassageirosUnicos();
         paginaAtualPassageiro = 1;
         renderizarConsultaPassageiro();
