@@ -1042,7 +1042,7 @@
             if (!grupos[v.mes]) {
                 grupos[v.mes] = { voos: new Set(), passageiros: 0, horas: 0 };
             }
-            grupos[v.mes].voos.add(`${v.data_voo}_${v.origem}_${v.destino}`);
+            grupos[v.mes].voos.add(v.numero_db || `${v.data_voo}_${v.origem}_${v.destino}`);
             grupos[v.mes].passageiros++;
             grupos[v.mes].horas += v.horas_decimais;
         });
@@ -1097,7 +1097,7 @@
         let aeronavesUnicas = new Set();
         
         dadosFiltradosVG.forEach(v => {
-            voosUnicos.add(`${v.data_voo}_${v.origem}_${v.destino}`);
+            voosUnicos.add(v.numero_db || `${v.data_voo}_${v.origem}_${v.destino}`);
             totalPassageiros++;
             totalHoras += v.horas_decimais;
             aeronavesUnicas.add(v.aeronave);
