@@ -1,6 +1,6 @@
 {
   "version": "4.16.6",
-  "time": 0.308,
+  "time": 0.324,
   "errors": [],
   "tasks": [
     {
@@ -71,7 +71,7 @@
           "rows": 271
         }
       },
-      "time": 0.041,
+      "time": 0.042,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -263,7 +263,7 @@
           "rows": 966
         }
       },
-      "time": 0.064,
+      "time": 0.063,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -359,7 +359,7 @@
           "rows": 644
         }
       },
-      "time": 0.054,
+      "time": 0.047,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -449,13 +449,13 @@
         "scheme": "file",
         "title": "Voos  2022",
         "stats": {
-          "hash": "81cf4157ae4103ece0e2b5e7e96876a4",
-          "bytes": 48030,
+          "hash": "d7e553a7194757e3f5e65822021dcca6",
+          "bytes": 159653,
           "fields": 11,
-          "rows": 190
+          "rows": 638
         }
       },
-      "time": 0.025,
+      "time": 0.047,
       "scope": [
         "hash-count-error",
         "byte-count-error",
