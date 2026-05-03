@@ -1,6 +1,6 @@
 {
   "version": "4.16.6",
-  "time": 0.3,
+  "time": 0.362,
   "errors": [],
   "tasks": [
     {
@@ -71,7 +71,7 @@
           "rows": 271
         }
       },
-      "time": 0.047,
+      "time": 0.041,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -167,7 +167,7 @@
           "rows": 1098
         }
       },
-      "time": 0.065,
+      "time": 0.059,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -263,7 +263,7 @@
           "rows": 966
         }
       },
-      "time": 0.056,
+      "time": 0.051,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -359,7 +359,7 @@
           "rows": 644
         }
       },
-      "time": 0.042,
+      "time": 0.039,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -455,7 +455,7 @@
           "rows": 638
         }
       },
-      "time": 0.042,
+      "time": 0.039,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -482,11 +482,263 @@
         "errors": 0
       },
       "valid": true
+    },
+    {
+      "resource": {
+        "dialect": {
+          "delimiter": ";"
+        },
+        "encoding": "utf-8-sig",
+        "format": "csv",
+        "hashing": "md5",
+        "name": "voos_2021",
+        "path": "data/voos_2021.csv",
+        "profile": "tabular-data-resource",
+        "schema": {
+          "fields": [
+            {
+              "name": "historico",
+              "type": "string"
+            },
+            {
+              "name": "horas_voadas",
+              "type": "time"
+            },
+            {
+              "name": "aeronave",
+              "type": "string"
+            },
+            {
+              "name": "numero_db",
+              "type": "string"
+            },
+            {
+              "name": "base",
+              "type": "string"
+            },
+            {
+              "name": "data_voo",
+              "type": "date"
+            },
+            {
+              "name": "origem",
+              "type": "string"
+            },
+            {
+              "name": "destino",
+              "type": "string"
+            },
+            {
+              "name": "passageiro",
+              "type": "string"
+            },
+            {
+              "name": "cargo_passageiro",
+              "type": "string"
+            },
+            {
+              "name": "orgao_passageiro",
+              "type": "string"
+            }
+          ]
+        },
+        "scheme": "file",
+        "title": "Voos  2021",
+        "stats": {
+          "hash": "f9b3c51d695c3511fce13f13ff284a5b",
+          "bytes": 287732,
+          "fields": 11,
+          "rows": 729
+        }
+      },
+      "time": 0.065,
+      "scope": [
+        "hash-count-error",
+        "byte-count-error",
+        "field-count-error",
+        "row-count-error",
+        "blank-header",
+        "extra-label",
+        "missing-label",
+        "blank-label",
+        "duplicate-label",
+        "incorrect-label",
+        "blank-row",
+        "primary-key-error",
+        "foreign-key-error",
+        "extra-cell",
+        "missing-cell",
+        "type-error",
+        "constraint-error",
+        "unique-error"
+      ],
+      "partial": false,
+      "errors": [
+        {
+          "cell": "01:0000",
+          "fieldName": "horas_voadas",
+          "fieldNumber": 2,
+          "fieldPosition": 2,
+          "cells": [
+            "Cumprimento de agenda oficial do Governador no STF.",
+            "01:0000",
+            "PT-MGS - PT-MGS",
+            "0093-2021",
+            "DTA",
+            "2021-12-21",
+            "BRASILIA",
+            "BELO HORIZONTE",
+            "Aline Brandão Silva",
+            "Assessora Cerimonial",
+            "Secretaria Geral do Estado de Minas Gerais"
+          ],
+          "rowNumber": 684,
+          "rowPosition": 685,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"time/default\"",
+          "message": "Type error in the cell \"01:0000\" in row \"685\" and field \"horas_voadas\" at position \"2\": type is \"time/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        },
+        {
+          "cell": "01:0000",
+          "fieldName": "horas_voadas",
+          "fieldNumber": 2,
+          "fieldPosition": 2,
+          "cells": [
+            "Cumprimento de agenda oficial do Governador no STF.",
+            "01:0000",
+            "PT-MGS - PT-MGS",
+            "0093-2021",
+            "DTA",
+            "2021-12-21",
+            "BRASILIA",
+            "BELO HORIZONTE",
+            "Marcel Dornas Beghini",
+            "Secretário Adjunto",
+            "Secretaria Geral do Estado de Minas Gerais"
+          ],
+          "rowNumber": 686,
+          "rowPosition": 687,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"time/default\"",
+          "message": "Type error in the cell \"01:0000\" in row \"687\" and field \"horas_voadas\" at position \"2\": type is \"time/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        },
+        {
+          "cell": "01:0000",
+          "fieldName": "horas_voadas",
+          "fieldNumber": 2,
+          "fieldPosition": 2,
+          "cells": [
+            "Cumprimento de agenda oficial do Governador no STF.",
+            "01:0000",
+            "PT-MGS - PT-MGS",
+            "0093-2021",
+            "DTA",
+            "2021-12-21",
+            "BRASILIA",
+            "BELO HORIZONTE",
+            "Paulo Roberto Bermudes Rezende",
+            "Ajudante de Ordens do Governador",
+            "Gabinete Militar do Governador"
+          ],
+          "rowNumber": 688,
+          "rowPosition": 689,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"time/default\"",
+          "message": "Type error in the cell \"01:0000\" in row \"689\" and field \"horas_voadas\" at position \"2\": type is \"time/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        },
+        {
+          "cell": "01:0000",
+          "fieldName": "horas_voadas",
+          "fieldNumber": 2,
+          "fieldPosition": 2,
+          "cells": [
+            "Cumprimento de agenda oficial do Governador no STF.",
+            "01:0000",
+            "PT-MGS - PT-MGS",
+            "0093-2021",
+            "DTA",
+            "2021-12-21",
+            "BRASILIA",
+            "BELO HORIZONTE",
+            "Romeu Zema Neto",
+            "Governador de Minas Gerais",
+            "Secretaria Geral do Estado de Minas Gerais"
+          ],
+          "rowNumber": 690,
+          "rowPosition": 691,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"time/default\"",
+          "message": "Type error in the cell \"01:0000\" in row \"691\" and field \"horas_voadas\" at position \"2\": type is \"time/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        },
+        {
+          "cell": "01:0000",
+          "fieldName": "horas_voadas",
+          "fieldNumber": 2,
+          "fieldPosition": 2,
+          "cells": [
+            "Cumprimento de agenda oficial do Governador no STF.",
+            "01:0000",
+            "PT-MGS - PT-MGS",
+            "0093-2021",
+            "DTA",
+            "2021-12-21",
+            "BRASILIA",
+            "BELO HORIZONTE",
+            "Sérgio Pessoa de Paula Castro",
+            "Advogado Geral",
+            "Advocacia-Geral do Estado de Minas Gerais"
+          ],
+          "rowNumber": 692,
+          "rowPosition": 693,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"time/default\"",
+          "message": "Type error in the cell \"01:0000\" in row \"693\" and field \"horas_voadas\" at position \"2\": type is \"time/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        }
+      ],
+      "stats": {
+        "errors": 5
+      },
+      "valid": false
     }
   ],
   "stats": {
-    "errors": 0,
-    "tasks": 5
+    "errors": 5,
+    "tasks": 6
   },
-  "valid": true
+  "valid": false
 }
